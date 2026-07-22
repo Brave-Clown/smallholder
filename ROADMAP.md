@@ -15,6 +15,7 @@ Levels, not dates. **0** = Make Repo ours · **1** = fix what exists · **2** = 
 
 ## Level 1 — Make the current app right
 
+- [ ] Default language becomes English (inherited from upstream, who is German). German stays a first-class locale, it just stops being the default. Set in **two** places that must agree: `getStoredLocale()` in `src/lib/i18n.ts` and `locale:` in the settings slice initial state; also `<html lang>` and the `og:locale` / alternates in `index.html`. Note the onboarding wizard already has a language picker, so this governs which language the wizard itself speaks before the user chooses. Better option than hardcoding: `i18next-browser-languagedetector` is already a dependency and is never imported — wire it up to detect the browser locale with English as fallback, so a German visitor still lands in German. If we hardcode instead, drop the unused dependency
 - [ ] Today marker on the calendar/timeline (verified: none exists)
 - [ ] Guild templates fill the whole bed — tile/scale the pattern instead of a fixed 3×3; make the guild button a friendly front door to the auto-fill engine rather than a parallel tool
 - [ ] Auto-fill consults the companion validator *while scoring*, so it stops generating conflicts it flags a second later
