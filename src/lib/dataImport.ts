@@ -1,5 +1,5 @@
 import { useStore } from "@/store";
-import type { GardenerExport } from "./dataExport";
+import type { SmallholderExport } from "./dataExport";
 
 export type ImportMode = "overwrite" | "merge";
 
@@ -33,7 +33,7 @@ const EMPTY_STATS: ImportResult["stats"] = {
   feedEntries: 0, healthEvents: 0, seeds: 0, soilTests: 0, amendments: 0, pests: 0, waterEntries: 0, pantryItems: 0,
 };
 
-export function validateExportFile(json: unknown): json is GardenerExport {
+export function validateExportFile(json: unknown): json is SmallholderExport {
   if (!json || typeof json !== "object") return false;
   const obj = json as Record<string, unknown>;
   if (obj.app !== "gardener") return false;
@@ -45,7 +45,7 @@ export function validateExportFile(json: unknown): json is GardenerExport {
 }
 
 export function importAllData(
-  exported: GardenerExport,
+  exported: SmallholderExport,
   mode: ImportMode,
 ): ImportResult {
   const store = useStore.getState();
@@ -62,7 +62,7 @@ export function importAllData(
   }
 }
 
-function importOverwrite(data: GardenerExport["data"]): ImportResult {
+function importOverwrite(data: SmallholderExport["data"]): ImportResult {
   const set = useStore.setState;
 
   set({
@@ -129,7 +129,7 @@ function importOverwrite(data: GardenerExport["data"]): ImportResult {
 }
 
 function importMerge(
-  data: GardenerExport["data"],
+  data: SmallholderExport["data"],
   current: ReturnType<typeof useStore.getState>,
 ): ImportResult {
   const set = useStore.setState;

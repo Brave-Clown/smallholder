@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
-import { buildExportData, type GardenerExport } from "@/lib/dataExport";
+import { buildExportData, type SmallholderExport } from "@/lib/dataExport";
 import { validateExportFile } from "@/lib/dataImport";
 
-function makeExport(overrides: Partial<GardenerExport["data"]> = {}): GardenerExport {
+function makeExport(overrides: Partial<SmallholderExport["data"]> = {}): SmallholderExport {
   return {
     version: 1,
     exportedAt: new Date().toISOString(),

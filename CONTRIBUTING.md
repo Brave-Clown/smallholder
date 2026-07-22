@@ -1,12 +1,12 @@
-# Contributing to Gardener
+# Contributing to Smallholder
 
-Thank you for your interest in contributing to Gardener!
+Thank you for your interest in contributing to Smallholder!
 
 ## Getting Started
 
 ```bash
-git clone https://github.com/mniedermaier/gardener.git
-cd gardener
+git clone https://github.com/Brave-Clown/smallholder.git
+cd smallholder
 npm install
 npm run dev
 ```
@@ -46,11 +46,11 @@ See [CLAUDE.md](CLAUDE.md#adding-a-new-page) for the checklist.
 
 ## Reporting Bugs
 
-Use the [bug report template](https://github.com/mniedermaier/gardener/issues/new?template=bug_report.yml).
+Use the [bug report template](https://github.com/Brave-Clown/smallholder/issues/new?template=bug_report.yml).
 
 ## Feature Requests
 
-Use the [feature request template](https://github.com/mniedermaier/gardener/issues/new?template=feature_request.yml).
+Use the [feature request template](https://github.com/Brave-Clown/smallholder/issues/new?template=feature_request.yml).
 
 ## Security
 

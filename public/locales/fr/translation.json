@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Gardener",
+    "title": "Smallholder",
     "subtitle": "Planificateur de jardin autosuffisant"
   },
   "nav": {
@@ -66,7 +66,7 @@
     "placeholder": "Rechercher plantes, tâches, journal..."
   },
   "onboarding": {
-    "welcome": "Bienvenue sur Gardener !",
+    "welcome": "Bienvenue sur Smallholder !",
     "welcomeDesc": "Votre planificateur de jardin autosuffisant. Configurons votre jardin en quelques étapes rapides.",
     "getStarted": "Commencer",
     "locationTitle": "Où se trouve votre jardin ?",
@@ -338,7 +338,7 @@
     "backendUrl": "URL du serveur",
     "backendHint": "Laisser vide pour le mode local uniquement. À définir avec Docker.",
     "saved": "Paramètres enregistrés !",
-    "coffeeTitle": "Vous aimez Gardener ?",
+    "coffeeTitle": "Vous aimez Smallholder ?",
     "coffeeDesc": "Ce projet est open source et gratuit. Soutenez le développement avec un café !"
   },
   "dataManagement": {
@@ -355,7 +355,7 @@
     "exportSuccess": "Sauvegarde téléchargée avec succès.",
     "importSuccess": "Données restaurées avec succès !",
     "importError": "L'importation a échoué.",
-    "invalidFile": "Fichier de sauvegarde invalide. Doit être une exportation Gardener.",
+    "invalidFile": "Fichier de sauvegarde invalide. Doit être une exportation Smallholder.",
     "importMode": "Comment importer ?",
     "importModeDesc": "Fusionner ajoute de nouvelles données sans supprimer les existantes. Écraser remplace tout.",
     "merge": "Fusionner (conserver + ajouter)",

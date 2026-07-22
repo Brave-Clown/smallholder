@@ -8,7 +8,7 @@ function formatIcalDate(dateStr: string): string {
   return dateStr.replace(/-/g, "");
 }
 
-export function tasksToIcal(tasks: Task[], calendarName: string = "Gardener"): string {
+export function tasksToIcal(tasks: Task[], calendarName: string = "Smallholder"): string {
   const now = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
 
   const events = tasks
@@ -22,7 +22,7 @@ export function tasksToIcal(tasks: Task[], calendarName: string = "Gardener"): s
 
       return [
         "BEGIN:VEVENT",
-        `UID:${task.id}@gardener`,
+        `UID:${task.id}@smallholder`,
         `DTSTAMP:${now}`,
         `DTSTART;VALUE=DATE:${dtStart}`,
         `DTEND;VALUE=DATE:${dtEnd}`,
@@ -36,7 +36,7 @@ export function tasksToIcal(tasks: Task[], calendarName: string = "Gardener"): s
   return [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Gardener//Garden Planner//EN",
+    "PRODID:-//Smallholder//Self-Sufficiency Planner//EN",
     `X-WR-CALNAME:${escapeIcal(calendarName)}`,
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
@@ -45,7 +45,7 @@ export function tasksToIcal(tasks: Task[], calendarName: string = "Gardener"): s
   ].join("\r\n");
 }
 
-export function downloadIcal(tasks: Task[], filename: string = "gardener-tasks.ics"): void {
+export function downloadIcal(tasks: Task[], filename: string = "smallholder-tasks.ics"): void {
   const ical = tasksToIcal(tasks);
   const blob = new Blob([ical], { type: "text/calendar;charset=utf-8" });
   const url = URL.createObjectURL(blob);

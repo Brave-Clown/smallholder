@@ -27,7 +27,7 @@ describe("iCal export", () => {
     expect(ical).toContain("BEGIN:VCALENDAR");
     expect(ical).toContain("END:VCALENDAR");
     expect(ical).toContain("VERSION:2.0");
-    expect(ical).toContain("PRODID:-//Gardener");
+    expect(ical).toContain("PRODID:-//Smallholder");
   });
 
   it("should only include incomplete tasks", () => {

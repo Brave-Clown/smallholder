@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Gardener",
+    "title": "Smallholder",
     "subtitle": "Gartenplaner f\u00fcr Selbstversorger"
   },
   "nav": {
@@ -63,7 +63,7 @@
     "backupNow": "Jetzt sichern"
   },
   "onboarding": {
-    "welcome": "Willkommen bei Gardener!",
+    "welcome": "Willkommen bei Smallholder!",
     "welcomeDesc": "Dein Gartenplaner f\u00fcr Selbstversorger. Lass uns deinen Garten in wenigen Schritten einrichten.",
     "getStarted": "Los geht's",
     "locationTitle": "Wo ist dein Garten?",
@@ -338,7 +338,7 @@
     "backendUrl": "Backend-URL",
     "backendHint": "Leer lassen f\u00fcr Nur-Lokal-Modus. Setzen wenn Docker verwendet wird.",
     "saved": "Einstellungen gespeichert!",
-    "coffeeTitle": "Gefällt dir Gardener?",
+    "coffeeTitle": "Gefällt dir Smallholder?",
     "coffeeDesc": "Dieses Projekt ist Open Source und kostenlos. Unterstütze die Entwicklung mit einem Kaffee!"
   },
   "dataManagement": {
@@ -355,7 +355,7 @@
     "exportSuccess": "Backup erfolgreich heruntergeladen.",
     "importSuccess": "Daten erfolgreich wiederhergestellt!",
     "importError": "Import fehlgeschlagen.",
-    "invalidFile": "Ung\u00fcltige Backup-Datei. Muss ein Gardener-Export sein.",
+    "invalidFile": "Ung\u00fcltige Backup-Datei. Muss ein Smallholder-Export sein.",
     "importMode": "Wie importieren?",
     "importModeDesc": "Zusammenf\u00fchren f\u00fcgt neue Daten hinzu ohne bestehende zu l\u00f6schen. \u00dcberschreiben ersetzt alles.",
     "merge": "Zusammenf\u00fchren (bestehende behalten + neue hinzuf\u00fcgen)",

@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Gardener",
+    "title": "Smallholder",
     "subtitle": "Planificador de huerto autosuficiente"
   },
   "nav": {
@@ -66,7 +66,7 @@
     "placeholder": "Buscar plantas, tareas, diario..."
   },
   "onboarding": {
-    "welcome": "Bienvenido a Gardener!",
+    "welcome": "Bienvenido a Smallholder!",
     "welcomeDesc": "Tu planificador de huerto autosuficiente. Vamos a configurar tu huerto en unos pocos pasos.",
     "getStarted": "Comenzar",
     "locationTitle": "Donde esta tu huerto?",
@@ -338,7 +338,7 @@
     "backendUrl": "URL del servidor",
     "backendHint": "Dejar vacio para modo local. Configurar cuando se ejecuta en Docker.",
     "saved": "Configuracion guardada!",
-    "coffeeTitle": "¿Te gusta Gardener?",
+    "coffeeTitle": "¿Te gusta Smallholder?",
     "coffeeDesc": "Este proyecto es de código abierto y gratuito. ¡Apoya el desarrollo con un café!"
   },
   "dataManagement": {
@@ -355,7 +355,7 @@
     "exportSuccess": "Respaldo descargado exitosamente.",
     "importSuccess": "Datos restaurados exitosamente!",
     "importError": "La importacion fallo.",
-    "invalidFile": "Archivo de respaldo invalido. Debe ser una exportacion de Gardener.",
+    "invalidFile": "Archivo de respaldo invalido. Debe ser una exportacion de Smallholder.",
     "importMode": "Como importar?",
     "importModeDesc": "Combinar agrega datos nuevos sin eliminar los existentes. Sobrescribir reemplaza todo.",
     "merge": "Combinar (conservar existentes + agregar nuevos)",

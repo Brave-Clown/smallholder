@@ -12,9 +12,9 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["locales/**/*.json"],
       manifest: {
-        name: "Gardener - Garden Planner",
-        short_name: "Gardener",
-        description: "Self-sufficiency garden planner for vegetables, fruit, berries and herbs",
+        name: "Smallholder - Self-Sufficiency Planner",
+        short_name: "Smallholder",
+        description: "Self-sufficiency planner: garden beds, livestock, pantry and water for a whole smallholding",
         theme_color: "#15803d",
         background_color: "#f0fdf0",
         display: "standalone",

@@ -33,5 +33,5 @@ app.use("/api/tasks", tasksRouter);
 app.use("/api/sync", syncRouter);
 
 app.listen(PORT, () => {
-  console.log(`Gardener backend listening on port ${PORT}`);
+  console.log(`Smallholder backend listening on port ${PORT}`);
 });

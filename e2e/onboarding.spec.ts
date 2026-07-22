@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("onboarding wizard completes successfully", async ({ page }) => {
-  await expect(page.getByRole("heading", { name: /Gardener/i })).toBeVisible({ timeout: 10000 });
+  await expect(page.getByRole("heading", { name: /Smallholder/i })).toBeVisible({ timeout: 10000 });
   await page.getByRole("button", { name: "English" }).click();
   await page.getByRole("button", { name: /Get Started/i }).click();
 

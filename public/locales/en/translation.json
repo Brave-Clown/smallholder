@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Gardener",
+    "title": "Smallholder",
     "subtitle": "Self-Sufficiency Garden Planner"
   },
   "nav": {
@@ -66,7 +66,7 @@
     "placeholder": "Search plants, tasks, journal..."
   },
   "onboarding": {
-    "welcome": "Welcome to Gardener!",
+    "welcome": "Welcome to Smallholder!",
     "welcomeDesc": "Your self-sufficiency garden planner. Let's set up your garden in a few quick steps.",
     "getStarted": "Get Started",
     "locationTitle": "Where is your garden?",
@@ -338,7 +338,7 @@
     "backendUrl": "Backend URL",
     "backendHint": "Leave empty for local-only mode. Set when running in Docker.",
     "saved": "Settings saved!",
-    "coffeeTitle": "Enjoying Gardener?",
+    "coffeeTitle": "Enjoying Smallholder?",
     "coffeeDesc": "This project is open source and free. Support development with a coffee!"
   },
   "dataManagement": {
@@ -355,7 +355,7 @@
     "exportSuccess": "Backup downloaded successfully.",
     "importSuccess": "Data restored successfully!",
     "importError": "Import failed.",
-    "invalidFile": "Invalid backup file. Must be a Gardener export.",
+    "invalidFile": "Invalid backup file. Must be a Smallholder export.",
     "importMode": "How to import?",
     "importModeDesc": "Merge adds new data without deleting existing. Overwrite replaces everything.",
     "merge": "Merge (keep existing + add new)",

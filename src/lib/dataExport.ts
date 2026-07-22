@@ -14,7 +14,7 @@ import type { PestEntry } from "@/types/pest";
 import type { WaterEntry } from "@/types/water";
 import type { PantryItem } from "@/types/pantry";
 
-export interface GardenerExport {
+export interface SmallholderExport {
   version: 1;
   exportedAt: string;
   app: "gardener";
@@ -50,7 +50,7 @@ export interface GardenerExport {
   };
 }
 
-export function buildExportData(): GardenerExport {
+export function buildExportData(): SmallholderExport {
   const state = useStore.getState();
   return {
     version: 1,
@@ -89,13 +89,13 @@ export function buildExportData(): GardenerExport {
   };
 }
 
-export function downloadJson(data: GardenerExport): void {
+export function downloadJson(data: SmallholderExport): void {
   const json = JSON.stringify(data, null, 2);
   const blob = new Blob([json], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `gardener-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  a.download = `smallholder-backup-${new Date().toISOString().slice(0, 10)}.json`;
   a.click();
   URL.revokeObjectURL(url);
 }
@@ -144,7 +144,7 @@ export function exportHarvestsCsv(): void {
       escapeCsv(h.notes ?? ""),
     ].join(",");
   });
-  downloadCsv([header, ...rows].join("\n"), `gardener-harvests-${new Date().getFullYear()}.csv`);
+  downloadCsv([header, ...rows].join("\n"), `smallholder-harvests-${new Date().getFullYear()}.csv`);
 }
 
 export function exportExpensesCsv(): void {
@@ -156,5 +156,5 @@ export function exportExpensesCsv(): void {
     escapeCsv(e.description),
     (e.amountCents / 100).toFixed(2),
   ].join(","));
-  downloadCsv([header, ...rows].join("\n"), `gardener-expenses-${new Date().getFullYear()}.csv`);
+  downloadCsv([header, ...rows].join("\n"), `smallholder-expenses-${new Date().getFullYear()}.csv`);
 }
