@@ -796,6 +796,7 @@
   },
   "guilds": {
     "title": "Associations de plantes",
+    "tileHint": "Se répète sur toute la planche.",
     "threeSisters": { "name": "Les trois sœurs", "desc": "Traditionnel : Maïs + Haricots + Courge se soutiennent mutuellement." },
     "tomatoBasil": { "name": "Tomate & Basilic", "desc": "Association méditerranéenne classique avec carottes et persil." },
     "saladBed": { "name": "Parcelle salade", "desc": "Mélange de salades à croissance rapide avec radis, épinards et aromatiques." },

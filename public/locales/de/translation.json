@@ -811,6 +811,7 @@
   },
   "guilds": {
     "title": "Pflanzgilden",
+    "tileHint": "Wiederholt sich über das ganze Beet.",
     "threeSisters": { "name": "Drei Schwestern", "desc": "Traditionell: Mais + Bohne + K\u00fcrbis unterst\u00fctzen sich gegenseitig." },
     "tomatoBasil": { "name": "Tomate & Basilikum", "desc": "Klassische mediterrane Kombination mit Karotten und Petersilie." },
     "saladBed": { "name": "Salatbeet", "desc": "Schnell wachsende Salatmischung mit Radieschen, Spinat und Kr\u00e4utern." },

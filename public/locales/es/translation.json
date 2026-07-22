@@ -796,6 +796,7 @@
   },
   "guilds": {
     "title": "Asociaciones de plantas",
+    "tileHint": "Se repite por todo el bancal.",
     "threeSisters": { "name": "Las tres hermanas", "desc": "Tradicional: Maiz + Porotos + Calabaza se apoyan mutuamente." },
     "tomatoBasil": { "name": "Tomate y albahaca", "desc": "Clasica combinacion mediterranea con zanahorias y perejil." },
     "saladBed": { "name": "Cantero de ensaladas", "desc": "Mezcla de ensalada de crecimiento rapido con rabano, espinaca y hierbas." },

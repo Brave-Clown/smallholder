@@ -11,6 +11,7 @@ export interface GardenSlice {
   updateBed: (gardenId: string, bedId: string, updates: Partial<Bed>) => void;
   deleteBed: (gardenId: string, bedId: string) => void;
   setCell: (gardenId: string, bedId: string, cell: CellPlanting) => void;
+  setBedCells: (gardenId: string, bedId: string, cells: CellPlanting[]) => void;
   updateCell: (gardenId: string, bedId: string, cellX: number, cellY: number, updates: Partial<CellPlanting>) => void;
   removeCell: (gardenId: string, bedId: string, cellX: number, cellY: number) => void;
   togglePath: (gardenId: string, bedId: string, cellX: number, cellY: number) => void;
@@ -89,6 +90,21 @@ export const createGardenSlice: StateCreator<GardenSlice> = (set) => ({
                     }
                   : b
               ),
+              updatedAt: new Date().toISOString(),
+            }
+          : g
+      ),
+    })),
+
+  // Replace a bed's plantings wholesale. Bulk fills use this so the whole bed
+  // lands in one store update, and so undo can restore the previous array.
+  setBedCells: (gardenId, bedId, cells) =>
+    set((state) => ({
+      gardens: state.gardens.map((g) =>
+        g.id === gardenId
+          ? {
+              ...g,
+              beds: g.beds.map((b) => (b.id === bedId ? { ...b, cells: [...cells] } : b)),
               updatedAt: new Date().toISOString(),
             }
           : g

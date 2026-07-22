@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
-import type { Bed, Garden, EnvironmentType, GreenhouseConfig, ContainerConfig, RaisedBedConfig, ColdFrameConfig } from "@/types/garden";
+import type { Bed, Garden, CellPlanting, EnvironmentType, GreenhouseConfig, ContainerConfig, RaisedBedConfig, ColdFrameConfig } from "@/types/garden";
 import { ENVIRONMENT_ICONS, getFrostProtectionWeeks } from "@/types/garden";
 import type { Plant } from "@/types/plant";
 import { PlantIconDisplay } from "@/components/ui/PlantIconDisplay";
@@ -330,10 +330,6 @@ function BedGrid({
       </div>
       </div>
 
-      {bed.cells.length === 0 && (
-        <GuildPicker gardenId={gardenId} bedId={bed.id} bedWidth={bed.width} bedHeight={bed.height} />
-      )}
-
       <BedStats bed={bed} plantMap={plantMap} gridCellSizeCm={gridCellSizeCm} />
       </>}
     </Card>
@@ -446,9 +442,9 @@ export function GardenPlanner() {
   const { t } = useTranslation();
   const {
     gardens, activeGardenId, addGarden, setActiveGarden, addBed, deleteBed,
-    deleteGarden, setCell, updateCell, archiveSeason, seasonArchives, gridCellSizeCm, lastFrostDate,
+    deleteGarden, setCell, setBedCells, updateCell, archiveSeason, seasonArchives, gridCellSizeCm, lastFrostDate,
     duplicateGarden, duplicateBed,
-  } = useStore(useShallow((s) => ({ gardens: s.gardens, activeGardenId: s.activeGardenId, addGarden: s.addGarden, setActiveGarden: s.setActiveGarden, addBed: s.addBed, deleteBed: s.deleteBed, deleteGarden: s.deleteGarden, setCell: s.setCell, updateCell: s.updateCell, archiveSeason: s.archiveSeason, seasonArchives: s.seasonArchives, gridCellSizeCm: s.gridCellSizeCm, lastFrostDate: s.lastFrostDate, duplicateGarden: s.duplicateGarden, duplicateBed: s.duplicateBed })));
+  } = useStore(useShallow((s) => ({ gardens: s.gardens, activeGardenId: s.activeGardenId, addGarden: s.addGarden, setActiveGarden: s.setActiveGarden, addBed: s.addBed, deleteBed: s.deleteBed, deleteGarden: s.deleteGarden, setCell: s.setCell, setBedCells: s.setBedCells, updateCell: s.updateCell, archiveSeason: s.archiveSeason, seasonArchives: s.seasonArchives, gridCellSizeCm: s.gridCellSizeCm, lastFrostDate: s.lastFrostDate, duplicateGarden: s.duplicateGarden, duplicateBed: s.duplicateBed })));
   const plants = usePlants();
   const plantMap = usePlantMap();
   const { toast, confirm } = useToast();
@@ -589,18 +585,30 @@ export function GardenPlanner() {
     }
   };
 
-  // Auto-fill a bed with strategy
-  const handleAutoFill = (bedId: string, strategy: PlantingStrategy) => {
+  // Single write path for every bulk fill (guild and strategy alike): one store
+  // update instead of one per cell, and one undo entry that restores the bed.
+  const applyFill = (bedId: string, label: string, cells: CellPlanting[]) => {
     if (!activeGardenId) return;
     const bed = activeGarden?.beds.find((b) => b.id === bedId);
     if (!bed) return;
 
-    const cells = recommendBedPlanting(bed, plants, { gridCellSizeCm, lastFrostDate, strategy, direction: autoFillDirection });
-    for (const cell of cells) {
-      setCell(activeGardenId, bedId, cell);
-    }
+    const gid = activeGardenId;
+    const previous = bed.cells;
+    const byCoord = new Map(previous.map((c) => [`${c.cellX}-${c.cellY}`, c]));
+    for (const cell of cells) byCoord.set(`${cell.cellX}-${cell.cellY}`, cell);
+
+    setBedCells(gid, bedId, [...byCoord.values()]);
+    pushUndo({ label, undo: () => useStore.getState().setBedCells(gid, bedId, previous) });
     setAutoFillBedId(null);
     toast(t("planner.autoFillDone", { count: cells.length }), "success");
+  };
+
+  // Auto-fill a bed with strategy
+  const handleAutoFill = (bedId: string, strategy: PlantingStrategy) => {
+    const bed = activeGarden?.beds.find((b) => b.id === bedId);
+    if (!bed) return;
+    const cells = recommendBedPlanting(bed, plants, { gridCellSizeCm, lastFrostDate, strategy, direction: autoFillDirection });
+    applyFill(bedId, `Fill ${bed.name}`, cells);
   };
 
   const handleExport = () => {
@@ -789,7 +797,13 @@ export function GardenPlanner() {
                           <Wand2 size={14} />
                         </button>
                         {autoFillBedId === bed.id && (
-                          <div className="absolute right-0 top-8 z-20 w-64 rounded-lg border border-gray-200 bg-white p-2 shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                          <div className="absolute right-0 top-8 z-20 max-h-[70vh] w-72 overflow-y-auto rounded-lg border border-gray-200 bg-white p-2 shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                            {/* Guilds: the friendly front door — named combinations, tiled across the bed */}
+                            <GuildPicker
+                              bed={bed}
+                              onApply={(guild, cells) => applyFill(bed.id, `Guild ${t(guild.nameKey)}`, cells)}
+                            />
+
                             {/* Direction picker */}
                             <p className="mb-1.5 px-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">{t("planner.direction")}</p>
                             <div className="mb-2 flex gap-1 px-1">

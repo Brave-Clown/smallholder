@@ -811,6 +811,7 @@
   },
   "guilds": {
     "title": "Plant Guilds",
+    "tileHint": "Repeats across the whole bed.",
     "threeSisters": { "name": "Three Sisters", "desc": "Traditional: Corn + Beans + Squash support each other." },
     "tomatoBasil": { "name": "Tomato & Basil", "desc": "Classic Mediterranean pairing with carrots and parsley." },
     "saladBed": { "name": "Salad Bed", "desc": "Quick-growing salad mix with radish, spinach and herbs." },

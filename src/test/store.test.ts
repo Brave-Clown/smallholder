@@ -83,6 +83,40 @@ describe("Zustand store", () => {
       expect(bed.cells).toHaveLength(1);
       expect(bed.cells[0].plantId).toBe("basil");
     });
+
+    it("should replace a bed's cells wholesale and let a snapshot restore them", () => {
+      const gardenId = store.getState().addGarden("Test");
+      store.getState().addBed(gardenId, { name: "B", x: 0, y: 0, width: 3, height: 3, environmentType: "outdoor_bed" as const });
+      const bedId = store.getState().gardens[0].beds[0].id;
+
+      store.getState().setCell(gardenId, bedId, { cellX: 0, cellY: 0, plantId: "tomato" });
+      const before = store.getState().gardens[0].beds[0].cells;
+
+      // a bulk fill lands in one update
+      store.getState().setBedCells(gardenId, bedId, [
+        { cellX: 0, cellY: 0, plantId: "corn" },
+        { cellX: 1, cellY: 1, plantId: "bean" },
+      ]);
+      expect(store.getState().gardens[0].beds[0].cells).toHaveLength(2);
+
+      // ...and undo restores exactly what was there before
+      store.getState().setBedCells(gardenId, bedId, before);
+      const restored = store.getState().gardens[0].beds[0].cells;
+      expect(restored).toHaveLength(1);
+      expect(restored[0].plantId).toBe("tomato");
+    });
+
+    it("should not let the caller mutate stored cells through the array it passed", () => {
+      const gardenId = store.getState().addGarden("Test");
+      store.getState().addBed(gardenId, { name: "B", x: 0, y: 0, width: 3, height: 3, environmentType: "outdoor_bed" as const });
+      const bedId = store.getState().gardens[0].beds[0].id;
+
+      const input = [{ cellX: 0, cellY: 0, plantId: "tomato" }];
+      store.getState().setBedCells(gardenId, bedId, input);
+      input.push({ cellX: 1, cellY: 1, plantId: "basil" });
+
+      expect(store.getState().gardens[0].beds[0].cells).toHaveLength(1);
+    });
   });
 
   describe("Task operations", () => {

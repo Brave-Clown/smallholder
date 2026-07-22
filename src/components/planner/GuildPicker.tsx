@@ -1,49 +1,32 @@
 import { useTranslation } from "react-i18next";
 import { Sparkles } from "lucide-react";
-import { useStore } from "@/store";
-import { useShallow } from "zustand/react/shallow";
 import { GUILDS, type PlantGuild } from "@/data/guilds";
+import { tileGuild, guildFitsBed } from "@/lib/guildFill";
+import type { Bed, CellPlanting } from "@/types/garden";
 
 interface Props {
-  gardenId: string;
-  bedId: string;
-  bedWidth: number;
-  bedHeight: number;
+  bed: Bed;
+  onApply: (guild: PlantGuild, cells: CellPlanting[]) => void;
 }
 
-export function GuildPicker({ gardenId, bedId, bedWidth, bedHeight }: Props) {
+export function GuildPicker({ bed, onApply }: Props) {
   const { t } = useTranslation();
-  const { setCell } = useStore(useShallow((s) => ({ setCell: s.setCell })));
 
-  const applyGuild = (guild: PlantGuild) => {
-    for (const p of guild.plants) {
-      if (p.offsetX < bedWidth && p.offsetY < bedHeight) {
-        setCell(gardenId, bedId, {
-          cellX: p.offsetX,
-          cellY: p.offsetY,
-          plantId: p.plantId,
-        });
-      }
-    }
-  };
-
-  const availableGuilds = GUILDS.filter(
-    (g) => g.minWidth <= bedWidth && g.minHeight <= bedHeight
-  );
+  const availableGuilds = GUILDS.filter((g) => guildFitsBed(g, bed));
 
   if (availableGuilds.length === 0) return null;
 
   return (
-    <div className="mb-3">
-      <p className="mb-1 flex items-center gap-1 text-xs font-medium text-gray-500">
-        <Sparkles size={12} />
+    <div className="mb-2 border-b border-gray-100 pb-2 dark:border-gray-800">
+      <p className="mb-1.5 flex items-center gap-1 px-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+        <Sparkles size={11} />
         {t("guilds.title")}
       </p>
-      <div className="flex flex-wrap gap-1">
+      <div className="mb-1.5 flex flex-wrap gap-1 px-1">
         {availableGuilds.map((guild) => (
           <button
             key={guild.id}
-            onClick={() => applyGuild(guild)}
+            onClick={() => onApply(guild, tileGuild(guild, bed))}
             title={t(guild.descriptionKey)}
             className="flex items-center gap-1 rounded-full border border-gray-200 px-2 py-0.5 text-xs transition-colors hover:border-garden-400 hover:bg-garden-50 dark:border-gray-700 dark:hover:border-garden-600 dark:hover:bg-garden-900/20"
           >
@@ -52,6 +35,7 @@ export function GuildPicker({ gardenId, bedId, bedWidth, bedHeight }: Props) {
           </button>
         ))}
       </div>
+      <p className="px-2 text-[10px] text-gray-400">{t("guilds.tileHint")}</p>
     </div>
   );
 }

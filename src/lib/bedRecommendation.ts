@@ -70,7 +70,14 @@ export function recommendBedPlanting(
   // Filter out antagonist conflicts from the selected set
   const compatible = removeAntagonistConflicts(selected);
 
-  return placePlantsOnGrid(compatible, bed, config.gridCellSizeCm, direction);
+  const placed = placePlantsOnGrid(compatible, bed, config.gridCellSizeCm, direction);
+
+  // Paths are not plantable area. togglePath already clears a plant when a path
+  // is drawn over it, and a path cell renders over whatever sits beneath it, so
+  // placing here would bury plants the user can never see.
+  if (!bed.paths?.length) return placed;
+  const paths = new Set(bed.paths);
+  return placed.filter((c) => !paths.has(`${c.cellX}-${c.cellY}`));
 }
 
 // --- Plant scoring (unchanged logic) ---
