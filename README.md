@@ -10,6 +10,14 @@
   <img src="https://img.shields.io/badge/i18n-DE%20%7C%20EN%20%7C%20ES%20%7C%20FR-blue" alt="4 languages">
 </p>
 
+<p align="center">
+  <a href="https://brave-clown.github.io/smallholder/"><strong>Live demo</strong></a>
+  &nbsp;&middot;&nbsp;
+  <a href="ROADMAP.md">Roadmap</a>
+  &nbsp;&middot;&nbsp;
+  <a href="#status-early-fork-not-ready-for-real-use">Status</a>
+</p>
+
 ---
 
 ## What this is
@@ -39,7 +47,9 @@ Being blunt, because the badge above is doing real work:
 - **Adopting mid-season is currently broken.** Task dates all derive from the
   last frost date and ignore when you actually planted, so a mid-season start
   produces a task list full of past-dated work. That is the top Level 2 item.
-- No demo site yet. The screenshots in `docs/` are inherited from upstream and
+- There is a **[live demo](https://brave-clown.github.io/smallholder/)**, but it
+  auto-deploys from `main`, so it shows the fork exactly as it is — including
+  everything above. The screenshots in `docs/` are inherited from upstream and
   still show the old branding.
 
 If you want a garden planner that works today, use

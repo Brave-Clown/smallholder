@@ -11,7 +11,7 @@ Levels, not dates. **0** = Make Repo ours · **1** = fix what exists · **2** = 
 - [x] License hygiene: retain upstream's MIT copyright notice, add mine alongside for the fork's changes
 - [x] README rewrite: the thesis in one paragraph, honest early-fork status, pointer to ROADMAP.md — short, nobody is reading it yet — *status section needs revisiting once Level 2 lands; it currently tells people to use upstream instead*
 - [x] Upstream residue: inspect `.github/` (workflows, FUNDING.yml, templates) and any netlify/vercel/deploy configs; delete or retarget — *no FUNDING.yml or netlify/vercel existed; fixed `--base=/gardener/` in deploy.yml (would have 404'd every Pages asset) and a blank-issue link pointing at `niedermm/gardener`*
-- [ ] *(optional)* GitHub Pages auto-deploy of `main` — standing demo URL that doubles as the acceptance-check surface for every handoff
+- [x] *(optional)* GitHub Pages auto-deploy of `main` — standing demo URL that doubles as the acceptance-check surface for every handoff — *live at https://brave-clown.github.io/smallholder/ ; the deploy gates on `tsc -b` + the unit suite, so a red build never reaches the demo*
 
 ## Level 1 — Make the current app right
 
