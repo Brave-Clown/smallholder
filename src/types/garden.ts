@@ -39,6 +39,9 @@ export interface CellPlanting {
   variety?: string;
   plantedDate?: string;
   notes?: string;
+  // The gardener has seen this cell's companion warning and chosen to keep the
+  // planting. Suppresses the marker for this cell only.
+  overrideWarnings?: boolean;
 }
 
 export interface Bed {

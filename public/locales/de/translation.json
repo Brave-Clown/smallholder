@@ -99,6 +99,7 @@
     "pathModeHint": "Klicke auf Felder um Wege hinzuzuf\u00fcgen oder zu entfernen. Wege ersetzen Pflanzen auf dem Feld.",
     "pathModeDone": "Fertig",
     "editCell": "Pflanzung bearbeiten",
+    "keepAnyway": "Pflanzung trotzdem behalten",
     "variety": "Sorte",
     "varietyPlaceholder": "z.B. San Marzano, Ochsenherz...",
     "plantedDate": "Pflanzdatum",

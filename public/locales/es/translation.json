@@ -99,6 +99,7 @@
     "pathModeHint": "Haz clic en las celdas para agregar o quitar senderos. Los caminos reemplazan cualquier planta en esa celda.",
     "pathModeDone": "Listo",
     "editCell": "Editar plantacion",
+    "keepAnyway": "Mantener esta plantacion de todos modos",
     "variety": "Variedad",
     "varietyPlaceholder": "ej. San Marzano, Brandywine...",
     "plantedDate": "Fecha de plantacion",

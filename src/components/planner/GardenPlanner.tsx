@@ -29,7 +29,8 @@ import { PrintBedLayout } from "./PrintBedLayout";
 import { generateShareUrl } from "@/lib/sharing";
 import { useToast } from "@/components/ui/Toast";
 import { useUndo } from "@/hooks/useUndo";
-import { validatePlacement, getCompanionHighlights, getAntagonistHighlights } from "@/lib/placementValidation";
+import { validatePlacement, getCompanionHighlights, getAntagonistHighlights, firstNotableIssue, resolveIssueParams } from "@/lib/placementValidation";
+import { CellEditor } from "./CellEditor";
 import { recommendBedPlanting, getRecommendedPlants, STRATEGY_DETAILS, DIRECTION_DETAILS, type PlantingStrategy, type PlantingDirection } from "@/lib/bedRecommendation";
 
 const ALL_ENVIRONMENTS: EnvironmentType[] = [
@@ -107,7 +108,7 @@ const DroppableCell = memo(function DroppableCell({
       } ${isOver && !isPath ? "ring-2 ring-garden-400 ring-offset-1 bg-garden-100 dark:bg-garden-900/40" : ""}
       ${isAntagonistHighlight && !plant && !isPath ? "bg-red-100 ring-1 ring-red-300 dark:bg-red-900/20" : ""}
       ${isCompanionHighlight && !plant && !isPath ? "bg-green-100 ring-1 ring-green-300 dark:bg-green-900/20" : ""}
-      ${plant && validationWarning ? "ring-2 ring-red-400" : ""}`}
+      ${plant && validationWarning ? "ring-2 ring-amber-400" : ""}`}
       style={{ width: cellSize, height: cellSize, ...(plant && !isPath ? { backgroundColor: plant.color + "18" } : {}) }}
     >
       {isPath && (
@@ -148,6 +149,7 @@ function BedGrid({
 }) {
   const { t } = useTranslation();
   const plantMap = usePlantMap();
+  const getPlantName = usePlantName();
   const { removeCell, updateBed, togglePath, gridCellSizeCm } = useStore(useShallow((s) => ({ removeCell: s.removeCell, updateBed: s.updateBed, togglePath: s.togglePath, gridCellSizeCm: s.gridCellSizeCm })));
   const [showConfig, setShowConfig] = useState(false);
   const [editingName, setEditingName] = useState(false);
@@ -168,18 +170,18 @@ function BedGrid({
     [selectedPlantId, bed, plantMap]
   );
 
-  // Validate each planted cell
+  // Validate each planted cell, skipping any the gardener has already accepted
   const cellWarnings = useMemo(() => {
     const warnings = new Map<string, string>();
     for (const cell of bed.cells) {
-      const result = validatePlacement(cell.plantId, cell.cellX, cell.cellY, bed, plantMap, gridCellSizeCm);
-      const errors = result.issues.filter((i) => i.severity === "error" || i.severity === "warning");
-      if (errors.length > 0) {
-        warnings.set(`${cell.cellX}-${cell.cellY}`, errors[0].messageKey);
+      if (cell.overrideWarnings) continue;
+      const issue = firstNotableIssue(validatePlacement(cell.plantId, cell.cellX, cell.cellY, bed, plantMap, gridCellSizeCm));
+      if (issue) {
+        warnings.set(`${cell.cellX}-${cell.cellY}`, t(issue.messageKey, resolveIssueParams(issue.messageParams, getPlantName)));
       }
     }
     return warnings;
-  }, [bed, plantMap, gridCellSizeCm]);
+  }, [bed, plantMap, gridCellSizeCm, t, getPlantName]);
 
   const cellSize = Math.round(48 * zoom);
   const iconSize = Math.round(22 * zoom);
@@ -442,9 +444,9 @@ export function GardenPlanner() {
   const { t } = useTranslation();
   const {
     gardens, activeGardenId, addGarden, setActiveGarden, addBed, deleteBed,
-    deleteGarden, setCell, setBedCells, updateCell, archiveSeason, seasonArchives, gridCellSizeCm, lastFrostDate,
+    deleteGarden, setCell, setBedCells, archiveSeason, seasonArchives, gridCellSizeCm, lastFrostDate,
     duplicateGarden, duplicateBed,
-  } = useStore(useShallow((s) => ({ gardens: s.gardens, activeGardenId: s.activeGardenId, addGarden: s.addGarden, setActiveGarden: s.setActiveGarden, addBed: s.addBed, deleteBed: s.deleteBed, deleteGarden: s.deleteGarden, setCell: s.setCell, setBedCells: s.setBedCells, updateCell: s.updateCell, archiveSeason: s.archiveSeason, seasonArchives: s.seasonArchives, gridCellSizeCm: s.gridCellSizeCm, lastFrostDate: s.lastFrostDate, duplicateGarden: s.duplicateGarden, duplicateBed: s.duplicateBed })));
+  } = useStore(useShallow((s) => ({ gardens: s.gardens, activeGardenId: s.activeGardenId, addGarden: s.addGarden, setActiveGarden: s.setActiveGarden, addBed: s.addBed, deleteBed: s.deleteBed, deleteGarden: s.deleteGarden, setCell: s.setCell, setBedCells: s.setBedCells, archiveSeason: s.archiveSeason, seasonArchives: s.seasonArchives, gridCellSizeCm: s.gridCellSizeCm, lastFrostDate: s.lastFrostDate, duplicateGarden: s.duplicateGarden, duplicateBed: s.duplicateBed })));
   const plants = usePlants();
   const plantMap = usePlantMap();
   const { toast, confirm } = useToast();
@@ -515,13 +517,10 @@ export function GardenPlanner() {
   const getPlantName = usePlantName();
 
   // Resolve plant IDs to names in validation params
-  const resolveParams = useCallback((params?: Record<string, string | number>) => {
-    if (!params) return params;
-    const resolved = { ...params };
-    if (typeof resolved.plant === "string") resolved.plant = getPlantName(resolved.plant);
-    if (typeof resolved.neighbor === "string") resolved.neighbor = getPlantName(resolved.neighbor);
-    return resolved;
-  }, [getPlantName]);
+  const resolveParams = useCallback(
+    (params?: Record<string, string | number>) => resolveIssueParams(params, getPlantName),
+    [getPlantName]
+  );
 
   const handleSelectPlant = useCallback((plant: Plant) => {
     setSelectedPlant((prev) => prev?.id === plant.id ? null : plant);
@@ -533,19 +532,18 @@ export function GardenPlanner() {
     const bed = activeGarden?.beds.find((b) => b.id === bedId);
     if (!bed) return;
 
+    // Conflicts are advice, not a veto: place it, then say what is wrong. The
+    // gardener can accept the placement per-cell in the cell editor.
     const result = validatePlacement(selectedPlant.id, cellX, cellY, bed, plantMap, gridCellSizeCm);
-    const errors = result.issues.filter((i) => i.severity === "error");
-    if (errors.length > 0) {
-      setPlacementFeedback(t(errors[0].messageKey, resolveParams(errors[0].messageParams)));
-      return;
-    }
 
     const gid = activeGardenId;
     const pid = selectedPlant.id;
     setCell(gid, bedId, { cellX, cellY, plantId: pid });
     pushUndo({ label: `Place ${pid}`, undo: () => useStore.getState().removeCell(gid, bedId, cellX, cellY) });
-    if (result.issues.length > 0) {
-      setPlacementFeedback(t(result.issues[0].messageKey, resolveParams(result.issues[0].messageParams)));
+
+    const issue = firstNotableIssue(result);
+    if (issue) {
+      setPlacementFeedback(t(issue.messageKey, resolveParams(issue.messageParams)));
     }
   }, [selectedPlant, activeGardenId, activeGarden, plantMap, gridCellSizeCm, setCell, t, pushUndo, resolveParams]);
 
@@ -572,13 +570,9 @@ export function GardenPlanner() {
     if (plantId && bedId && x !== undefined && y !== undefined) {
       const bed = activeGarden?.beds.find((b) => b.id === bedId);
       if (bed) {
-        const result = validatePlacement(plantId, x, y, bed, plantMap, gridCellSizeCm);
-        if (result.issues.some((i) => i.severity === "error")) {
-          setPlacementFeedback(t(result.issues[0].messageKey, resolveParams(result.issues[0].messageParams)));
-          return;
-        }
-        if (result.issues.length > 0) {
-          setPlacementFeedback(t(result.issues[0].messageKey, resolveParams(result.issues[0].messageParams)));
+        const issue = firstNotableIssue(validatePlacement(plantId, x, y, bed, plantMap, gridCellSizeCm));
+        if (issue) {
+          setPlacementFeedback(t(issue.messageKey, resolveParams(issue.messageParams)));
         }
       }
       setCell(activeGardenId, bedId, { cellX: x, cellY: y, plantId });
@@ -921,27 +915,8 @@ export function GardenPlanner() {
                 {editingCell && (() => {
                   const bed = activeGarden?.beds.find((b) => b.id === editingCell.bedId);
                   const cell = bed?.cells.find((c) => c.cellX === editingCell.cellX && c.cellY === editingCell.cellY);
-                  if (!cell) return null;
-                  return (
-                    <Card>
-                      <h3 className="mb-3 text-sm font-semibold">{t("planner.editCell")}</h3>
-                      <div className="space-y-3">
-                        <div>
-                          <label className="mb-1 block text-xs text-gray-500">{t("planner.variety")}</label>
-                          <input type="text" value={cell.variety ?? ""} onChange={(e) => updateCell(editingCell.gardenId, editingCell.bedId, editingCell.cellX, editingCell.cellY, { variety: e.target.value || undefined })} placeholder={t("planner.varietyPlaceholder")} className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800" />
-                        </div>
-                        <div>
-                          <label className="mb-1 block text-xs text-gray-500">{t("planner.plantedDate")}</label>
-                          <input type="date" value={cell.plantedDate ?? ""} onChange={(e) => updateCell(editingCell.gardenId, editingCell.bedId, editingCell.cellX, editingCell.cellY, { plantedDate: e.target.value || undefined })} className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800" />
-                        </div>
-                        <div>
-                          <label className="mb-1 block text-xs text-gray-500">{t("harvest.notes")}</label>
-                          <textarea value={cell.notes ?? ""} onChange={(e) => updateCell(editingCell.gardenId, editingCell.bedId, editingCell.cellX, editingCell.cellY, { notes: e.target.value || undefined })} rows={2} className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800" />
-                        </div>
-                        <button onClick={() => setEditingCell(null)} className="text-xs text-gray-400 hover:text-gray-600">{t("common.close")}</button>
-                      </div>
-                    </Card>
-                  );
+                  if (!bed || !cell) return null;
+                  return <CellEditor gardenId={editingCell.gardenId} bed={bed} cell={cell} variant="sidebar" onClose={() => setEditingCell(null)} />;
                 })()}
               </div>
             </div>
@@ -958,27 +933,8 @@ export function GardenPlanner() {
                 {editingCell && (() => {
                   const bed = activeGarden?.beds.find((b) => b.id === editingCell.bedId);
                   const cell = bed?.cells.find((c) => c.cellX === editingCell.cellX && c.cellY === editingCell.cellY);
-                  if (!cell) return null;
-                  return (
-                    <div className="mt-3 rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
-                      <h3 className="mb-3 text-sm font-semibold">{t("planner.editCell")}</h3>
-                      <div className="space-y-3">
-                        <div>
-                          <label className="mb-1 block text-xs text-gray-500">{t("planner.variety")}</label>
-                          <input type="text" value={cell.variety ?? ""} onChange={(e) => updateCell(editingCell.gardenId, editingCell.bedId, editingCell.cellX, editingCell.cellY, { variety: e.target.value || undefined })} placeholder={t("planner.varietyPlaceholder")} className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-base dark:border-gray-600 dark:bg-gray-900" />
-                        </div>
-                        <div>
-                          <label className="mb-1 block text-xs text-gray-500">{t("planner.plantedDate")}</label>
-                          <input type="date" value={cell.plantedDate ?? ""} onChange={(e) => updateCell(editingCell.gardenId, editingCell.bedId, editingCell.cellX, editingCell.cellY, { plantedDate: e.target.value || undefined })} className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-base dark:border-gray-600 dark:bg-gray-900" />
-                        </div>
-                        <div>
-                          <label className="mb-1 block text-xs text-gray-500">{t("harvest.notes")}</label>
-                          <textarea value={cell.notes ?? ""} onChange={(e) => updateCell(editingCell.gardenId, editingCell.bedId, editingCell.cellX, editingCell.cellY, { notes: e.target.value || undefined })} rows={2} className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-base dark:border-gray-600 dark:bg-gray-900" />
-                        </div>
-                        <button onClick={() => setEditingCell(null)} className="w-full rounded-lg bg-garden-600 px-4 py-2 text-sm font-medium text-white">{t("common.close")}</button>
-                      </div>
-                    </div>
-                  );
+                  if (!bed || !cell) return null;
+                  return <CellEditor gardenId={editingCell.gardenId} bed={bed} cell={cell} variant="sheet" onClose={() => setEditingCell(null)} />;
                 })()}
               </div>
             )}

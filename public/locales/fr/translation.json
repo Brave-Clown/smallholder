@@ -99,6 +99,7 @@
     "pathModeHint": "Cliquez sur les cellules pour ajouter ou retirer des allées. Les allées remplacent les plantes sur cette cellule.",
     "pathModeDone": "Terminé",
     "editCell": "Modifier la plantation",
+    "keepAnyway": "Conserver cette plantation quand même",
     "variety": "Variété",
     "varietyPlaceholder": "ex : San Marzano, Brandywine...",
     "plantedDate": "Date de plantation",

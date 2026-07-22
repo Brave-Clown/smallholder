@@ -117,6 +117,26 @@ export function validatePlacement(
   return { issues, companionCount, antagonistCount, isRecommended };
 }
 
+/**
+ * Issue params carry plant ids, which are not what a gardener should read.
+ * Shared so every surface that renders an issue resolves them the same way.
+ */
+export function resolveIssueParams(
+  params: Record<string, string | number> | undefined,
+  getPlantName: (id: string) => string,
+): Record<string, string | number> | undefined {
+  if (!params) return params;
+  const resolved = { ...params };
+  if (typeof resolved.plant === "string") resolved.plant = getPlantName(resolved.plant);
+  if (typeof resolved.neighbor === "string") resolved.neighbor = getPlantName(resolved.neighbor);
+  return resolved;
+}
+
+/** The first issue worth showing a gardener, or undefined if the placement is clean. */
+export function firstNotableIssue(result: PlacementResult): PlacementIssue | undefined {
+  return result.issues.find((i) => i.severity === "error" || i.severity === "warning");
+}
+
 export function getCompanionHighlights(
   plantId: string,
   bed: Bed,

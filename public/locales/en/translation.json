@@ -99,6 +99,7 @@
     "pathModeHint": "Click on cells to add or remove walkways. Paths replace any plants on that cell.",
     "pathModeDone": "Done",
     "editCell": "Edit Planting",
+    "keepAnyway": "Keep this planting anyway",
     "variety": "Variety",
     "varietyPlaceholder": "e.g. San Marzano, Brandywine...",
     "plantedDate": "Planted date",

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { validatePlacement, calculateBedScore } from "@/lib/placementValidation";
+import { validatePlacement, calculateBedScore, firstNotableIssue, resolveIssueParams } from "@/lib/placementValidation";
 import type { Plant } from "@/types/plant";
 import type { Bed } from "@/types/garden";
 
@@ -37,6 +37,42 @@ function makeBed(cells: Array<{ cellX: number; cellY: number; plantId: string }>
     environmentType: "outdoor_bed", cells,
   };
 }
+
+describe("Issue presentation helpers", () => {
+  const names: Record<string, string> = { tomato: "Tomate", potato: "Kartoffel" };
+  const getPlantName = (id: string) => names[id] ?? id;
+
+  it("resolves plant ids in issue params to display names", () => {
+    const bed = makeBed([{ cellX: 1, cellY: 0, plantId: "potato" }]);
+    const issue = firstNotableIssue(validatePlacement("tomato", 0, 0, bed, plantMap, 30));
+    expect(issue).toBeDefined();
+    // the raw params are ids - not something to show a gardener
+    expect(issue!.messageParams).toEqual({ plant: "tomato", neighbor: "potato" });
+    expect(resolveIssueParams(issue!.messageParams, getPlantName)).toEqual({
+      plant: "Tomate",
+      neighbor: "Kartoffel",
+    });
+  });
+
+  it("leaves undefined params and non-plant params alone", () => {
+    expect(resolveIssueParams(undefined, getPlantName)).toBeUndefined();
+    expect(resolveIssueParams({ spacing: 50, actual: 15 }, getPlantName)).toEqual({ spacing: 50, actual: 15 });
+  });
+
+  it("reports no notable issue for a clean placement", () => {
+    const bed = makeBed([{ cellX: 1, cellY: 0, plantId: "basil" }]);
+    expect(firstNotableIssue(validatePlacement("tomato", 0, 0, bed, plantMap, 30))).toBeUndefined();
+  });
+
+  it("surfaces both error and warning severities", () => {
+    // adjacent antagonist -> error
+    const adjacent = makeBed([{ cellX: 1, cellY: 0, plantId: "potato" }]);
+    expect(firstNotableIssue(validatePlacement("tomato", 0, 0, adjacent, plantMap, 30))?.severity).toBe("error");
+    // antagonist two cells away -> warning, still notable
+    const nearby = makeBed([{ cellX: 2, cellY: 0, plantId: "potato" }]);
+    expect(firstNotableIssue(validatePlacement("tomato", 0, 0, nearby, plantMap, 30))?.severity).toBe("warning");
+  });
+});
 
 describe("Placement validation", () => {
   it("should detect direct antagonist placement", () => {
