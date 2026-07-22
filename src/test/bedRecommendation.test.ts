@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { recommendBedPlanting, getRecommendedPlants } from "@/lib/bedRecommendation";
+import { validatePlacement } from "@/lib/placementValidation";
 import plantsData from "@/data/plants.json";
 import type { Plant } from "@/types/plant";
 import type { Bed } from "@/types/garden";
@@ -88,6 +89,65 @@ describe("Bed recommendation engine", () => {
     expect(combined.size).toBeGreaterThanOrEqual(Math.max(caloriesPlants.size, beginnerPlants.size));
     expect(caloriesCells.length).toBeGreaterThan(0);
     expect(beginnerCells.length).toBeGreaterThan(0);
+  });
+
+  it("never generates a placement the validator would flag", () => {
+    const directions = ["rows_ew", "rows_ns", "blocks", "companion_clusters"] as const;
+    const strategies = ["balanced", "calories", "selfsufficient", "yield", "beginner", "quickharvest"] as const;
+    const plantMap = new Map(plants.map((p) => [p.id, p]));
+
+    for (const envType of ["outdoor_bed", "greenhouse", "windowsill"] as const) {
+      for (const direction of directions) {
+        for (const strategy of strategies) {
+          const bed = makeBed(6, 4, envType);
+          const cells = recommendBedPlanting(bed, plants, {
+            gridCellSizeCm: 30,
+            lastFrostDate: "2026-05-15",
+            strategy,
+            direction,
+          });
+          expect(cells.length, `${envType}/${direction}/${strategy} produced nothing`).toBeGreaterThan(0);
+
+          // Re-validate the finished layout exactly as the grid does
+          const planted: Bed = { ...bed, cells };
+          for (const cell of cells) {
+            const { issues } = validatePlacement(cell.plantId, cell.cellX, cell.cellY, planted, plantMap, 30);
+            const flagged = issues.filter((i) => i.severity === "error" || i.severity === "warning");
+            expect(
+              flagged.map((i) => i.messageKey),
+              `${envType}/${direction}/${strategy}: ${cell.plantId} at (${cell.cellX},${cell.cellY})`
+            ).toEqual([]);
+          }
+        }
+      }
+    }
+  });
+
+  it("never fills a small container with plants that do not fit it", () => {
+    // 29 of the 45 shipped plants trip the validator's container-volume rule at
+    // 30L, so this is the case where position-independent fit actually bites.
+    const bed: Bed = {
+      id: "b1", name: "Pot", x: 0, y: 0, width: 4, height: 3,
+      environmentType: "container", containerConfig: { volumeLiters: 30, material: "terracotta" },
+      cells: [],
+    };
+    const plantMap = new Map(plants.map((p) => [p.id, p]));
+
+    for (const strategy of ["balanced", "calories", "beginner"] as const) {
+      const cells = recommendBedPlanting(bed, plants, {
+        gridCellSizeCm: 30, lastFrostDate: "2026-05-15", strategy,
+      });
+      expect(cells.length, `${strategy} produced nothing for a container`).toBeGreaterThan(0);
+
+      const planted: Bed = { ...bed, cells };
+      for (const cell of cells) {
+        const { issues } = validatePlacement(cell.plantId, cell.cellX, cell.cellY, planted, plantMap, 30);
+        expect(
+          issues.filter((i) => i.severity !== "info").map((i) => i.messageKey),
+          `${strategy}: ${cell.plantId} at (${cell.cellX},${cell.cellY})`
+        ).toEqual([]);
+      }
+    }
   });
 
   it("never plants on a path cell, in any direction or strategy", () => {

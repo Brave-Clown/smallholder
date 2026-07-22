@@ -1,6 +1,7 @@
 import type { Plant } from "@/types/plant";
 import type { Bed, CellPlanting } from "@/types/garden";
 import { plantFamilyMap, type PlantFamily } from "@/data/plantFamilies";
+import { validatePlacement } from "./placementValidation";
 import { differenceInWeeks, parseISO, addWeeks } from "date-fns";
 
 export type PlantingStrategy =
@@ -52,9 +53,17 @@ export function recommendBedPlanting(
   const totalCells = bed.width * bed.height;
   const strategy = config.strategy ?? "balanced";
   const direction = config.direction ?? "rows_ew";
+  const plantMap = new Map(allPlants.map((p) => [p.id, p]));
 
-  const scored = allPlants
-    .filter((p) => p.category !== "berry")
+  // The validator's issues split by what they depend on. Environment fit is
+  // position-independent — a shade plant in a greenhouse is wrong in every
+  // cell — so it has to be settled here, during selection, or the plant would
+  // be placed and then flagged in every cell it occupies.
+  const candidates = allPlants.filter((p) => p.category !== "berry");
+  const envClean = candidates.filter((p) => !hasEnvironmentIssue(p, bed, plantMap, config.gridCellSizeCm));
+  const pool = envClean.length > 0 ? envClean : candidates;
+
+  const scored = pool
     .map((p) => scorePlant(p, bed, config, strategy))
     .filter((s) => s.score > 0)
     .sort((a, b) => b.score - a.score);
@@ -75,9 +84,47 @@ export function recommendBedPlanting(
   // Paths are not plantable area. togglePath already clears a plant when a path
   // is drawn over it, and a path cell renders over whatever sits beneath it, so
   // placing here would bury plants the user can never see.
-  if (!bed.paths?.length) return placed;
-  const paths = new Set(bed.paths);
-  return placed.filter((c) => !paths.has(`${c.cellX}-${c.cellY}`));
+  const paths = new Set(bed.paths ?? []);
+  const plantable = paths.size > 0
+    ? placed.filter((c) => !paths.has(`${c.cellX}-${c.cellY}`))
+    : placed;
+
+  return dropCellsTheValidatorWouldFlag(plantable, bed, plantMap, config.gridCellSizeCm);
+}
+
+// Position-independent fit: probe the validator against an empty copy of the bed,
+// so only issues that depend on the plant and the bed itself can fire.
+function hasEnvironmentIssue(
+  plant: Plant,
+  bed: Bed,
+  plantMap: Map<string, Plant>,
+  gridCellSizeCm: number,
+): boolean {
+  const emptyBed: Bed = { ...bed, cells: [] };
+  return validatePlacement(plant.id, 0, 0, emptyBed, plantMap, gridCellSizeCm)
+    .issues.some((i) => i.type === "environment");
+}
+
+// The remaining issues — antagonist proximity and same-species spacing — depend
+// on the neighbours, so they can only be judged once a layout exists. Walk the
+// generated cells in order and keep each one only if the validator accepts it
+// against the cells already kept. Calling the validator itself, at the same
+// severity bar the grid marks cells with, is what stops the engine from
+// producing a layout the UI flags a moment later.
+function dropCellsTheValidatorWouldFlag(
+  cells: CellPlanting[],
+  bed: Bed,
+  plantMap: Map<string, Plant>,
+  gridCellSizeCm: number,
+): CellPlanting[] {
+  const accepted: CellPlanting[] = [];
+  for (const cell of cells) {
+    const soFar: Bed = { ...bed, cells: accepted };
+    const { issues } = validatePlacement(cell.plantId, cell.cellX, cell.cellY, soFar, plantMap, gridCellSizeCm);
+    if (issues.some((i) => i.severity === "error" || i.severity === "warning")) continue;
+    accepted.push(cell);
+  }
+  return accepted;
 }
 
 // --- Plant scoring (unchanged logic) ---
