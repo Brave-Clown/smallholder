@@ -337,9 +337,7 @@
     },
     "backendUrl": "URL del servidor",
     "backendHint": "Dejar vacio para modo local. Configurar cuando se ejecuta en Docker.",
-    "saved": "Configuracion guardada!",
-    "coffeeTitle": "¿Te gusta Smallholder?",
-    "coffeeDesc": "Este proyecto es de código abierto y gratuito. ¡Apoya el desarrollo con un café!"
+    "saved": "Configuracion guardada!"
   },
   "dataManagement": {
     "title": "Gestion de datos",

@@ -337,9 +337,7 @@
     },
     "backendUrl": "Backend-URL",
     "backendHint": "Leer lassen f\u00fcr Nur-Lokal-Modus. Setzen wenn Docker verwendet wird.",
-    "saved": "Einstellungen gespeichert!",
-    "coffeeTitle": "Gefällt dir Smallholder?",
-    "coffeeDesc": "Dieses Projekt ist Open Source und kostenlos. Unterstütze die Entwicklung mit einem Kaffee!"
+    "saved": "Einstellungen gespeichert!"
   },
   "dataManagement": {
     "title": "Daten-Management",

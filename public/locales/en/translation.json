@@ -337,9 +337,7 @@
     },
     "backendUrl": "Backend URL",
     "backendHint": "Leave empty for local-only mode. Set when running in Docker.",
-    "saved": "Settings saved!",
-    "coffeeTitle": "Enjoying Smallholder?",
-    "coffeeDesc": "This project is open source and free. Support development with a coffee!"
+    "saved": "Settings saved!"
   },
   "dataManagement": {
     "title": "Data Management",

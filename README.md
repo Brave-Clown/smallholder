@@ -1,135 +1,106 @@
-<p align="center">
-  <img src="public/favicon.svg" width="80" height="80" alt="Gardener">
-</p>
-
-<h1 align="center">Gardener</h1>
+<h1 align="center">Smallholder</h1>
 
 <p align="center">
-  <strong>The open-source toolkit for self-sufficient living</strong><br>
-  <em>Plan beds. Raise animals. Preserve harvests. Feed your family.</em>
+  <strong>A garden planner that grows into a homestead manager.</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/mniedermaier/gardener/actions/workflows/ci.yml"><img src="https://github.com/mniedermaier/gardener/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/mniedermaier/gardener/actions/workflows/deploy.yml"><img src="https://github.com/mniedermaier/gardener/actions/workflows/deploy.yml/badge.svg" alt="Deploy"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License"></a>
-  <img src="https://img.shields.io/badge/plants-45+-228B22" alt="45+ plants">
-  <img src="https://img.shields.io/badge/tests-311-brightgreen" alt="311 tests">
+  <img src="https://img.shields.io/badge/status-early%20fork-orange" alt="Status: early fork">
   <img src="https://img.shields.io/badge/i18n-DE%20%7C%20EN%20%7C%20ES%20%7C%20FR-blue" alt="4 languages">
-  <a href="https://buymeacoffee.com/mniedermaier"><img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?logo=buy-me-a-coffee&logoColor=black" alt="Buy Me a Coffee"></a>
-</p>
-
-<p align="center">
-  <a href="https://mniedermaier.github.io/gardener/"><strong>Try the Live Demo</strong></a>
-  &nbsp;&middot;&nbsp;
-  <a href="#quick-start">Quick Start</a>
-  &nbsp;&middot;&nbsp;
-  <a href="CONTRIBUTING.md">Contribute</a>
 </p>
 
 ---
 
-<p align="center">
-  <img src="docs/screenshots/dashboard.png" width="800" alt="Dashboard">
-</p>
+## What this is
 
-## What is Gardener?
+Most garden planners assume you already know what you are doing. Smallholder is
+aimed at the opposite person: a total layperson who wants to grow a meaningful
+share of their own food and has no idea where to start. It begins at "what do I
+plant this week" and scales, only if you ask it to, toward whole-property food
+production — beds, livestock, pantry, compost, water.
 
-Gardener is a **complete self-sufficiency planner** — not just for your garden, but for your entire homestead. It answers the question every self-sufficiency beginner asks: **"Can my garden feed my family?"**
+The governing rule is progressive disclosure. Every capability has to be
+ignorable, so someone who only wants a planting date never meets the rest.
 
-Works **offline as a PWA**, runs as a **static site** (GitHub Pages), or as a **Docker container** with backend sync. Available in **Deutsch, English, Español, Français**.
+## Status: early fork, not ready for real use
 
-<details>
-<summary><strong>More screenshots</strong></summary>
+Being blunt, because the badge above is doing real work:
 
-| Bed Planner | Plant Database |
-|:-:|:-:|
-| <img src="docs/screenshots/planner.png" width="400" alt="Planner"> | <img src="docs/screenshots/plants.png" width="400" alt="Plants"> |
+- This is a hard fork of **[mniedermaier/gardener](https://github.com/mniedermaier/gardener)**
+  and most of the code here is still his. It builds, runs, and passes its tests
+  (113 unit tests across 17 files).
+- **The part that makes it Smallholder is not written yet.** Upstream derives
+  planting dates from frost-date offsets. Smallholder computes planting windows
+  from climate normals × per-plant climate needs, and can explain *why* a window
+  closes — frost, heat, soil temperature, vernalization, daylight. That engine
+  is Level 3 on the roadmap. The schema it consumes exists
+  (`src/types/plantV2.ts`); the engine does not.
+- **Adopting mid-season is currently broken.** Task dates all derive from the
+  last frost date and ignore when you actually planted, so a mid-season start
+  produces a task list full of past-dated work. That is the top Level 2 item.
+- No demo site yet. The screenshots in `docs/` are inherited from upstream and
+  still show the old branding.
 
-| Season Calendar | Self-Sufficiency |
-|:-:|:-:|
-| <img src="docs/screenshots/calendar.png" width="400" alt="Calendar"> | <img src="docs/screenshots/sufficiency.png" width="400" alt="Sufficiency"> |
+If you want a garden planner that works today, use
+[upstream](https://github.com/mniedermaier/gardener) — it is further along and
+maintained. Come back here once Level 2 lands.
 
-| Livestock | Mobile |
-|:-:|:-:|
-| <img src="docs/screenshots/livestock.png" width="400" alt="Livestock"> | <img src="docs/screenshots/mobile-dashboard.png" width="200" alt="Mobile"> |
+## What works today
 
-</details>
+Inherited from upstream and functional: drag-and-drop bed planner with companion
+and rotation validation, 45 plants, task calendar, harvest log, garden journal,
+seed inventory, soil tests, pest tracker, livestock and feed tracking,
+preservation and pantry, expense tracking, weather dashboard, self-sufficiency
+calculator, full JSON backup and CSV export. Works offline as a PWA, in four
+languages.
 
-## Features at a Glance
+Treat all of it as inherited ground being rebuilt, not as a finished product.
 
-**Garden Planning**
-- Drag & drop bed planner with 8 environments (outdoor, greenhouse, polytunnel, raised bed, ...)
-- 45 plants with hand-drawn SVG icons, companion/antagonist validation
-- 6 auto-fill strategies (calories, yield, beginner, ...) with 4 planting directions
-- Companion planting matrix — see all relationships at a glance
-- Crop rotation warnings, permaculture guild templates, walkway drawing
-
-**Livestock Management**
-- 7 animal types: chickens, ducks, rabbits, bees, goats, sheep, quail
-- Production tracking with quick-log (tap +5 eggs), trends chart, per-animal analytics
-- Feed cost management with monthly comparison and per-animal ROI
-- Health records: vaccinations, deworming, illness — with overdue warnings
-
-**Self-Sufficiency Calculator**
-- Monthly nutrition coverage (calories, protein, vitamin C, fiber)
-- Uses **real production data** when available, falls back to estimates
-- Winter gap analysis with preservation recommendations
-- Annual food plan with crop targets and animal product yields
-
-**Preservation & Pantry**
-- Track stored food: jars, frozen bags, dried herbs — with expiry warnings
-- 5 methods: canning, freezing, fermenting, drying, root cellar
-- Per-plant preservation guides and practical tips
-
-**Everything Else**
-- Task calendar, harvest log, garden journal (with photos), seed inventory
-- Soil tests (pH, N-P-K), pest tracker, irrigation logging, expense tracking with ROI
-- Weather dashboard with frost alerts and sunlight simulation
-- Full data backup/restore (17 data types), CSV export
-- Print-friendly bed layouts
-
-## Quick Start
+## Quick start
 
 ```bash
-git clone https://github.com/mniedermaier/gardener.git
-cd gardener && npm install && npm run dev
+git clone https://github.com/Brave-Clown/smallholder.git
+cd smallholder && npm install && npm run dev
 ```
 
-Docker:
+Docker, with the optional sync backend:
 
 ```bash
 docker compose up --build    # http://localhost:8080
 ```
 
-## Commands
-
 | Command | Description |
 |---------|-------------|
 | `npm run dev` | Dev server (localhost:5173) |
 | `npm run build` | TypeScript check + production build |
-| `npm run test` | 311 unit tests (Vitest) |
-| `npm run test:e2e` | 8 E2E tests (Playwright) |
+| `npm run test` | Unit tests (Vitest) |
+| `npm run test:e2e` | E2E tests (Playwright) |
 
-## Tech Stack
+## Direction
 
-React 19 · TypeScript · Vite · Tailwind CSS · Zustand · @dnd-kit · react-i18next · date-fns · SunCalc · Vitest · Playwright · PWA (Workbox)
+- **[ROADMAP.md](ROADMAP.md)** — levels, not dates. Start there.
+- **[CLAUDE.md](CLAUDE.md)** — architecture invariants and conventions.
+- **[src/types/plantV2.ts](src/types/plantV2.ts)** — the v2 schema and the
+  reasoning behind it.
 
-Optional backend: Express + SQLite + rate limiting (Docker only)
+React 19 · Vite 8 · TypeScript 6 · Tailwind 4 · Zustand · @dnd-kit ·
+react-i18next · date-fns · SunCalc · Vitest · Playwright · PWA (Workbox).
+Optional backend: Express 5 + SQLite.
 
-## Data Safety
+## Data safety
 
-All data stays in your browser. No account needed, no data sent anywhere.
-
-- **Full JSON backup** — 17 data types (gardens, animals, pantry, ...)
-- **CSV export** for harvests and expenses
-- **Backend sync** optional via Docker (SQLite)
-- Dashboard reminds you if no backup in 7+ days
+All data stays in your browser. No account, nothing sent anywhere. Full JSON
+backup and CSV export are built in, and backups produced by upstream Gardener
+still import.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). Issues and PRs welcome!
+Too early. The foundations are still moving and I would be wasting your time.
+Issues describing real growing problems are welcome; see
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE). Original work © Matthias Niedermaier; fork modifications
+© Brave Clown. Upstream's copyright notice is retained as MIT requires.
