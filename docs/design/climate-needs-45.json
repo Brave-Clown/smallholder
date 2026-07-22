@@ -1,0 +1,399 @@
+{
+  "arugula": {
+    "soilGerminationMinC": 4,
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      4,
+      24
+    ],
+    "heatCeilingC": 26
+  },
+  "asparagus": {
+    "frostTolerance": "very_hardy",
+    "growthRangeC": [
+      7,
+      30
+    ],
+    "minWinterTempC": -34
+  },
+  "basil": {
+    "soilGerminationMinC": 18,
+    "frostTolerance": "tender",
+    "growthRangeC": [
+      15,
+      35
+    ]
+  },
+  "bean": {
+    "soilGerminationMinC": 16,
+    "frostTolerance": "tender",
+    "growthRangeC": [
+      16,
+      32
+    ],
+    "heatCeilingC": 35
+  },
+  "beetroot": {
+    "soilGerminationMinC": 7,
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      7,
+      29
+    ],
+    "heatCeilingC": 30
+  },
+  "blueberry": {
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      7,
+      29
+    ],
+    "minWinterTempC": -26,
+    "chillHoursMin": 500
+  },
+  "broccoli": {
+    "soilGerminationMinC": 7,
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      7,
+      26
+    ],
+    "heatCeilingC": 27
+  },
+  "cabbage": {
+    "soilGerminationMinC": 7,
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      7,
+      26
+    ],
+    "heatCeilingC": 28
+  },
+  "carrot": {
+    "soilGerminationMinC": 7,
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      7,
+      29
+    ],
+    "heatCeilingC": 30
+  },
+  "cauliflower": {
+    "soilGerminationMinC": 8,
+    "frostTolerance": "half_hardy",
+    "growthRangeC": [
+      8,
+      26
+    ],
+    "heatCeilingC": 27
+  },
+  "celery": {
+    "soilGerminationMinC": 15,
+    "soilGerminationMaxC": 24,
+    "frostTolerance": "half_hardy",
+    "growthRangeC": [
+      10,
+      24
+    ],
+    "heatCeilingC": 27
+  },
+  "chard": {
+    "soilGerminationMinC": 7,
+    "frostTolerance": "half_hardy",
+    "growthRangeC": [
+      7,
+      32
+    ]
+  },
+  "chives": {
+    "soilGerminationMinC": 10,
+    "frostTolerance": "very_hardy",
+    "growthRangeC": [
+      5,
+      29
+    ],
+    "minWinterTempC": -34
+  },
+  "corn": {
+    "soilGerminationMinC": 13,
+    "frostTolerance": "tender",
+    "growthRangeC": [
+      13,
+      35
+    ]
+  },
+  "cucumber": {
+    "soilGerminationMinC": 16,
+    "frostTolerance": "tender",
+    "growthRangeC": [
+      16,
+      35
+    ]
+  },
+  "currant": {
+    "frostTolerance": "very_hardy",
+    "growthRangeC": [
+      4,
+      27
+    ],
+    "heatCeilingC": 30,
+    "minWinterTempC": -34,
+    "chillHoursMin": 900
+  },
+  "dill": {
+    "soilGerminationMinC": 10,
+    "frostTolerance": "half_hardy",
+    "growthRangeC": [
+      7,
+      26
+    ],
+    "heatCeilingC": 27
+  },
+  "eggplant": {
+    "soilGerminationMinC": 18,
+    "frostTolerance": "tender",
+    "growthRangeC": [
+      18,
+      35
+    ]
+  },
+  "endive": {
+    "soilGerminationMinC": 7,
+    "frostTolerance": "half_hardy",
+    "growthRangeC": [
+      7,
+      24
+    ],
+    "heatCeilingC": 27
+  },
+  "fennel": {
+    "soilGerminationMinC": 15,
+    "frostTolerance": "half_hardy",
+    "growthRangeC": [
+      10,
+      26
+    ],
+    "heatCeilingC": 27
+  },
+  "garlic": {
+    "soilGerminationMinC": 4,
+    "frostTolerance": "very_hardy",
+    "growthRangeC": [
+      4,
+      29
+    ],
+    "vernalization": {
+      "weeks": 6,
+      "belowC": 10
+    }
+  },
+  "gooseberry": {
+    "frostTolerance": "very_hardy",
+    "growthRangeC": [
+      4,
+      27
+    ],
+    "heatCeilingC": 30,
+    "minWinterTempC": -34,
+    "chillHoursMin": 900
+  },
+  "kale": {
+    "soilGerminationMinC": 7,
+    "frostTolerance": "very_hardy",
+    "growthRangeC": [
+      4,
+      27
+    ],
+    "heatCeilingC": 29
+  },
+  "kohlrabi": {
+    "soilGerminationMinC": 7,
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      7,
+      26
+    ],
+    "heatCeilingC": 28
+  },
+  "leek": {
+    "soilGerminationMinC": 8,
+    "frostTolerance": "very_hardy",
+    "growthRangeC": [
+      7,
+      26
+    ]
+  },
+  "lettuce": {
+    "soilGerminationMinC": 4,
+    "soilGerminationMaxC": 27,
+    "frostTolerance": "half_hardy",
+    "growthRangeC": [
+      4,
+      24
+    ],
+    "heatCeilingC": 27
+  },
+  "mint": {
+    "soilGerminationMinC": 13,
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      7,
+      30
+    ],
+    "minWinterTempC": -29
+  },
+  "onion": {
+    "soilGerminationMinC": 10,
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      7,
+      29
+    ]
+  },
+  "pak_choi": {
+    "soilGerminationMinC": 7,
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      7,
+      24
+    ],
+    "heatCeilingC": 27
+  },
+  "parsley": {
+    "soilGerminationMinC": 10,
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      7,
+      28
+    ]
+  },
+  "pea": {
+    "soilGerminationMinC": 4,
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      7,
+      24
+    ],
+    "heatCeilingC": 27
+  },
+  "pepper": {
+    "soilGerminationMinC": 18,
+    "frostTolerance": "tender",
+    "growthRangeC": [
+      15,
+      35
+    ]
+  },
+  "potato": {
+    "soilGerminationMinC": 7,
+    "frostTolerance": "half_hardy",
+    "growthRangeC": [
+      7,
+      30
+    ]
+  },
+  "pumpkin": {
+    "soilGerminationMinC": 16,
+    "frostTolerance": "tender",
+    "growthRangeC": [
+      15,
+      35
+    ]
+  },
+  "radish": {
+    "soilGerminationMinC": 5,
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      5,
+      25
+    ],
+    "heatCeilingC": 26
+  },
+  "raspberry": {
+    "frostTolerance": "very_hardy",
+    "growthRangeC": [
+      7,
+      29
+    ],
+    "heatCeilingC": 32,
+    "minWinterTempC": -29,
+    "chillHoursMin": 800
+  },
+  "rosemary": {
+    "frostTolerance": "half_hardy",
+    "growthRangeC": [
+      7,
+      32
+    ],
+    "minWinterTempC": -9
+  },
+  "spinach": {
+    "soilGerminationMinC": 2,
+    "soilGerminationMaxC": 24,
+    "frostTolerance": "very_hardy",
+    "growthRangeC": [
+      2,
+      21
+    ],
+    "heatCeilingC": 24,
+    "photoperiod": "long_day"
+  },
+  "squash": {
+    "soilGerminationMinC": 16,
+    "frostTolerance": "tender",
+    "growthRangeC": [
+      15,
+      35
+    ]
+  },
+  "strawberry": {
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      7,
+      29
+    ],
+    "minWinterTempC": -23,
+    "chillHoursMin": 250
+  },
+  "sunflower": {
+    "soilGerminationMinC": 10,
+    "frostTolerance": "tender",
+    "growthRangeC": [
+      10,
+      35
+    ]
+  },
+  "thyme": {
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      7,
+      32
+    ],
+    "minWinterTempC": -23
+  },
+  "tomato": {
+    "soilGerminationMinC": 15,
+    "frostTolerance": "tender",
+    "growthRangeC": [
+      10,
+      35
+    ]
+  },
+  "turnip": {
+    "soilGerminationMinC": 5,
+    "frostTolerance": "hardy",
+    "growthRangeC": [
+      5,
+      26
+    ],
+    "heatCeilingC": 27
+  },
+  "zucchini": {
+    "soilGerminationMinC": 16,
+    "frostTolerance": "tender",
+    "growthRangeC": [
+      15,
+      35
+    ]
+  }
+}
