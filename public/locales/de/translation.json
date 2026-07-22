@@ -279,6 +279,7 @@
   },
   "calendar": {
     "title": "Kalender",
+    "today": "Heute",
     "noTasks": "Noch keine Aufgaben. Plane deinen Garten um automatisch Aufgaben zu erstellen.",
     "thisWeek": "Diese Woche",
     "upcoming": "Bevorstehend",

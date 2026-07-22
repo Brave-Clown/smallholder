@@ -279,6 +279,7 @@
   },
   "calendar": {
     "title": "Calendar",
+    "today": "Today",
     "noTasks": "No tasks yet. Plan your garden to generate tasks automatically.",
     "thisWeek": "This Week",
     "upcoming": "Upcoming",

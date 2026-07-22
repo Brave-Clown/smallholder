@@ -16,7 +16,7 @@ Levels, not dates. **0** = Make Repo ours · **1** = fix what exists · **2** = 
 ## Level 1 — Make the current app right
 
 - [x] Default language becomes English (inherited from upstream, who is German) — *done via `i18next-browser-languagedetector`, which was already a dependency and imported nowhere. Precedence is stored choice → browser language → English, so a German visitor still lands in German. New `src/lib/locale.ts` owns the supported list, the default, and the persist key, which also collapsed four hardcoded copies of `gardener-storage` into one*
-- [ ] Today marker on the calendar/timeline (verified: none exists)
+- [x] Today marker on the calendar/timeline (verified: none exists) — *vertical line per row on the season timeline plus a diamond cap in the month header, alongside the existing frost line. The axis math moved out of the component into `src/lib/timeline.ts` with tests, which also fixed a real bug: `monthFraction` divided every month by 31 days, so short months compressed and every bar after February sat slightly late*
 - [ ] Guild templates fill the whole bed — tile/scale the pattern instead of a fixed 3×3; make the guild button a friendly front door to the auto-fill engine rather than a parallel tool
 - [ ] Auto-fill consults the companion validator *while scoring*, so it stops generating conflicts it flags a second later
 - [ ] Downgrade companion conflicts everywhere to soft warnings with per-placement override

@@ -279,6 +279,7 @@
   },
   "calendar": {
     "title": "Calendrier",
+    "today": "Aujourd'hui",
     "noTasks": "Aucune tâche pour le moment. Planifiez votre jardin pour générer des tâches automatiquement.",
     "thisWeek": "Cette semaine",
     "upcoming": "À venir",

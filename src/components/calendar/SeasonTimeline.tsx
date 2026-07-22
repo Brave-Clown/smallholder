@@ -6,8 +6,9 @@ import { usePlantMap } from "@/hooks/usePlants";
 import { usePlantName } from "@/hooks/usePlantName";
 import { PlantIconDisplay } from "@/components/ui/PlantIconDisplay";
 import { Card } from "@/components/ui/Card";
-import { addWeeks, addDays, parseISO, getMonth, format } from "date-fns";
+import { addWeeks, addDays, parseISO, format } from "date-fns";
 import { getFrostProtectionWeeks, ENVIRONMENT_ICONS } from "@/types/garden";
+import { monthFraction, axisPercent } from "@/lib/timeline";
 
 const MONTHS_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const MONTHS_DE = ["Jan", "Feb", "M\u00e4r", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
@@ -38,10 +39,6 @@ interface TooltipInfo {
   color: string;
   x: number;
   y: number;
-}
-
-function monthFraction(date: Date): number {
-  return getMonth(date) + date.getDate() / 31;
 }
 
 function fmt(date: Date): string {
@@ -155,7 +152,8 @@ export function SeasonTimeline() {
     setTooltip({ label, plant, dates, color, x: e.clientX, y: e.clientY - 50 });
   };
 
-  const frostFraction = (monthFraction(parseISO(lastFrostDate)) / 12) * 100;
+  const frostFraction = axisPercent(parseISO(lastFrostDate));
+  const todayFraction = axisPercent(new Date());
 
   return (
     <Card className="mt-6 overflow-x-auto">
@@ -204,6 +202,11 @@ export function SeasonTimeline() {
           {months.map((m, i) => (
             <div key={i} className="absolute text-center text-[9px] sm:text-xs" style={{ left: `${(i / 12) * 100}%`, width: `${100 / 12}%` }}>{m}</div>
           ))}
+          <div
+            className="absolute -bottom-0.5 h-1.5 w-1.5 -translate-x-1/2 rotate-45 bg-gray-700 dark:bg-gray-200"
+            style={{ left: `${todayFraction}%` }}
+            title={t("calendar.today")}
+          />
           <div className="invisible">X</div>
         </div>
       </div>
@@ -260,6 +263,11 @@ export function SeasonTimeline() {
                   className="absolute top-0 w-px bg-red-400"
                   style={{ left: `${frostFraction}%`, height: `${ROW_HEIGHT}px` }}
                 />
+                <div
+                  className="absolute top-0 w-0.5 -translate-x-1/2 bg-gray-700/70 dark:bg-gray-200/70"
+                  style={{ left: `${todayFraction}%`, height: `${ROW_HEIGHT}px` }}
+                  title={t("calendar.today")}
+                />
               </div>
             </div>
           );
@@ -291,6 +299,7 @@ export function SeasonTimeline() {
         <span className="flex items-center gap-1"><span className="inline-block h-3 w-3 rounded" style={{ backgroundColor: "#3b82f6" }} /> {t("plants.details.transplant")}</span>
         <span className="flex items-center gap-1"><span className="inline-block h-3 w-3 rounded" style={{ backgroundColor: "#f59e0b" }} /> {t("plants.details.harvest")}</span>
         <span className="flex items-center gap-1"><span className="inline-block bg-red-400" style={{ width: "2px", height: "12px" }} /> {t("settings.lastFrostDate")}</span>
+        <span className="flex items-center gap-1"><span className="inline-block bg-gray-700 dark:bg-gray-200" style={{ width: "2px", height: "12px" }} /> {t("calendar.today")}</span>
       </div>
     </Card>
   );
