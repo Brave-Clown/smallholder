@@ -14,10 +14,14 @@ ignored, redesign it.
 
 ## Tech Stack
 
-- React 19 + Vite + TypeScript (strict) + Tailwind 3
-- Zustand slices + localStorage persistence; HashRouter
+- React 19 + Vite 8 + TypeScript 6 (strict) + Tailwind 4
+- Zustand slices (14) + localStorage persistence; HashRouter
 - react-i18next (de/en/es/fr), @dnd-kit, date-fns, SunCalc
-- PWA via vite-plugin-pwa; optional Docker backend (Express 5 + better-sqlite3 + Zod)
+- PWA via vite-plugin-pwa; optional Docker backend (Express 5 + better-sqlite3
+  + Zod — note the backend is pinned to TypeScript 5.8, not 6)
+
+Tailwind 4 is CSS-first: theme tokens live in `@theme` in `src/index.css`.
+There is no `tailwind.config.js` and there should not be one.
 
 ## Commands
 
@@ -29,6 +33,21 @@ npm run test:watch
 npm run test:e2e     # Playwright (e2e/playwright.config.ts)
 docker compose up --build   # full stack, localhost:8080
 ```
+
+## Codebase Map (inherited from upstream — verified, not assumed)
+
+- `@/` is an alias for `src/`.
+- State: 14 slices in `src/store/`, composed in `src/store/index.ts`
+  (`seasonArchives` lives in index.ts, not its own slice).
+- **Always read state with `useShallow()` selectors — never bare `useStore()`.**
+  This is load-bearing for render performance, not style.
+- Components use **named exports**. `src/App.tsx` holds the only default export.
+- Routes are lazy-loaded through the `lazyRetry()` wrapper, which recovers from
+  a stale PWA cache serving a deleted chunk. New routes must use it too.
+- i18n: default locale is `de`, fallback `en`; strings load over HTTP from
+  `public/locales/{lng}/`, so a new key needs the file, not just the code.
+- The persisted localStorage key is `gardener-storage`. Renaming it during the
+  identity sweep discards existing user data — it needs a migration.
 
 ## Architecture Direction (v2 — non-negotiable invariants)
 
@@ -82,4 +101,6 @@ docker compose up --build   # full stack, localhost:8080
 ## Pointers (read ad hoc, not imported)
 
 - Roadmap: ROADMAP.md + GitHub milestones/issues
-- v2 schema rationale: docs/design/climate-engine.md
+- v2 schema rationale: src/types/plantV2.ts (header + inline comments).
+  A separate docs/design/climate-engine.md gets written at Level 3, when the
+  engine itself is designed — not before, or it just restates the schema.
