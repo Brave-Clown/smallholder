@@ -66,4 +66,4 @@ Levels, not dates. **0** = Make Repo ours · **1** = fix what exists · **2** = 
 
 ## Inbox (capture-only, sort later)
 
-- (empty)
+- Auto-fill caps species variety at a fixed 6 (4 for `calories`/`yield`) however large the bed: `Math.min(6, Math.ceil(totalCells / 3))` in `recommendBedPlanting`. The low end does scale — a 6-cell bed gets 2 species — but the top end never moves, so a 96-cell bed and a 400-cell bed both get 6. Not obviously a bug: fewer types is the deliberate point of `calories`/`yield`, and monoculture blocks are legitimate at field scale. Wants sorting alongside the Level 3 rescoring and the fields abstraction rather than a blind raise.
