@@ -1,4 +1,5 @@
 import type { StateCreator } from "zustand";
+import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
 
 export interface AlertConfig {
   frostAlertEnabled: boolean;
@@ -9,7 +10,7 @@ export interface AlertConfig {
 }
 
 export interface SettingsSlice {
-  locale: "de" | "en" | "es" | "fr";
+  locale: Locale;
   weatherApiKey: string;
   locationLat: number | null;
   locationLon: number | null;
@@ -20,7 +21,7 @@ export interface SettingsSlice {
   theme: "light" | "dark" | "system";
   alerts: AlertConfig;
   lastBackupDate: string | null;
-  setLocale: (locale: "de" | "en" | "es" | "fr") => void;
+  setLocale: (locale: Locale) => void;
   setWeatherApiKey: (key: string) => void;
   setLocation: (lat: number, lon: number, name: string) => void;
   setLastFrostDate: (date: string) => void;
@@ -32,7 +33,9 @@ export interface SettingsSlice {
 }
 
 export const createSettingsSlice: StateCreator<SettingsSlice> = (set) => ({
-  locale: "de",
+  // Overwritten by persist rehydration for a returning user, and by the
+  // detector sync in main.tsx for a new one.
+  locale: DEFAULT_LOCALE,
   weatherApiKey: "",
   locationLat: null,
   locationLon: null,

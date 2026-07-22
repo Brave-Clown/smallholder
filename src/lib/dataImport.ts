@@ -1,5 +1,6 @@
 import { useStore } from "@/store";
 import { EXPORT_APP_ID, LEGACY_EXPORT_APP_ID, type SmallholderExport } from "./dataExport";
+import { STORAGE_KEY } from "./locale";
 
 export type ImportMode = "overwrite" | "merge";
 
@@ -220,7 +221,7 @@ function importMerge(
 }
 
 export function clearAllData(): void {
-  localStorage.removeItem("gardener-storage");
+  localStorage.removeItem(STORAGE_KEY);
   sessionStorage.removeItem("smallholder-weather");
   window.location.reload();
 }

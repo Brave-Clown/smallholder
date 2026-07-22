@@ -15,6 +15,7 @@ import { createWaterSlice, type WaterSlice } from "./waterSlice";
 import { createLivestockSlice, type LivestockSlice } from "./livestockSlice";
 import { createPantrySlice, type PantrySlice } from "./pantrySlice";
 import type { Garden, SeasonArchive } from "@/types/garden";
+import { STORAGE_KEY } from "@/lib/locale";
 
 export type AppStore = SettingsSlice & GardenSlice & TaskSlice & HarvestSlice & JournalSlice & WeatherSlice & CustomPlantsSlice & ExpenseSlice & SeedSlice & SoilSlice & PestSlice & WaterSlice & LivestockSlice & PantrySlice & {
   seasonArchives: SeasonArchive[];
@@ -67,7 +68,7 @@ export const useStore = create<AppStore>()(
       },
     }),
     {
-      name: "gardener-storage",
+      name: STORAGE_KEY,
       version: 3,
       migrate: (persisted, version) => {
         const state = persisted as PersistedState;

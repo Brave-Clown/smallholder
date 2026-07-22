@@ -1,7 +1,9 @@
+import { STORAGE_KEY } from "./locale";
+
 export function initTheme() {
   const stored = (() => {
     try {
-      const data = JSON.parse(localStorage.getItem("gardener-storage") ?? "{}");
+      const data = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "{}");
       return data?.state?.theme as string | undefined;
     } catch {
       return undefined;
