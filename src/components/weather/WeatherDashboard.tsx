@@ -46,7 +46,7 @@ export function WeatherDashboard() {
   const plantMap = usePlantMap();
   const [weather, setWeather] = useState<WeatherData | null>(() => {
     try {
-      const cached = sessionStorage.getItem("gardener-weather");
+      const cached = sessionStorage.getItem("smallholder-weather");
       return cached ? JSON.parse(cached) : null;
     } catch { return null; }
   });
@@ -125,7 +125,7 @@ export function WeatherDashboard() {
         fetchedAt: new Date().toISOString(),
       };
       setWeather(weatherData);
-      try { sessionStorage.setItem("gardener-weather", JSON.stringify(weatherData)); } catch {}
+      try { sessionStorage.setItem("smallholder-weather", JSON.stringify(weatherData)); } catch {}
     } catch {
       setError("Failed to fetch weather data. Check your API key.");
     } finally {

@@ -6,7 +6,7 @@ function makeExport(overrides: Partial<SmallholderExport["data"]> = {}): Smallho
   return {
     version: 1,
     exportedAt: new Date().toISOString(),
-    app: "gardener",
+    app: "smallholder",
     data: {
       gardens: [],
       tasks: [],
@@ -45,7 +45,7 @@ describe("Data export", () => {
   it("should build valid export data", () => {
     const data = buildExportData();
     expect(data.version).toBe(1);
-    expect(data.app).toBe("gardener");
+    expect(data.app).toBe("smallholder");
     expect(data.exportedAt).toBeTruthy();
     expect(Array.isArray(data.data.gardens)).toBe(true);
     expect(Array.isArray(data.data.tasks)).toBe(true);
@@ -93,11 +93,15 @@ describe("Data import validation", () => {
   });
 
   it("should reject missing data", () => {
-    expect(validateExportFile({ app: "gardener", version: 1 })).toBe(false);
+    expect(validateExportFile({ app: "smallholder", version: 1 })).toBe(false);
   });
 
   it("should reject missing gardens array", () => {
-    expect(validateExportFile({ app: "gardener", version: 1, data: {} })).toBe(false);
+    expect(validateExportFile({ app: "smallholder", version: 1, data: {} })).toBe(false);
+  });
+
+  it("should still accept pre-fork exports written by upstream gardener", () => {
+    expect(validateExportFile({ app: "gardener", version: 1, data: { gardens: [] } })).toBe(true);
   });
 
   it("should reject string input", () => {

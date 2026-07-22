@@ -14,10 +14,15 @@ import type { PestEntry } from "@/types/pest";
 import type { WaterEntry } from "@/types/water";
 import type { PantryItem } from "@/types/pantry";
 
+/** Written into every new export. */
+export const EXPORT_APP_ID = "smallholder";
+/** Upstream's id. Still accepted on import so pre-fork backups keep working. */
+export const LEGACY_EXPORT_APP_ID = "gardener";
+
 export interface SmallholderExport {
   version: 1;
   exportedAt: string;
-  app: "gardener";
+  app: typeof EXPORT_APP_ID | typeof LEGACY_EXPORT_APP_ID;
   data: {
     gardens: Garden[];
     tasks: Task[];
@@ -55,7 +60,7 @@ export function buildExportData(): SmallholderExport {
   return {
     version: 1,
     exportedAt: new Date().toISOString(),
-    app: "gardener",
+    app: EXPORT_APP_ID,
     data: {
       gardens: state.gardens,
       tasks: state.tasks,

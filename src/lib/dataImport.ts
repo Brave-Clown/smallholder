@@ -1,5 +1,5 @@
 import { useStore } from "@/store";
-import type { SmallholderExport } from "./dataExport";
+import { EXPORT_APP_ID, LEGACY_EXPORT_APP_ID, type SmallholderExport } from "./dataExport";
 
 export type ImportMode = "overwrite" | "merge";
 
@@ -36,7 +36,7 @@ const EMPTY_STATS: ImportResult["stats"] = {
 export function validateExportFile(json: unknown): json is SmallholderExport {
   if (!json || typeof json !== "object") return false;
   const obj = json as Record<string, unknown>;
-  if (obj.app !== "gardener") return false;
+  if (obj.app !== EXPORT_APP_ID && obj.app !== LEGACY_EXPORT_APP_ID) return false;
   if (typeof obj.version !== "number") return false;
   if (!obj.data || typeof obj.data !== "object") return false;
   const data = obj.data as Record<string, unknown>;
@@ -221,6 +221,6 @@ function importMerge(
 
 export function clearAllData(): void {
   localStorage.removeItem("gardener-storage");
-  sessionStorage.removeItem("gardener-weather");
+  sessionStorage.removeItem("smallholder-weather");
   window.location.reload();
 }

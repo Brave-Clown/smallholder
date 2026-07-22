@@ -33,7 +33,7 @@ COPY --from=backend-build /app/backend/package.json ./backend/
 RUN mkdir -p /app/data
 VOLUME /app/data
 
-ENV DB_PATH=/app/data/gardener.db
+ENV DB_PATH=/app/data/smallholder.db
 ENV PORT=3001
 
 EXPOSE 80

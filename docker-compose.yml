@@ -1,12 +1,12 @@
 services:
-  gardener:
+  smallholder:
     build: .
     ports:
       - "8080:80"
     volumes:
-      - gardener-data:/app/data
+      - smallholder-data:/app/data
     environment:
-      - DB_PATH=/app/data/gardener.db
+      - DB_PATH=/app/data/smallholder.db
 
 volumes:
-  gardener-data:
+  smallholder-data:

@@ -4,13 +4,13 @@ Levels, not dates. **0** = Make Repo ours · **1** = fix what exists · **2** = 
 
 ## Level 0 — Make the repo ours (identity + tooling, before any app work)
 
-- [ ] Baseline savepoint: fresh clone → `npm install`, `npm run dev`, `npm run build`, `npm run test` all pass; log any upstream breakage, don't fix it here
-- [ ] Claude Code installed, authenticated, opened at the repo root, reading CLAUDE.md (human setup, not a handoff)
-- [ ] Governing docs land in-repo: CLAUDE.md + ROADMAP.md at root; plant-schema-v2.ts → `src/types/plantV2.ts`; climate-needs-45.json staged under `docs/design/` for Level 2; stub `docs/design/climate-engine.md` or fix the CLAUDE.md pointer. From here the repo is canonical; Project uploads become stale mirrors.
-- [ ] Identity sweep: gardener → smallholder in `package.json`, README, `index.html` title, PWA manifest name/short_name (the install prompt shows these), GitHub About/description/topics
+- [x] Baseline savepoint: fresh clone → `npm install`, `npm run dev`, `npm run build`, `npm run test` all pass; log any upstream breakage, don't fix it here — *all four pass, 112 tests, no breakage found*
+- [x] Claude Code installed, authenticated, opened at the repo root, reading CLAUDE.md (human setup, not a handoff)
+- [x] Governing docs land in-repo: CLAUDE.md + ROADMAP.md at root; plant-schema-v2.ts → `src/types/plantV2.ts`; climate-needs-45.json staged under `docs/design/` for Level 2; stub `docs/design/climate-engine.md` or fix the CLAUDE.md pointer. From here the repo is canonical; Project uploads become stale mirrors. — *pointer now aims at plantV2.ts; climate-engine.md deferred to Level 3*
+- [ ] Identity sweep: gardener → smallholder in `package.json`, README, `index.html` title, PWA manifest name/short_name (the install prompt shows these), GitHub About/description/topics — *done except README (own item below). `gardener-storage` deliberately left alone; folded into the Level 2 schema-v2 migration*
 - [ ] License hygiene: retain upstream's MIT copyright notice, add mine alongside for the fork's changes
 - [ ] README rewrite: the thesis in one paragraph, honest early-fork status, pointer to ROADMAP.md — short, nobody is reading it yet
-- [ ] Upstream residue: inspect `.github/` (workflows, FUNDING.yml, templates) and any netlify/vercel/deploy configs; delete or retarget
+- [x] Upstream residue: inspect `.github/` (workflows, FUNDING.yml, templates) and any netlify/vercel/deploy configs; delete or retarget — *no FUNDING.yml or netlify/vercel existed; fixed `--base=/gardener/` in deploy.yml (would have 404'd every Pages asset) and a blank-issue link pointing at `niedermm/gardener`*
 - [ ] *(optional)* GitHub Pages auto-deploy of `main` — standing demo URL that doubles as the acceptance-check surface for every handoff
 
 ## Level 1 — Make the current app right

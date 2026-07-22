@@ -1,6 +1,6 @@
 import Database from "better-sqlite3";
 
-const DB_PATH = process.env.DB_PATH || "./data/gardener.db";
+const DB_PATH = process.env.DB_PATH || "./data/smallholder.db";
 
 let db: Database.Database;
 
