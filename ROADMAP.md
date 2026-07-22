@@ -32,6 +32,7 @@ Levels, not dates. **0** = Make Repo ours · **1** = fix what exists · **2** = 
 - [ ] Schema v2 migration: lifecycle split, required ClimateNeeds, family on the plant, frost offsets deleted
 - [ ] Crop expansion batch 1 (~50 homestead/SoCal staples: sweet potato, okra, melons, winged bean, first fruit trees)
 - [ ] Task list filterable by garden/bed selection
+- [ ] README status rewrite: once mid-season onboarding works, drop the "use upstream instead" steer and the early-fork badge, and re-describe what actually ships
 
 ## Level 3 — Near-term
 
