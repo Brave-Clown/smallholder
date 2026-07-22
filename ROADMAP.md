@@ -31,6 +31,7 @@ Levels, not dates. **0** = Make Repo ours · **1** = fix what exists · **2** = 
 - [ ] Dual frost dates (spring + fall) with risk percentiles, frost-free toggle, manual ClimateProfile entry
 - [ ] Per-bed sun exposure field, wired into placement validation and auto-fill scoring
 - [ ] Schema v2 migration: lifecycle split, required ClimateNeeds, family on the plant, frost offsets deleted
+- [ ] **Sanity-check each auto-fill strategy against its own goal.** Nothing currently asserts that `selfsufficient` actually produces better nutritional coverage than `balanced`, or that `calories` beats the others on calories — the strategies are named promises with no measurement behind them. `calculateSufficiency` already returns per-nutrient `{produced, needed, percent}`, so it is the oracle: fill a bed with each strategy, score the result, assert each one wins on the metric it claims. Land this *before* crop batch 1, so the batch is measured against a known baseline instead of silently moving one.
 - [ ] Crop expansion batch 1 (~50 homestead/SoCal staples: sweet potato, okra, melons, winged bean, first fruit trees)
 - [ ] Task list filterable by garden/bed selection
 - [ ] README status rewrite: once mid-season onboarding works, drop the "use upstream instead" steer and the early-fork badge, and re-describe what actually ships
@@ -46,6 +47,7 @@ Levels, not dates. **0** = Make Repo ours · **1** = fix what exists · **2** = 
 - [ ] Imperial display units (storage stays metric, conversion at the boundary)
 - [ ] Granular export/import and sharing at bed and site level (notes included)
 - [ ] Chinese (zh) locale
+- [ ] **Rescore auto-fill for a growing plant corpus** (follows the Level 2 sanity-check). Two structural problems, both harmless at 45 plants and neither harmless at 300: (1) `scorePlant` grades every plant independently and takes the top N, but "self-sufficient" is a property of the *set* — six high-protein legumes each score well and leave the plan with no vitamin C. A coverage goal needs portfolio selection, not per-plant ranking. (2) The nutrition thresholds are absolute (`protein > 2`, `calories > 30`, `vitC > 20`) and today split the corpus 16/25/22 of 45; nothing rescales them as plants land, so the signal flattens toward "everything qualifies". Also `?? 0` scores missing nutrition as zero, so sparse `draft` entries rank bottom for reasons unrelated to their merit.
 - [ ] Crop batches 2+ toward hundreds (draft → verified review pipeline)
 - [ ] Succession presets move from hardcoded tables into plant data
 
