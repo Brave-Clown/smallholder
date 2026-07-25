@@ -98,6 +98,12 @@
     "pathMode": "Wege zeichnen",
     "pathModeHint": "Klicke auf Felder um Wege hinzuzuf\u00fcgen oder zu entfernen. Wege ersetzen Pflanzen auf dem Feld.",
     "pathModeDone": "Fertig",
+    "bedView": {
+      "all": "Alle Beete",
+      "one": "Ein Beet",
+      "switchToOne": "Nur ein Beet auf einmal zeigen",
+      "switchToAll": "Alle Beete gleichzeitig zeigen"
+    },
     "editCell": "Pflanzung bearbeiten",
     "keepAnyway": "Pflanzung trotzdem behalten",
     "variety": "Sorte",

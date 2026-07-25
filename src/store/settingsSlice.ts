@@ -1,5 +1,6 @@
 import type { StateCreator } from "zustand";
 import { DEFAULT_LOCALE, type Locale } from "@/lib/locale";
+import { toggleBedCollapse, type BedViewMode } from "@/lib/bedView";
 
 export interface AlertConfig {
   frostAlertEnabled: boolean;
@@ -19,6 +20,8 @@ export interface SettingsSlice {
   gridCellSizeCm: number;
   backendUrl: string | null;
   theme: "light" | "dark" | "system";
+  bedViewMode: BedViewMode;
+  collapsedBedIds: string[];
   alerts: AlertConfig;
   lastBackupDate: string | null;
   setLocale: (locale: Locale) => void;
@@ -28,6 +31,8 @@ export interface SettingsSlice {
   setTheme: (theme: "light" | "dark" | "system") => void;
   setBackendUrl: (url: string | null) => void;
   setGridCellSizeCm: (size: number) => void;
+  setBedViewMode: (mode: BedViewMode) => void;
+  toggleBedCollapsed: (bedId: string, allBedIds: string[]) => void;
   setAlerts: (alerts: Partial<AlertConfig>) => void;
   setLastBackupDate: (date: string) => void;
 }
@@ -44,6 +49,9 @@ export const createSettingsSlice: StateCreator<SettingsSlice> = (set) => ({
   gridCellSizeCm: 30,
   backendUrl: null,
   theme: "system",
+  // All beds open, at every bed count, until the user says otherwise.
+  bedViewMode: "all",
+  collapsedBedIds: [],
   alerts: {
     frostAlertEnabled: true,
     frostThresholdC: 2,
@@ -60,6 +68,13 @@ export const createSettingsSlice: StateCreator<SettingsSlice> = (set) => ({
   setTheme: (theme) => set({ theme }),
   setBackendUrl: (backendUrl) => set({ backendUrl }),
   setGridCellSizeCm: (gridCellSizeCm) => set({ gridCellSizeCm }),
+  // Switching modes starts that mode clean: "all" opens everything, "one"
+  // falls back on the first bed. Neither inherits the other's collapsed set.
+  setBedViewMode: (bedViewMode) => set({ bedViewMode, collapsedBedIds: [] }),
+  toggleBedCollapsed: (bedId, allBedIds) =>
+    set((state) => ({
+      collapsedBedIds: toggleBedCollapse(state.bedViewMode, state.collapsedBedIds, allBedIds, bedId),
+    })),
   setAlerts: (updates) =>
     set((state) => ({ alerts: { ...state.alerts, ...updates } })),
   setLastBackupDate: (lastBackupDate) => set({ lastBackupDate }),

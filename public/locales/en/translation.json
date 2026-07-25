@@ -98,6 +98,12 @@
     "pathMode": "Draw Paths",
     "pathModeHint": "Click on cells to add or remove walkways. Paths replace any plants on that cell.",
     "pathModeDone": "Done",
+    "bedView": {
+      "all": "All beds",
+      "one": "One bed",
+      "switchToOne": "Show one bed at a time",
+      "switchToAll": "Show all beds at once"
+    },
     "editCell": "Edit Planting",
     "keepAnyway": "Keep this planting anyway",
     "variety": "Variety",

@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus, Trash2, Download, Upload, Settings, Archive, Share2, Wand2, AlertTriangle, Undo2, Footprints, Copy, Printer } from "lucide-react";
+import { Plus, Trash2, Download, Upload, Settings, Archive, Share2, Wand2, AlertTriangle, Undo2, Footprints, Copy, Printer, Rows3, Square } from "lucide-react";
 import {
   DndContext,
   DragOverlay,
@@ -32,6 +32,7 @@ import { useUndo } from "@/hooks/useUndo";
 import { validatePlacement, getCompanionHighlights, getAntagonistHighlights, firstNotableIssue, resolveIssueParams } from "@/lib/placementValidation";
 import { CellEditor } from "./CellEditor";
 import { recommendBedPlanting, getRecommendedPlants, STRATEGY_DETAILS, DIRECTION_DETAILS, type PlantingStrategy, type PlantingDirection } from "@/lib/bedRecommendation";
+import { expandedBedIds } from "@/lib/bedView";
 
 const ALL_ENVIRONMENTS: EnvironmentType[] = [
   "outdoor_bed", "raised_bed", "greenhouse", "cold_frame",
@@ -445,8 +446,8 @@ export function GardenPlanner() {
   const {
     gardens, activeGardenId, addGarden, setActiveGarden, addBed, deleteBed,
     deleteGarden, setCell, setBedCells, archiveSeason, seasonArchives, gridCellSizeCm, lastFrostDate,
-    duplicateGarden, duplicateBed,
-  } = useStore(useShallow((s) => ({ gardens: s.gardens, activeGardenId: s.activeGardenId, addGarden: s.addGarden, setActiveGarden: s.setActiveGarden, addBed: s.addBed, deleteBed: s.deleteBed, deleteGarden: s.deleteGarden, setCell: s.setCell, setBedCells: s.setBedCells, archiveSeason: s.archiveSeason, seasonArchives: s.seasonArchives, gridCellSizeCm: s.gridCellSizeCm, lastFrostDate: s.lastFrostDate, duplicateGarden: s.duplicateGarden, duplicateBed: s.duplicateBed })));
+    duplicateGarden, duplicateBed, bedViewMode, collapsedBedIds, setBedViewMode, toggleBedCollapsed,
+  } = useStore(useShallow((s) => ({ gardens: s.gardens, activeGardenId: s.activeGardenId, addGarden: s.addGarden, setActiveGarden: s.setActiveGarden, addBed: s.addBed, deleteBed: s.deleteBed, deleteGarden: s.deleteGarden, setCell: s.setCell, setBedCells: s.setBedCells, archiveSeason: s.archiveSeason, seasonArchives: s.seasonArchives, gridCellSizeCm: s.gridCellSizeCm, lastFrostDate: s.lastFrostDate, duplicateGarden: s.duplicateGarden, duplicateBed: s.duplicateBed, bedViewMode: s.bedViewMode, collapsedBedIds: s.collapsedBedIds, setBedViewMode: s.setBedViewMode, toggleBedCollapsed: s.toggleBedCollapsed })));
   const plants = usePlants();
   const plantMap = usePlantMap();
   const { toast, confirm } = useToast();
@@ -471,12 +472,17 @@ export function GardenPlanner() {
   const [autoFillBedId, setAutoFillBedId] = useState<string | null>(null);
   const [autoFillDirection, setAutoFillDirection] = useState<import("@/lib/bedRecommendation").PlantingDirection>("rows_ew");
   const [pathMode, setPathMode] = useState(false);
-  const [expandedBedId, setExpandedBedId] = useState<string | null>(null);
   const [editingCell, setEditingCell] = useState<{ gardenId: string; bedId: string; cellX: number; cellY: number } | null>(null);
   const [showPrint, setShowPrint] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const activeGarden = gardens.find((g) => g.id === activeGardenId);
+
+  const bedIds = useMemo(() => (activeGarden?.beds ?? []).map((b) => b.id), [activeGarden]);
+  const expandedBeds = useMemo(
+    () => expandedBedIds(bedViewMode, collapsedBedIds, bedIds),
+    [bedViewMode, collapsedBedIds, bedIds]
+  );
 
   // Get recommended plants for the active garden
   const recommendedIds = useMemo(() => {
@@ -776,6 +782,17 @@ export function GardenPlanner() {
                 >
                   <Footprints size={16} />{pathMode ? t("planner.pathModeDone") : t("planner.pathMode")}
                 </Button>
+                {activeGarden.beds.length > 1 && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setBedViewMode(bedViewMode === "all" ? "one" : "all")}
+                    title={t(bedViewMode === "all" ? "planner.bedView.switchToOne" : "planner.bedView.switchToAll")}
+                  >
+                    {bedViewMode === "all" ? <Rows3 size={16} /> : <Square size={16} />}
+                    {t(bedViewMode === "all" ? "planner.bedView.all" : "planner.bedView.one")}
+                  </Button>
+                )}
               </div>
 
               <div className="space-y-6">
@@ -858,8 +875,8 @@ export function GardenPlanner() {
                       gardenId={activeGardenId!}
                       selectedPlantId={selectedPlant?.id ?? null}
                       isPathMode={pathMode}
-                      isExpanded={expandedBedId === null ? (activeGarden?.beds.length ?? 0) <= 2 : expandedBedId === bed.id}
-                      onToggleExpand={() => setExpandedBedId(expandedBedId === bed.id ? null : bed.id)}
+                      isExpanded={expandedBeds.has(bed.id)}
+                      onToggleExpand={() => toggleBedCollapsed(bed.id, bedIds)}
                       onCellClick={handleCellClick}
                       onSelectPlantFromCell={(id, bedId, cellX, cellY) => {
                         const p = plantMap.get(id);

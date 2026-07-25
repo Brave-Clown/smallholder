@@ -98,6 +98,12 @@
     "pathMode": "Tracer des allées",
     "pathModeHint": "Cliquez sur les cellules pour ajouter ou retirer des allées. Les allées remplacent les plantes sur cette cellule.",
     "pathModeDone": "Terminé",
+    "bedView": {
+      "all": "Toutes les planches",
+      "one": "Une planche",
+      "switchToOne": "Afficher une planche à la fois",
+      "switchToAll": "Afficher toutes les planches"
+    },
     "editCell": "Modifier la plantation",
     "keepAnyway": "Conserver cette plantation quand même",
     "variety": "Variété",

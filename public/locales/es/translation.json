@@ -98,6 +98,12 @@
     "pathMode": "Dibujar caminos",
     "pathModeHint": "Haz clic en las celdas para agregar o quitar senderos. Los caminos reemplazan cualquier planta en esa celda.",
     "pathModeDone": "Listo",
+    "bedView": {
+      "all": "Todos los bancales",
+      "one": "Un bancal",
+      "switchToOne": "Mostrar un bancal a la vez",
+      "switchToAll": "Mostrar todos los bancales a la vez"
+    },
     "editCell": "Editar plantacion",
     "keepAnyway": "Mantener esta plantacion de todos modos",
     "variety": "Variedad",
