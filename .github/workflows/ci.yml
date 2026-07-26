@@ -22,8 +22,34 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npm audit --audit-level=high
       - run: npx tsc -b
+
+  # Advisories are published against dependencies we did not touch, so a red
+  # audit says nothing about the commit that happens to trigger it. Kept
+  # visible in the run summary, but it must never gate typecheck or build.
+  audit:
+    name: Dependency Audit (advisory)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Report advisories
+        run: |
+          echo "## Dependency Audit" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          set +e
+          npm audit --audit-level=high 2>&1 | tee -a $GITHUB_STEP_SUMMARY
+          status=${PIPESTATUS[0]}
+          set -e
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          exit $status
 
   test:
     name: Unit Tests
