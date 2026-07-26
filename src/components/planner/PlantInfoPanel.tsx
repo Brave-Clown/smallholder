@@ -1,11 +1,12 @@
 import { useTranslation } from "react-i18next";
-import { Sun, Droplets, Ruler, Clock, Apple, X } from "lucide-react";
+import { Sun, Droplets, Ruler, Clock, Apple, X, Grid3x3 } from "lucide-react";
 import { PlantIconDisplay } from "@/components/ui/PlantIconDisplay";
 import type { Plant } from "@/types/plant";
 import { usePlantMap } from "@/hooks/usePlants";
 import { usePlantName } from "@/hooks/usePlantName";
 import { useStore } from "@/store";
 import { useShallow } from "zustand/react/shallow";
+import { plantDensity } from "@/lib/plantDensity";
 import { addWeeks, parseISO, format } from "date-fns";
 
 interface Props {
@@ -17,9 +18,12 @@ export function PlantInfoPanel({ plant, onClose }: Props) {
   const { t } = useTranslation();
   const plantMap = usePlantMap();
   const getPlantName = usePlantName();
-  const { lastFrostDate } = useStore(useShallow((s) => ({ lastFrostDate: s.lastFrostDate })));
+  const { lastFrostDate, gridCellSizeCm } = useStore(
+    useShallow((s) => ({ lastFrostDate: s.lastFrostDate, gridCellSizeCm: s.gridCellSizeCm }))
+  );
 
   const frostDate = parseISO(lastFrostDate);
+  const density = plantDensity(plant, gridCellSizeCm);
 
   const timings: Array<{ label: string; date: string }> = [];
   if (plant.sowIndoorsWeeks !== null) {
@@ -67,11 +71,25 @@ export function PlantInfoPanel({ plant, onClose }: Props) {
           <Droplets size={12} className="text-sky-500" />
           <span>{t(`plants.water.${plant.waterNeed}`)}</span>
         </div>
-        <div className="flex items-center gap-1.5 rounded-lg bg-white px-2 py-1.5 dark:bg-gray-800">
+        <div
+          className="flex items-center gap-1.5 rounded-lg bg-white px-2 py-1.5 dark:bg-gray-800"
+          title={t("plants.details.spacingPairHint")}
+        >
           <Ruler size={12} className="text-gray-500" />
-          <span>{plant.spacingCm} cm</span>
+          <span>{t("plants.details.spacingPair", { inRow: plant.spacingCm, rows: plant.rowSpacingCm })}</span>
         </div>
       </div>
+
+      {density && (
+        <div className="mb-3 flex items-center gap-2 rounded-lg border border-garden-300 bg-white px-3 py-2 text-sm font-medium dark:border-garden-700 dark:bg-gray-800">
+          <Grid3x3 size={15} className="shrink-0 text-garden-600 dark:text-garden-400" />
+          <span>
+            {density.perCell > 0
+              ? t("planner.plantsPerCell", { count: density.perCell, size: gridCellSizeCm })
+              : t("planner.cellsPerPlant", { count: density.cellsPerPlant, size: gridCellSizeCm })}
+          </span>
+        </div>
+      )}
 
       {timings.length > 0 && (
         <div className="mb-3 flex flex-wrap gap-1.5">

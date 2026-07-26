@@ -1,11 +1,12 @@
 import { useTranslation } from "react-i18next";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Grid3x3 } from "lucide-react";
 import { useStore } from "@/store";
 import { useShallow } from "zustand/react/shallow";
 import { usePlantMap } from "@/hooks/usePlants";
 import { usePlantName } from "@/hooks/usePlantName";
 import { Card } from "@/components/ui/Card";
 import { validatePlacement, firstNotableIssue, resolveIssueParams } from "@/lib/placementValidation";
+import { plantDensity } from "@/lib/plantDensity";
 import type { Bed, CellPlanting } from "@/types/garden";
 
 interface Props {
@@ -31,6 +32,9 @@ export function CellEditor({ gardenId, bed, cell, variant, onClose }: Props) {
   const issue = firstNotableIssue(validatePlacement(cell.plantId, cell.cellX, cell.cellY, bed, plantMap, gridCellSizeCm));
   const warning = issue ? t(issue.messageKey, resolveIssueParams(issue.messageParams, getPlantName)) : null;
 
+  const plant = plantMap.get(cell.plantId);
+  const density = plant ? plantDensity(plant, gridCellSizeCm) : null;
+
   const sheet = variant === "sheet";
   const inputClass = sheet
     ? "w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-base dark:border-gray-600 dark:bg-gray-900"
@@ -39,6 +43,14 @@ export function CellEditor({ gardenId, bed, cell, variant, onClose }: Props) {
   const body = (
     <>
       <h3 className="mb-3 text-sm font-semibold">{t("planner.editCell")}</h3>
+      {density && (
+        <p className="mb-3 flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-300">
+          <Grid3x3 size={12} className="shrink-0 text-garden-600 dark:text-garden-400" />
+          {density.perCell > 0
+            ? t("planner.sowPerCell", { count: density.perCell })
+            : t("planner.cellsPerPlant", { count: density.cellsPerPlant, size: gridCellSizeCm })}
+        </p>
+      )}
       <div className="space-y-3">
         <div>
           <label className="mb-1 block text-xs text-gray-500">{t("planner.variety")}</label>
