@@ -25,7 +25,6 @@ export interface ContainerConfig {
 
 export interface RaisedBedConfig {
   heightCm: number;
-  layers?: string[];
 }
 
 export interface ColdFrameConfig {

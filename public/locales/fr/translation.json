@@ -170,7 +170,6 @@
     },
     "raisedBed": {
       "height": "Hauteur du bac (cm)",
-      "layers": "Couches",
       "soilVolume": "Remplir ce bac demande environ {{litres}} L de terre — {{cubicMetres}} m³, ou {{bags}} sacs de 40 L"
     },
     "environmentEffects": {

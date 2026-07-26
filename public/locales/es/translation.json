@@ -170,7 +170,6 @@
     },
     "raisedBed": {
       "height": "Altura del cantero (cm)",
-      "layers": "Capas",
       "soilVolume": "Llenar este cantero necesita unos {{litres}} L de tierra — {{cubicMetres}} m³, o {{bags}} sacos de 40 L"
     },
     "environmentEffects": {

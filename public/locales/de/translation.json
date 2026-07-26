@@ -170,7 +170,6 @@
     },
     "raisedBed": {
       "height": "Beeth\u00f6he (cm)",
-      "layers": "Schichten",
       "soilVolume": "Zum F\u00fcllen dieses Beets werden etwa {{litres}} L Erde gebraucht \u2014 {{cubicMetres}} m\u00b3 oder {{bags}} S\u00e4cke \u00e0 40 L"
     },
     "environmentEffects": {

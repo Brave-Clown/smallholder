@@ -170,7 +170,6 @@
     },
     "raisedBed": {
       "height": "Bed height (cm)",
-      "layers": "Layers",
       "soilVolume": "Filling this bed takes about {{litres}} L of soil — {{cubicMetres}} m³, or {{bags}} bags of 40 L"
     },
     "environmentEffects": {
