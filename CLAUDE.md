@@ -41,16 +41,17 @@ docker compose up --build   # full stack, localhost:8080
   (`seasonArchives` lives in index.ts, not its own slice).
 - **Always read state with `useShallow()` selectors — never bare `useStore()`.**
   This is load-bearing for render performance, not style.
-- Components use **named exports**. `src/App.tsx` holds the only default export.
+- Components use **named exports**. `src/App.tsx` is the only component with a
+  default export (`src/lib/i18n.ts` also default-exports, as an instance).
 - Routes are lazy-loaded through the `lazyRetry()` wrapper, which recovers from
   a stale PWA cache serving a deleted chunk. New routes must use it too.
 - i18n: default locale is `de`, fallback `en`; strings load over HTTP from
   `public/locales/{lng}/`, so a new key needs the file, not just the code.
 - The persisted localStorage key is still `gardener-storage`, deliberately.
   Renaming it discards existing gardens, so it is folded into the Level 2
-  schema-v2 migration instead. `i18n.ts` and `theme.ts` read this key directly
-  at module load, before the store hydrates — a migration must run earlier than
-  both.
+  schema-v2 migration instead. `src/lib/locale.ts` (which owns the key as
+  `STORAGE_KEY`) and `src/lib/theme.ts` both read it directly at module load,
+  before the store hydrates — a migration must run earlier than both.
 - Exports are written with `app: "smallholder"`; imports also accept the legacy
   `"gardener"` id so pre-fork backups keep working. Constants live in
   `src/lib/dataExport.ts`.
@@ -83,6 +84,13 @@ docker compose up --build   # full stack, localhost:8080
   lag with fallback).
 - New plants: emoji icon is the default; custom SVG is optional, never
   required.
+- A roadmap claim marked "verified" must cite what was actually read —
+  `file.ts:line`, a count, a formula — so the next session can re-check it
+  in seconds instead of trusting it. Unciteable claims have already gone
+  wrong twice: per-bed `notes` was recorded as existing when only
+  `CellPlanting.notes` did, and "manual placement ignores spacing" was
+  recorded when it warns at `placementValidation.ts:79`. Re-verify before
+  building on any claim, however confident it sounds.
 
 ## Plant Data Rules
 
