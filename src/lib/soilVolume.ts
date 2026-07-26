@@ -18,12 +18,12 @@ export interface SoilVolume {
 export function raisedBedSoilVolume(
   bed: Pick<Bed, "width" | "height">,
   heightCm: number,
-  gridCellSizeCm: number
+  cellSizeCm: number
 ): SoilVolume | null {
   if (!(bed.width > 0) || !(bed.height > 0)) return null;
-  if (!(heightCm > 0) || !(gridCellSizeCm > 0)) return null;
+  if (!(heightCm > 0) || !(cellSizeCm > 0)) return null;
 
-  const areaCm2 = bed.width * gridCellSizeCm * bed.height * gridCellSizeCm;
+  const areaCm2 = bed.width * cellSizeCm * bed.height * cellSizeCm;
   const litres = (areaCm2 * heightCm) / 1000;
 
   return {

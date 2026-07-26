@@ -8,6 +8,7 @@ interface SharedGardenTemplate {
     w: number;
     h: number;
     env: string;
+    cs?: number; // cell size in cm; absent means the recipient's default
     cells: Array<[number, number, string]>; // [x, y, plantId]
   }>;
 }
@@ -21,6 +22,9 @@ function gardenToTemplate(garden: Garden): SharedGardenTemplate {
       w: b.width,
       h: b.height,
       env: b.environmentType ?? "outdoor_bed",
+      // A 6 × 4 bed at 25 cm is not the same layout as one at 30 cm, so the
+      // template carries the size whenever the sender set one.
+      ...(b.cellSizeCm ? { cs: b.cellSizeCm } : {}),
       cells: b.cells.map((c) => [c.cellX, c.cellY, c.plantId]),
     })),
   };
@@ -55,7 +59,7 @@ export function generateShareUrl(garden: Garden): string {
 export function importTemplateToStore(
   template: SharedGardenTemplate,
   addGarden: (name: string) => string,
-  addBed: (gardenId: string, bed: { name: string; x: number; y: number; width: number; height: number; environmentType: string }) => void,
+  addBed: (gardenId: string, bed: { name: string; x: number; y: number; width: number; height: number; environmentType: string; cellSizeCm?: number }) => void,
   setCell: (gardenId: string, bedId: string, cell: { cellX: number; cellY: number; plantId: string }) => void,
   getState: () => { gardens: Garden[] },
 ) {
@@ -69,6 +73,7 @@ export function importTemplateToStore(
       width: bed.w,
       height: bed.h,
       environmentType: bed.env as Garden["beds"][0]["environmentType"],
+      ...(typeof bed.cs === "number" && bed.cs > 0 ? { cellSizeCm: bed.cs } : {}),
     });
     const currentGarden = getState().gardens.find((g) => g.id === gardenId);
     const newBed = currentGarden?.beds[currentGarden.beds.length - 1];

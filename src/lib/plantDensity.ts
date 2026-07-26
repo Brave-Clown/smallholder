@@ -19,13 +19,13 @@ export interface PlantDensity {
 
 export function plantDensity(
   plant: Pick<Plant, "spacingCm" | "rowSpacingCm">,
-  gridCellSizeCm: number
+  cellSizeCm: number
 ): PlantDensity | null {
   const { spacingCm, rowSpacingCm } = plant;
-  if (!(spacingCm > 0) || !(rowSpacingCm > 0) || !(gridCellSizeCm > 0)) return null;
+  if (!(spacingCm > 0) || !(rowSpacingCm > 0) || !(cellSizeCm > 0)) return null;
 
   const areaPerPlantCm2 = spacingCm * rowSpacingCm;
-  const fit = gridCellSizeCm ** 2 / areaPerPlantCm2;
+  const fit = cellSizeCm ** 2 / areaPerPlantCm2;
 
   return fit >= 1
     ? { perCell: Math.floor(fit), cellsPerPlant: 1, areaPerPlantCm2 }

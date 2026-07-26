@@ -4,6 +4,7 @@ import type { Animal } from "@/types/animal";
 import { ANNUAL_YIELD, PRODUCT_NUTRITION } from "@/types/animal";
 import { addWeeks, addDays, parseISO, getMonth } from "date-fns";
 import { getFrostProtectionWeeks } from "@/types/garden";
+import { bedCellAreaM2, plantAreaM2 } from "@/lib/bedGeometry";
 
 // --- Types ---
 
@@ -115,15 +116,9 @@ const SUGGESTIONS: Record<string, string> = {
 export function estimatePlantArea(
   gardens: Garden[],
   plantId: string,
-  gridCellSizeCm: number,
+  defaultCellSizeCm: number,
 ): number {
-  let cellCount = 0;
-  for (const g of gardens) {
-    for (const b of g.beds) {
-      cellCount += b.cells.filter((c) => c.plantId === plantId).length;
-    }
-  }
-  return cellCount * (gridCellSizeCm / 100) ** 2;
+  return plantAreaM2(gardens, plantId, defaultCellSizeCm);
 }
 
 export function calculatePlantYield(
@@ -180,7 +175,7 @@ export function calculateSufficiency(
   gardens: Garden[],
   plants: Plant[],
   familySize: number,
-  gridCellSizeCm: number,
+  defaultCellSizeCm: number,
   lastFrostDate: string = "2026-05-15",
   animals: Animal[] = [],
   actualAnimalProducts: { type: string; quantity: number; unit: string; date: string }[] = [],
@@ -206,9 +201,10 @@ export function calculateSufficiency(
   for (const g of gardens) {
     for (const b of g.beds) {
       const protection = getFrostProtectionWeeks(b);
+      const cellArea = bedCellAreaM2(b, defaultCellSizeCm);
       for (const c of b.cells) {
         const existing = plantAreas.get(c.plantId) ?? { area: 0, protections: [] };
-        existing.area += (gridCellSizeCm / 100) ** 2;
+        existing.area += cellArea;
         if (!existing.protections.includes(protection)) existing.protections.push(protection);
         plantAreas.set(c.plantId, existing);
       }

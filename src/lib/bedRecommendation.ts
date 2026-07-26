@@ -15,7 +15,7 @@ export type PlantingStrategy =
 export type PlantingDirection = "rows_ew" | "rows_ns" | "blocks" | "companion_clusters";
 
 export interface RecommendationConfig {
-  gridCellSizeCm: number;
+  cellSizeCm: number;
   lastFrostDate: string;
   strategy?: PlantingStrategy;
   direction?: PlantingDirection;
@@ -60,7 +60,7 @@ export function recommendBedPlanting(
   // cell — so it has to be settled here, during selection, or the plant would
   // be placed and then flagged in every cell it occupies.
   const candidates = allPlants.filter((p) => p.category !== "berry");
-  const envClean = candidates.filter((p) => !hasEnvironmentIssue(p, bed, plantMap, config.gridCellSizeCm));
+  const envClean = candidates.filter((p) => !hasEnvironmentIssue(p, bed, plantMap, config.cellSizeCm));
   const pool = envClean.length > 0 ? envClean : candidates;
 
   const scored = pool
@@ -79,7 +79,7 @@ export function recommendBedPlanting(
   // Filter out antagonist conflicts from the selected set
   const compatible = removeAntagonistConflicts(selected);
 
-  const placed = placePlantsOnGrid(compatible, bed, config.gridCellSizeCm, direction);
+  const placed = placePlantsOnGrid(compatible, bed, config.cellSizeCm, direction);
 
   // Paths are not plantable area. togglePath already clears a plant when a path
   // is drawn over it, and a path cell renders over whatever sits beneath it, so
@@ -89,7 +89,7 @@ export function recommendBedPlanting(
     ? placed.filter((c) => !paths.has(`${c.cellX}-${c.cellY}`))
     : placed;
 
-  return dropCellsTheValidatorWouldFlag(plantable, bed, plantMap, config.gridCellSizeCm);
+  return dropCellsTheValidatorWouldFlag(plantable, bed, plantMap, config.cellSizeCm);
 }
 
 // Position-independent fit: probe the validator against an empty copy of the bed,
@@ -98,10 +98,10 @@ function hasEnvironmentIssue(
   plant: Plant,
   bed: Bed,
   plantMap: Map<string, Plant>,
-  gridCellSizeCm: number,
+  cellSizeCm: number,
 ): boolean {
   const emptyBed: Bed = { ...bed, cells: [] };
-  return validatePlacement(plant.id, 0, 0, emptyBed, plantMap, gridCellSizeCm)
+  return validatePlacement(plant.id, 0, 0, emptyBed, plantMap, cellSizeCm)
     .issues.some((i) => i.type === "environment");
 }
 
@@ -115,12 +115,12 @@ function dropCellsTheValidatorWouldFlag(
   cells: CellPlanting[],
   bed: Bed,
   plantMap: Map<string, Plant>,
-  gridCellSizeCm: number,
+  cellSizeCm: number,
 ): CellPlanting[] {
   const accepted: CellPlanting[] = [];
   for (const cell of cells) {
     const soFar: Bed = { ...bed, cells: accepted };
-    const { issues } = validatePlacement(cell.plantId, cell.cellX, cell.cellY, soFar, plantMap, gridCellSizeCm);
+    const { issues } = validatePlacement(cell.plantId, cell.cellX, cell.cellY, soFar, plantMap, cellSizeCm);
     if (issues.some((i) => i.severity === "error" || i.severity === "warning")) continue;
     accepted.push(cell);
   }
@@ -319,7 +319,7 @@ function removeAntagonistConflicts(plants: Plant[]): Plant[] {
 function placePlantsOnGrid(
   plants: Plant[],
   bed: Bed,
-  gridCellSizeCm: number,
+  cellSizeCm: number,
   direction: PlantingDirection,
 ): CellPlanting[] {
   if (plants.length === 0) return [];
@@ -328,13 +328,13 @@ function placePlantsOnGrid(
 
   switch (direction) {
     case "rows_ew":
-      return placeInRows(plants, width, height, gridCellSizeCm, "horizontal");
+      return placeInRows(plants, width, height, cellSizeCm, "horizontal");
     case "rows_ns":
-      return placeInRows(plants, width, height, gridCellSizeCm, "vertical");
+      return placeInRows(plants, width, height, cellSizeCm, "vertical");
     case "blocks":
-      return placeInBlocks(plants, width, height, gridCellSizeCm);
+      return placeInBlocks(plants, width, height, cellSizeCm);
     case "companion_clusters":
-      return placeInCompanionClusters(plants, width, height, gridCellSizeCm);
+      return placeInCompanionClusters(plants, width, height, cellSizeCm);
   }
 }
 
@@ -345,7 +345,7 @@ function placeInRows(
   plants: Plant[],
   width: number,
   height: number,
-  gridCellSizeCm: number,
+  cellSizeCm: number,
   orientation: "horizontal" | "vertical",
 ): CellPlanting[] {
   const cells: CellPlanting[] = [];
@@ -356,7 +356,7 @@ function placeInRows(
   const secondaryLen = orientation === "horizontal" ? width : height;
 
   // Calculate how many rows each plant needs based on spacing
-  const plantRowCounts = distributeRows(plants, primaryLen, gridCellSizeCm);
+  const plantRowCounts = distributeRows(plants, primaryLen, cellSizeCm);
 
   let rowStart = 0;
   for (let pi = 0; pi < plants.length; pi++) {
@@ -365,9 +365,9 @@ function placeInRows(
     if (rowCount === 0) continue;
 
     // Calculate step along secondary axis (within-row spacing)
-    const stepSecondary = Math.max(1, Math.round(plant.spacingCm / gridCellSizeCm));
+    const stepSecondary = Math.max(1, Math.round(plant.spacingCm / cellSizeCm));
     // Calculate step along primary axis (between-row spacing)
-    const stepPrimary = Math.max(1, Math.round(plant.spacingCm / gridCellSizeCm));
+    const stepPrimary = Math.max(1, Math.round(plant.spacingCm / cellSizeCm));
 
     for (let r = rowStart; r < rowStart + rowCount && r < primaryLen; r += stepPrimary) {
       // Offset every other row for better coverage (staggered planting)
@@ -390,13 +390,13 @@ function placeInRows(
 
 // Distribute rows proportionally across plants, ensuring each plant gets
 // at least 1 row and larger-spacing plants don't waste rows.
-function distributeRows(plants: Plant[], totalRows: number, gridCellSizeCm: number): number[] {
+function distributeRows(plants: Plant[], totalRows: number, cellSizeCm: number): number[] {
   if (plants.length === 0) return [];
 
   // Weight: small-spacing plants should get more rows (they fill densely)
   // Large-spacing plants need fewer rows but more space each
   const weights = plants.map((p) => {
-    const rowsNeeded = Math.max(1, Math.round(p.spacingCm / gridCellSizeCm));
+    const rowsNeeded = Math.max(1, Math.round(p.spacingCm / cellSizeCm));
     // Give proportionally more cells to dense plants
     return 1 / rowsNeeded;
   });
@@ -429,7 +429,7 @@ function placeInBlocks(
   plants: Plant[],
   width: number,
   height: number,
-  gridCellSizeCm: number,
+  cellSizeCm: number,
 ): CellPlanting[] {
   const cells: CellPlanting[] = [];
   const blocks = calculateBlocks(plants.length, width, height);
@@ -437,7 +437,7 @@ function placeInBlocks(
   for (let i = 0; i < plants.length && i < blocks.length; i++) {
     const plant = plants[i];
     const block = blocks[i];
-    const step = Math.max(1, Math.round(plant.spacingCm / gridCellSizeCm));
+    const step = Math.max(1, Math.round(plant.spacingCm / cellSizeCm));
 
     for (let y = block.y; y < block.y + block.h; y += step) {
       const offset = ((y - block.y) / step) % 2 === 1 ? Math.floor(step / 2) : 0;
@@ -491,7 +491,7 @@ function placeInCompanionClusters(
   plants: Plant[],
   width: number,
   height: number,
-  gridCellSizeCm: number,
+  cellSizeCm: number,
 ): CellPlanting[] {
   const cells: CellPlanting[] = [];
   const occupied = new Set<string>();
@@ -515,7 +515,7 @@ function placeInCompanionClusters(
   const cellsPerPlant = Math.max(1, Math.floor(totalCells / plants.length));
 
   for (const plant of sorted) {
-    const step = Math.max(1, Math.round(plant.spacingCm / gridCellSizeCm));
+    const step = Math.max(1, Math.round(plant.spacingCm / cellSizeCm));
     let placed = 0;
     const target = cellsPerPlant;
 
@@ -561,7 +561,7 @@ function placeInCompanionClusters(
   }
 
   // Fill any remaining empty cells with the best-fitting plant
-  fillRemainingCells(cells, plants, width, height, occupied, gridCellSizeCm);
+  fillRemainingCells(cells, plants, width, height, occupied, cellSizeCm);
 
   return cells;
 }
@@ -624,7 +624,7 @@ function fillRemainingCells(
   width: number,
   height: number,
   occupied: Set<string>,
-  gridCellSizeCm: number,
+  cellSizeCm: number,
 ): void {
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
@@ -637,7 +637,7 @@ function fillRemainingCells(
 
       for (const plant of plants) {
         let score = 0;
-        const step = Math.max(1, Math.round(plant.spacingCm / gridCellSizeCm));
+        const step = Math.max(1, Math.round(plant.spacingCm / cellSizeCm));
 
         // Prefer placing near same-species (continuity)
         let hasSameSpeciesNear = false;

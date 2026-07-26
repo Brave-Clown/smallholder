@@ -4,6 +4,7 @@ import { Printer, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import type { Garden } from "@/types/garden";
 import type { Plant } from "@/types/plant";
+import { bedCellSizeCm } from "@/lib/bedGeometry";
 
 interface PrintBedLayoutProps {
   garden: Garden;
@@ -74,8 +75,9 @@ export function PrintBedLayout({ garden, plants, gridCellSizeCm, getPlantName }:
         {/* Beds */}
         <div className="space-y-8">
           {garden.beds.map((bed) => {
-            const widthCm = bed.width * gridCellSizeCm;
-            const heightCm = bed.height * gridCellSizeCm;
+            const cellSizeCm = bedCellSizeCm(bed, gridCellSizeCm);
+            const widthCm = bed.width * cellSizeCm;
+            const heightCm = bed.height * cellSizeCm;
             const pathSet = new Set(bed.paths ?? []);
 
             // Collect unique plants in this bed

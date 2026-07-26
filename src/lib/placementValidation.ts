@@ -28,7 +28,7 @@ export function validatePlacement(
   cellY: number,
   bed: Bed,
   plantMap: Map<string, Plant>,
-  gridCellSizeCm: number,
+  cellSizeCm: number,
 ): PlacementResult {
   const plant = plantMap.get(plantId);
   if (!plant) return { issues: [], companionCount: 0, antagonistCount: 0, isRecommended: false };
@@ -44,7 +44,7 @@ export function validatePlacement(
 
     const distX = Math.abs(cell.cellX - cellX);
     const distY = Math.abs(cell.cellY - cellY);
-    const distCm = Math.sqrt((distX * gridCellSizeCm) ** 2 + (distY * gridCellSizeCm) ** 2);
+    const distCm = Math.sqrt((distX * cellSizeCm) ** 2 + (distY * cellSizeCm) ** 2);
 
     // Antagonist check (within 3 cells ~90cm)
     if (distX <= 3 && distY <= 3) {

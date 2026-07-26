@@ -9,6 +9,7 @@ import { PlantIconDisplay } from "@/components/ui/PlantIconDisplay";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { ANIMAL_ICONS, PRODUCT_ICONS, ANNUAL_YIELD, PRODUCT_NUTRITION } from "@/types/animal";
+import { plantAreaM2 } from "@/lib/bedGeometry";
 
 // Annual kg consumption targets per person (based on average European diet)
 const ANNUAL_KG_TARGETS: Record<string, { kgPerPerson: number; category: string }> = {
@@ -53,7 +54,6 @@ export function FoodPlan() {
 
   const cropPlans = useMemo(() => {
     const plans: CropPlan[] = [];
-    const cellAreaM2 = (gridCellSizeCm / 100) ** 2;
 
     for (const [plantId, target] of Object.entries(ANNUAL_KG_TARGETS)) {
       const plant = plantMap.get(plantId);
@@ -64,9 +64,7 @@ export function FoodPlan() {
       const neededAreaM2 = yieldPerM2 > 0 ? Math.round((targetKg / yieldPerM2) * 10) / 10 : 0;
 
       // Count current area
-      let cellCount = 0;
-      for (const g of gardens) for (const b of g.beds) cellCount += b.cells.filter((c) => c.plantId === plantId).length;
-      const currentAreaM2 = Math.round(cellCount * cellAreaM2 * 10) / 10;
+      const currentAreaM2 = Math.round(plantAreaM2(gardens, plantId, gridCellSizeCm) * 10) / 10;
       const currentYieldKg = Math.round(currentAreaM2 * yieldPerM2 * 10) / 10;
 
       plans.push({

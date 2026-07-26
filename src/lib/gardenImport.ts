@@ -76,6 +76,8 @@ function normalizeBed(raw: unknown): ImportedBed | null {
     cells,
     ...(paths.length ? { paths } : {}),
     ...(notes ? { notes } : {}),
+    // Omitted means "inherit the app default", so only carry a real value.
+    ...(isNum(b.cellSizeCm) && b.cellSizeCm > 0 ? { cellSizeCm: b.cellSizeCm } : {}),
     ...(b.greenhouseConfig ? { greenhouseConfig: b.greenhouseConfig as Bed["greenhouseConfig"] } : {}),
     ...(b.containerConfig ? { containerConfig: b.containerConfig as Bed["containerConfig"] } : {}),
     ...(b.raisedBedConfig ? { raisedBedConfig: b.raisedBedConfig as Bed["raisedBedConfig"] } : {}),

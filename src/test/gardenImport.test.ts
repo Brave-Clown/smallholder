@@ -17,6 +17,7 @@ const fullGarden = [
         paths: ["0-2", "1-2"],
         environmentType: "raised_bed",
         raisedBedConfig: { heightCm: 40 },
+        cellSizeCm: 25,
         cells: [
           {
             cellX: 1,
@@ -43,6 +44,8 @@ describe("parseGardensJson", () => {
     expect(bed.paths).toEqual(["0-2", "1-2"]);
     expect(bed.environmentType).toBe("raised_bed");
     expect(bed.raisedBedConfig).toEqual({ heightCm: 40 });
+    // Dropping this would silently resize the bed on import.
+    expect(bed.cellSizeCm).toBe(25);
 
     // The regression this function exists for: the old inline import rebuilt
     // each cell as {cellX, cellY, plantId} and silently dropped the rest.
@@ -77,7 +80,22 @@ describe("parseGardensJson", () => {
 
     expect(bed).not.toHaveProperty("notes");
     expect(bed).not.toHaveProperty("paths");
+    // Absent must stay absent: it means "inherit the default", not "0 cm".
+    expect(bed).not.toHaveProperty("cellSizeCm");
     expect(bed.cells[0]).toEqual({ cellX: 0, cellY: 0, plantId: "carrot" });
+  });
+
+  it("ignores a nonsense cell size rather than importing a zero-area bed", () => {
+    const [garden] = parseGardensJson([
+      {
+        name: "G",
+        beds: [
+          { name: "zero", width: 2, height: 2, cellSizeCm: 0, cells: [] },
+          { name: "text", width: 2, height: 2, cellSizeCm: "wide", cells: [] },
+        ],
+      },
+    ])!;
+    expect(garden.beds.every((b) => b.cellSizeCm === undefined)).toBe(true);
   });
 
   it("imports a garden that has no id, since the store mints its own", () => {

@@ -19,6 +19,7 @@ import { Card } from "@/components/ui/Card";
 import type { Bed, CellPlanting, EnvironmentType, GreenhouseConfig, ContainerConfig, RaisedBedConfig, ColdFrameConfig } from "@/types/garden";
 import { ENVIRONMENT_ICONS, getFrostProtectionWeeks } from "@/types/garden";
 import { raisedBedSoilVolume } from "@/lib/soilVolume";
+import { bedCellSizeCm, bedSizeM, regridToCellSize, cellCountExceedsLimit, MAX_BED_CELLS, MIN_CELL_SIZE_CM, MAX_CELL_SIZE_CM } from "@/lib/bedGeometry";
 import { environmentEffects } from "@/lib/environmentEffects";
 import type { Plant } from "@/types/plant";
 import { PlantIconDisplay } from "@/components/ui/PlantIconDisplay";
@@ -162,8 +163,9 @@ function BedGrid({
   const [zoom, setZoom] = useState(1); // 0.6 = small, 1 = normal, 1.3 = large
   const envType = bed.environmentType ?? "outdoor_bed";
   const frostWeeks = getFrostProtectionWeeks(bed);
-  const bedWidthM = ((bed.width * gridCellSizeCm) / 100).toFixed(1);
-  const bedHeightM = ((bed.height * gridCellSizeCm) / 100).toFixed(1);
+  const cellSizeCm = bedCellSizeCm(bed, gridCellSizeCm);
+  const bedWidthM = ((bed.width * cellSizeCm) / 100).toFixed(1);
+  const bedHeightM = ((bed.height * cellSizeCm) / 100).toFixed(1);
 
   // Pre-compute highlights for selected plant
   const companionCells = useMemo(
@@ -180,13 +182,13 @@ function BedGrid({
     const warnings = new Map<string, string>();
     for (const cell of bed.cells) {
       if (cell.overrideWarnings) continue;
-      const issue = firstNotableIssue(validatePlacement(cell.plantId, cell.cellX, cell.cellY, bed, plantMap, gridCellSizeCm));
+      const issue = firstNotableIssue(validatePlacement(cell.plantId, cell.cellX, cell.cellY, bed, plantMap, cellSizeCm));
       if (issue) {
         warnings.set(`${cell.cellX}-${cell.cellY}`, t(issue.messageKey, resolveIssueParams(issue.messageParams, getPlantName)));
       }
     }
     return warnings;
-  }, [bed, plantMap, gridCellSizeCm, t, getPlantName]);
+  }, [bed, plantMap, cellSizeCm, t, getPlantName]);
 
   const cellSize = Math.round(48 * zoom);
   const iconSize = Math.round(22 * zoom);
@@ -283,7 +285,7 @@ function BedGrid({
         <p className="mt-1.5 whitespace-pre-wrap text-xs italic text-gray-500 dark:text-gray-400">{bed.notes}</p>
       )}
 
-      {!isExpanded && <BedStats bed={bed} plantMap={plantMap} gridCellSizeCm={gridCellSizeCm} />}
+      {!isExpanded && <BedStats bed={bed} plantMap={plantMap} defaultCellSizeCm={gridCellSizeCm} />}
 
       {isExpanded && <>
       {showNotes && (
@@ -297,6 +299,16 @@ function BedGrid({
             className="w-full rounded border border-gray-300 bg-white px-2 py-1 text-xs dark:border-gray-600 dark:bg-gray-800"
           />
         </div>
+      )}
+      {showConfig && (
+        <BedGeometryPanel
+          bed={bed}
+          defaultCellSizeCm={gridCellSizeCm}
+          onChange={(next, grid) => {
+            // Path keys are grid coordinates, so they do not survive a re-grid.
+            updateBed(gardenId, bed.id, { cellSizeCm: next, ...grid, paths: undefined });
+          }}
+        />
       )}
       {showConfig && <EnvironmentEffectsPanel bed={bed} />}
       {showConfig && envType === "greenhouse" && (
@@ -317,7 +329,7 @@ function BedGrid({
           onChange={(config) => updateBed(gardenId, bed.id, { raisedBedConfig: config })}
           widthCells={bed.width}
           heightCells={bed.height}
-          gridCellSizeCm={gridCellSizeCm}
+          gridCellSizeCm={cellSizeCm}
         />
       )}
       {showConfig && envType === "container" && (
@@ -367,7 +379,7 @@ function BedGrid({
       </div>
       </div>
 
-      <BedStats bed={bed} plantMap={plantMap} gridCellSizeCm={gridCellSizeCm} />
+      <BedStats bed={bed} plantMap={plantMap} defaultCellSizeCm={gridCellSizeCm} />
       </>}
     </Card>
   );
@@ -475,6 +487,128 @@ function RaisedBedConfigPanel({ config, onChange, widthCells, heightCells, gridC
   );
 }
 
+/**
+ * Holds its own text while you type, and only commits a valid number on blur
+ * or Enter. Committing per keystroke meant backspacing "30" clamped to the
+ * minimum instead of clearing, and typing "10" re-gridded at 1 cm on the way
+ * through — 21,600 cells on a small bed, which hangs the page.
+ */
+function CellSizeInput({ value, onCommit, disabled, className }: {
+  value: number;
+  onCommit: (cm: number) => void;
+  disabled?: boolean;
+  className?: string;
+}) {
+  const [text, setText] = useState(String(value));
+  useEffect(() => { setText(String(value)); }, [value]);
+
+  const parse = (raw: string): number | null => {
+    const n = Number(raw);
+    if (raw.trim() === "" || !Number.isFinite(n) || n < MIN_CELL_SIZE_CM || n > MAX_CELL_SIZE_CM) return null;
+    return n;
+  };
+
+  const commit = () => {
+    const n = parse(text);
+    if (n === null) { setText(String(value)); return; }
+    onCommit(n);
+  };
+
+  // Closing the panel counts as applying: the gear unmounts this input, and a
+  // pending edit must not vanish just because blur and unmount race.
+  const latest = useRef({ text, value, onCommit });
+  latest.current = { text, value, onCommit };
+  useEffect(() => () => {
+    const { text: t, value: v, onCommit: commitFn } = latest.current;
+    const n = parse(t);
+    if (n !== null && n !== v) commitFn(n);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <input
+      type="number"
+      inputMode="numeric"
+      min={MIN_CELL_SIZE_CM}
+      max={MAX_CELL_SIZE_CM}
+      value={text}
+      disabled={disabled}
+      onChange={(e) => setText(e.target.value)}
+      onBlur={commit}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") e.currentTarget.blur();
+        if (e.key === "Escape") setText(String(value));
+      }}
+      className={className}
+    />
+  );
+}
+
+/**
+ * Cell size is planning resolution, not bed size: changing it re-grids the bed
+ * and leaves its real-world footprint alone. Re-gridding cannot preserve
+ * plantings (a 30 cm cell is not a 15 cm cell), so it is only offered while the
+ * bed is empty — "Clear all" above makes that the gardener's own decision
+ * rather than something a confirm dialog talks them through.
+ */
+function BedGeometryPanel({ bed, defaultCellSizeCm, onChange }: {
+  bed: Bed;
+  defaultCellSizeCm: number;
+  onChange: (cellSizeCm: number | undefined, grid: { width: number; height: number }) => void;
+}) {
+  const { t } = useTranslation();
+  const [rejected, setRejected] = useState(false);
+  const cellSizeCm = bedCellSizeCm(bed, defaultCellSizeCm);
+  const { widthM, heightM } = bedSizeM(bed, defaultCellSizeCm);
+  const locked = bed.cells.length > 0;
+
+  const commit = (next: number | undefined) => {
+    const grid = regridToCellSize(bed, next ?? defaultCellSizeCm, defaultCellSizeCm);
+    if (!grid) { setRejected(true); return; }
+    setRejected(false);
+    onChange(next, grid);
+  };
+
+  return (
+    <div className="mb-4 rounded-lg bg-slate-50 p-3 dark:bg-slate-800/50">
+      <div className="flex flex-wrap items-center gap-3">
+        <label className="text-xs text-gray-600 dark:text-gray-400">{t("planner.cellSize.label")}</label>
+        <CellSizeInput
+          value={cellSizeCm}
+          disabled={locked}
+          onCommit={commit}
+          className="w-20 rounded border border-gray-300 bg-white px-2 py-1 text-xs disabled:cursor-not-allowed disabled:opacity-50 dark:border-gray-600 dark:bg-gray-800"
+        />
+        {bed.cellSizeCm === undefined ? (
+          <span className="text-xs text-gray-400">{t("planner.cellSize.inherited", { size: defaultCellSizeCm })}</span>
+        ) : (
+          <button
+            onClick={() => commit(undefined)}
+            disabled={locked}
+            className="rounded px-1.5 py-0.5 text-xs text-gray-500 underline hover:text-gray-700 disabled:cursor-not-allowed disabled:opacity-50 dark:hover:text-gray-300"
+          >
+            {t("planner.cellSize.useDefault", { size: defaultCellSizeCm })}
+          </button>
+        )}
+      </div>
+      <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+        {t("planner.cellSize.footprint", {
+          width: widthM.toFixed(2),
+          height: heightM.toFixed(2),
+          cols: bed.width,
+          rows: bed.height,
+        })}
+      </p>
+      {locked && (
+        <p className="mt-1 text-xs text-amber-700 dark:text-amber-400">{t("planner.cellSize.locked")}</p>
+      )}
+      {rejected && !locked && (
+        <p className="mt-1 text-xs text-amber-700 dark:text-amber-400">{t("planner.cellSize.tooManyCells", { max: MAX_BED_CELLS.toLocaleString() })}</p>
+      )}
+    </div>
+  );
+}
+
 function EnvironmentEffectsPanel({ bed }: { bed: Bed }) {
   const { t } = useTranslation();
   const effects = environmentEffects(bed);
@@ -539,6 +673,8 @@ export function GardenPlanner() {
   const [bedName, setBedName] = useState("");
   const [bedWidthM, setBedWidthM] = useState(1.8);
   const [bedHeightM, setBedHeightM] = useState(1.2);
+  // null means "take the default", which is what gets stored as inherit.
+  const [bedCellSize, setBedCellSize] = useState<number | null>(null);
   const [bedEnvType, setBedEnvType] = useState<EnvironmentType>("outdoor_bed");
   const [ghConfig, setGhConfig] = useState<GreenhouseConfig>({ material: "glass", heated: false, ventilation: "manual", minTempC: 5, maxTempC: 35, frostProtectionWeeks: 4 });
   const [cfConfig, setCfConfig] = useState<ColdFrameConfig>({ frostProtectionWeeks: 3 });
@@ -569,7 +705,7 @@ export function GardenPlanner() {
     if (!activeGarden || activeGarden.beds.length === 0) return new Set<string>();
     const recommended = new Set<string>();
     for (const bed of activeGarden.beds) {
-      const recs = getRecommendedPlants(bed, plants, { gridCellSizeCm, lastFrostDate });
+      const recs = getRecommendedPlants(bed, plants, { cellSizeCm: bedCellSizeCm(bed, gridCellSizeCm), lastFrostDate });
       for (const r of recs) recommended.add(r.plant.id);
     }
     return recommended;
@@ -620,7 +756,7 @@ export function GardenPlanner() {
 
     // Conflicts are advice, not a veto: place it, then say what is wrong. The
     // gardener can accept the placement per-cell in the cell editor.
-    const result = validatePlacement(selectedPlant.id, cellX, cellY, bed, plantMap, gridCellSizeCm);
+    const result = validatePlacement(selectedPlant.id, cellX, cellY, bed, plantMap, bedCellSizeCm(bed, gridCellSizeCm));
 
     const gid = activeGardenId;
     const pid = selectedPlant.id;
@@ -656,7 +792,7 @@ export function GardenPlanner() {
     if (plantId && bedId && x !== undefined && y !== undefined) {
       const bed = activeGarden?.beds.find((b) => b.id === bedId);
       if (bed) {
-        const issue = firstNotableIssue(validatePlacement(plantId, x, y, bed, plantMap, gridCellSizeCm));
+        const issue = firstNotableIssue(validatePlacement(plantId, x, y, bed, plantMap, bedCellSizeCm(bed, gridCellSizeCm)));
         if (issue) {
           setPlacementFeedback(t(issue.messageKey, resolveParams(issue.messageParams)));
         }
@@ -687,7 +823,7 @@ export function GardenPlanner() {
   const handleAutoFill = (bedId: string, strategy: PlantingStrategy) => {
     const bed = activeGarden?.beds.find((b) => b.id === bedId);
     if (!bed) return;
-    const cells = recommendBedPlanting(bed, plants, { gridCellSizeCm, lastFrostDate, strategy, direction: autoFillDirection });
+    const cells = recommendBedPlanting(bed, plants, { cellSizeCm: bedCellSizeCm(bed, gridCellSizeCm), lastFrostDate, strategy, direction: autoFillDirection });
     applyFill(bedId, `Fill ${bed.name}`, cells);
   };
 
@@ -742,12 +878,14 @@ export function GardenPlanner() {
 
   const handleCreateBed = () => {
     if (!bedName.trim() || !activeGardenId) return;
-    const width = cellsForMetres(bedWidthM, gridCellSizeCm);
-    const height = cellsForMetres(bedHeightM, gridCellSizeCm);
+    const newCellSize = bedCellSize ?? gridCellSizeCm;
+    const width = cellsForMetres(bedWidthM, newCellSize);
+    const height = cellsForMetres(bedHeightM, newCellSize);
     const bedCount = activeGarden?.beds.length ?? 0;
     addBed(activeGardenId, {
       name: bedName.trim(), x: 0, y: bedCount, width, height,
       environmentType: bedEnvType,
+      ...(bedCellSize !== null ? { cellSizeCm: bedCellSize } : {}),
       ...(bedEnvType === "greenhouse" ? { greenhouseConfig: { ...ghConfig } } : {}),
       ...(bedEnvType === "cold_frame" ? { coldFrameConfig: { ...cfConfig } } : {}),
       ...(bedEnvType === "raised_bed" ? { raisedBedConfig: { ...rbConfig } } : {}),
@@ -755,15 +893,21 @@ export function GardenPlanner() {
     });
     setBedName("");
     setBedEnvType("outdoor_bed");
+    setBedCellSize(null);
     setShowNewBed(false);
   };
+
+  const newBedCols = cellsForMetres(bedWidthM, bedCellSize ?? gridCellSizeCm);
+  const newBedRows = cellsForMetres(bedHeightM, bedCellSize ?? gridCellSizeCm);
+  const newBedTooLarge = cellCountExceedsLimit(newBedCols, newBedRows);
 
   // Lets the New Bed modal explain a choice before it is committed, using the
   // same derivation the created bed will use.
   const newBedPreview: Bed = {
     id: "", name: "", x: 0, y: 0,
-    width: cellsForMetres(bedWidthM, gridCellSizeCm),
-    height: cellsForMetres(bedHeightM, gridCellSizeCm),
+    width: cellsForMetres(bedWidthM, bedCellSize ?? gridCellSizeCm),
+    height: cellsForMetres(bedHeightM, bedCellSize ?? gridCellSizeCm),
+    ...(bedCellSize !== null ? { cellSizeCm: bedCellSize } : {}),
     cells: [],
     environmentType: bedEnvType,
     ...(bedEnvType === "greenhouse" ? { greenhouseConfig: ghConfig } : {}),
@@ -1088,29 +1232,46 @@ export function GardenPlanner() {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <Input label={`${t("planner.width")} (m)`} type="number" min={0.3} max={20} step={0.1} value={bedWidthM} onChange={(e) => setBedWidthM(Number(e.target.value))} />
-              <Input label={`${t("planner.height")} (m)`} type="number" min={0.3} max={20} step={0.1} value={bedHeightM} onChange={(e) => setBedHeightM(Number(e.target.value))} />
+            <div className="grid grid-cols-3 gap-4">
+              <Input label={`${t("planner.width")} (m)`} type="number" min={0.3} max={200} step={0.1} value={bedWidthM} onChange={(e) => setBedWidthM(Number(e.target.value))} />
+              <Input label={`${t("planner.height")} (m)`} type="number" min={0.3} max={200} step={0.1} value={bedHeightM} onChange={(e) => setBedHeightM(Number(e.target.value))} />
+              {/* Big beds want big cells: a 40 m field at 30 cm is 133 columns */}
+              <div>
+                <label className="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">{t("planner.cellSize.label")}</label>
+                <CellSizeInput
+                  value={bedCellSize ?? gridCellSizeCm}
+                  onCommit={setBedCellSize}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100"
+                />
+              </div>
             </div>
             <p className="text-xs text-gray-400">
-              {t("planner.gridInfo", { cells: `${cellsForMetres(bedWidthM, gridCellSizeCm)} × ${cellsForMetres(bedHeightM, gridCellSizeCm)}`, size: gridCellSizeCm })}
+              {t("planner.gridInfo", {
+                cells: `${newBedCols} × ${newBedRows}`,
+                size: bedCellSize ?? gridCellSizeCm,
+              })}
             </p>
+            {newBedTooLarge && (
+              <p className="text-xs text-amber-700 dark:text-amber-400">
+                {t("planner.cellSize.tooManyCells", { max: MAX_BED_CELLS.toLocaleString() })}
+              </p>
+            )}
             {bedEnvType === "greenhouse" && <GreenhouseConfigPanel config={ghConfig} onChange={setGhConfig} />}
             {bedEnvType === "cold_frame" && <ColdFrameConfigPanel config={cfConfig} onChange={setCfConfig} />}
             {bedEnvType === "raised_bed" && (
               <RaisedBedConfigPanel
                 config={rbConfig}
                 onChange={setRbConfig}
-                widthCells={cellsForMetres(bedWidthM, gridCellSizeCm)}
-                heightCells={cellsForMetres(bedHeightM, gridCellSizeCm)}
-                gridCellSizeCm={gridCellSizeCm}
+                widthCells={cellsForMetres(bedWidthM, bedCellSize ?? gridCellSizeCm)}
+                heightCells={cellsForMetres(bedHeightM, bedCellSize ?? gridCellSizeCm)}
+                gridCellSizeCm={bedCellSize ?? gridCellSizeCm}
               />
             )}
             {bedEnvType === "container" && <ContainerConfigPanel config={ctConfig} onChange={setCtConfig} />}
             <EnvironmentEffectsPanel bed={newBedPreview} />
             <div className="flex justify-end gap-2">
               <Button variant="secondary" onClick={() => setShowNewBed(false)}>{t("common.cancel")}</Button>
-              <Button onClick={handleCreateBed}>{t("common.add")}</Button>
+              <Button onClick={handleCreateBed} disabled={newBedTooLarge}>{t("common.add")}</Button>
             </div>
           </div>
         </Modal>

@@ -7,6 +7,7 @@ import { usePlantName } from "@/hooks/usePlantName";
 import { Card } from "@/components/ui/Card";
 import { validatePlacement, firstNotableIssue, resolveIssueParams } from "@/lib/placementValidation";
 import { plantDensity } from "@/lib/plantDensity";
+import { bedCellSizeCm } from "@/lib/bedGeometry";
 import type { Bed, CellPlanting } from "@/types/garden";
 
 interface Props {
@@ -29,11 +30,12 @@ export function CellEditor({ gardenId, bed, cell, variant, onClose }: Props) {
     updateCell(gardenId, bed.id, cell.cellX, cell.cellY, updates);
 
   // Shown even when overridden, so the gardener can see what they accepted.
-  const issue = firstNotableIssue(validatePlacement(cell.plantId, cell.cellX, cell.cellY, bed, plantMap, gridCellSizeCm));
+  const cellSizeCm = bedCellSizeCm(bed, gridCellSizeCm);
+  const issue = firstNotableIssue(validatePlacement(cell.plantId, cell.cellX, cell.cellY, bed, plantMap, cellSizeCm));
   const warning = issue ? t(issue.messageKey, resolveIssueParams(issue.messageParams, getPlantName)) : null;
 
   const plant = plantMap.get(cell.plantId);
-  const density = plant ? plantDensity(plant, gridCellSizeCm) : null;
+  const density = plant ? plantDensity(plant, cellSizeCm) : null;
 
   const sheet = variant === "sheet";
   const inputClass = sheet
@@ -43,13 +45,16 @@ export function CellEditor({ gardenId, bed, cell, variant, onClose }: Props) {
   const body = (
     <>
       <h3 className="mb-3 text-sm font-semibold">{t("planner.editCell")}</h3>
+      {/* This one knows the bed, so it is the number that gets the weight. */}
       {density && (
-        <p className="mb-3 flex items-center gap-1.5 text-xs text-gray-600 dark:text-gray-300">
-          <Grid3x3 size={12} className="shrink-0 text-garden-600 dark:text-garden-400" />
-          {density.perCell > 0
-            ? t("planner.sowPerCell", { count: density.perCell })
-            : t("planner.cellsPerPlant", { count: density.cellsPerPlant, size: gridCellSizeCm })}
-        </p>
+        <div className="mb-3 flex items-center gap-2 rounded-lg border border-garden-300 bg-white px-3 py-2 text-sm font-medium dark:border-garden-700 dark:bg-gray-800">
+          <Grid3x3 size={15} className="shrink-0 text-garden-600 dark:text-garden-400" />
+          <span>
+            {density.perCell > 0
+              ? t("planner.sowPerCell", { count: density.perCell, size: cellSizeCm })
+              : t("planner.cellsPerPlant", { count: density.cellsPerPlant, size: cellSizeCm })}
+          </span>
+        </div>
       )}
       <div className="space-y-3">
         <div>

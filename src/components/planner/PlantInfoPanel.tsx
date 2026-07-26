@@ -78,18 +78,23 @@ export function PlantInfoPanel({ plant, onClose }: Props) {
           <Ruler size={12} className="text-gray-500" />
           <span>{t("plants.details.spacingPair", { inRow: plant.spacingCm, rows: plant.rowSpacingCm })}</span>
         </div>
+        {/* Deliberately a plain chip: this panel is not bed-scoped (a plant is
+            picked before a bed is), so it can only speak for the default size.
+            The bed's real figure gets the prominent treatment in CellEditor. */}
+        {density && (
+          <div
+            className="flex items-center gap-1.5 rounded-lg bg-white px-2 py-1.5 dark:bg-gray-800"
+            title={t("planner.cellSize.defaultCaveat", { size: gridCellSizeCm })}
+          >
+            <Grid3x3 size={12} className="text-gray-500" />
+            <span>
+              {density.perCell > 0
+                ? t("planner.plantsPerCellShort", { count: density.perCell, size: gridCellSizeCm })
+                : t("planner.cellsPerPlantShort", { count: density.cellsPerPlant })}
+            </span>
+          </div>
+        )}
       </div>
-
-      {density && (
-        <div className="mb-3 flex items-center gap-2 rounded-lg border border-garden-300 bg-white px-3 py-2 text-sm font-medium dark:border-garden-700 dark:bg-gray-800">
-          <Grid3x3 size={15} className="shrink-0 text-garden-600 dark:text-garden-400" />
-          <span>
-            {density.perCell > 0
-              ? t("planner.plantsPerCell", { count: density.perCell, size: gridCellSizeCm })
-              : t("planner.cellsPerPlant", { count: density.cellsPerPlant, size: gridCellSizeCm })}
-          </span>
-        </div>
-      )}
 
       {timings.length > 0 && (
         <div className="mb-3 flex flex-wrap gap-1.5">

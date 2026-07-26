@@ -4,14 +4,15 @@ import { Sprout, Apple, Heart, AlertTriangle } from "lucide-react";
 import type { Bed } from "@/types/garden";
 import type { Plant } from "@/types/plant";
 import { calculateBedScore } from "@/lib/placementValidation";
+import { bedCellAreaM2 } from "@/lib/bedGeometry";
 
 interface Props {
   bed: Bed;
   plantMap: Map<string, Plant>;
-  gridCellSizeCm: number;
+  defaultCellSizeCm: number;
 }
 
-export function BedStats({ bed, plantMap, gridCellSizeCm }: Props) {
+export function BedStats({ bed, plantMap, defaultCellSizeCm }: Props) {
   const { t } = useTranslation();
 
   const stats = useMemo(() => {
@@ -19,7 +20,7 @@ export function BedStats({ bed, plantMap, gridCellSizeCm }: Props) {
     const plantedCells = bed.cells.length;
     const occupancy = totalCells > 0 ? Math.round((plantedCells / totalCells) * 100) : 0;
 
-    const cellAreaM2 = (gridCellSizeCm / 100) ** 2;
+    const cellAreaM2 = bedCellAreaM2(bed, defaultCellSizeCm);
     let yieldKg = 0;
     const uniquePlants = new Set<string>();
 
@@ -43,7 +44,7 @@ export function BedStats({ bed, plantMap, gridCellSizeCm }: Props) {
       companionPairs,
       antagonistPairs,
     };
-  }, [bed, plantMap, gridCellSizeCm]);
+  }, [bed, plantMap, defaultCellSizeCm]);
 
   if (stats.plantedCells === 0) return null;
 

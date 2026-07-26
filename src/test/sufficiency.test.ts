@@ -44,6 +44,27 @@ describe("Sufficiency calculator", () => {
     expect(area).toBeCloseTo(0.18, 2);
   });
 
+  it("honours each bed's own cell size when beds disagree", () => {
+    const mixed: Garden = {
+      ...garden,
+      beds: [
+        garden.beds[0], // inherits 30 cm: 2 tomato cells = 0.18 m²
+        {
+          id: "b2", name: "Bed 2", x: 0, y: 1, width: 2, height: 2,
+          environmentType: "outdoor_bed", cellSizeCm: 50,
+          cells: [{ cellX: 0, cellY: 0, plantId: "tomato" }], // 0.25 m²
+        },
+      ],
+    };
+    expect(estimatePlantArea([mixed], "tomato", 30)).toBeCloseTo(0.43, 6);
+
+    // The yield path aggregates separately from estimatePlantArea, so it gets
+    // its own check: 3 cells × one global size would give 0.27 m².
+    const result = calculateSufficiency([mixed], [tomato, bean], 2, 30);
+    const tomatoYield = result.plantYields.find((y) => y.plantId === "tomato")!;
+    expect(tomatoYield.areaM2).toBeCloseTo(0.43, 6);
+  });
+
   it("should calculate plant yield", () => {
     const result = calculatePlantYield(tomato, 1.0);
     expect(result.estimatedKg).toBe(8);

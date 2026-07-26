@@ -53,6 +53,9 @@ export interface Bed {
   cells: CellPlanting[];
   notes?: string;
   paths?: string[]; // "x-y" keys for path cells
+  // Undefined inherits the app-wide default, so gardens made before beds had
+  // their own size keep their geometry without a migration.
+  cellSizeCm?: number;
   environmentType: EnvironmentType;
   greenhouseConfig?: GreenhouseConfig;
   containerConfig?: ContainerConfig;

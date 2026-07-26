@@ -49,6 +49,13 @@ describe("Garden sharing", () => {
     expect(decoded!.beds[0].cells).toHaveLength(3);
   });
 
+  it("carries a bed's own cell size, which is part of the layout", () => {
+    const sized: Garden = { ...garden, beds: [{ ...garden.beds[0], cellSizeCm: 25 }] };
+    expect(decodeGardenFromUrl(encodeGardenToUrl(sized))!.beds[0].cs).toBe(25);
+    // A bed on the default carries nothing, so the recipient uses their own.
+    expect(decodeGardenFromUrl(encodeGardenToUrl(garden))!.beds[0].cs).toBeUndefined();
+  });
+
   it("should return null for invalid data", () => {
     expect(decodeGardenFromUrl("invalid")).toBeNull();
     expect(decodeGardenFromUrl("")).toBeNull();
