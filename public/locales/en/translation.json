@@ -86,6 +86,8 @@
     "deleteBed": "Delete Bed",
     "gardenName": "Garden Name",
     "bedName": "Bed Name",
+    "bedNotes": "Bed notes",
+    "bedNotesPlaceholder": "Soil, drainage, what grew here last year...",
     "width": "Width",
     "height": "Height",
     "noGarden": "No garden created yet. Create one to get started!",

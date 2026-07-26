@@ -86,6 +86,8 @@
     "deleteBed": "Beet l\u00f6schen",
     "gardenName": "Gartenname",
     "bedName": "Beetname",
+    "bedNotes": "Beetnotizen",
+    "bedNotesPlaceholder": "Boden, Drainage, was hier letztes Jahr wuchs...",
     "width": "Breite",
     "height": "H\u00f6he",
     "noGarden": "Noch kein Garten angelegt. Erstelle einen um loszulegen!",

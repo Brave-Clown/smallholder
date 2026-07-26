@@ -86,6 +86,8 @@
     "deleteBed": "Eliminar cantero",
     "gardenName": "Nombre del huerto",
     "bedName": "Nombre del cantero",
+    "bedNotes": "Notas del cantero",
+    "bedNotesPlaceholder": "Suelo, drenaje, qué creció aquí el año pasado...",
     "width": "Ancho",
     "height": "Alto",
     "noGarden": "Aun no se ha creado un huerto. Crea uno para comenzar!",

@@ -86,6 +86,8 @@
     "deleteBed": "Supprimer la parcelle",
     "gardenName": "Nom du jardin",
     "bedName": "Nom de la parcelle",
+    "bedNotes": "Notes de la parcelle",
+    "bedNotesPlaceholder": "Sol, drainage, ce qui a poussé ici l'an dernier...",
     "width": "Largeur",
     "height": "Hauteur",
     "noGarden": "Aucun jardin créé. Créez-en un pour commencer !",

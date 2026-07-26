@@ -97,6 +97,12 @@ export function PrintBedLayout({ garden, plants, gridCellSizeCm, getPlantName }:
                   </span>
                 </h2>
 
+                {bed.notes && (
+                  <p className="mb-2 max-w-xl whitespace-pre-wrap text-xs italic text-gray-600 print:text-black">
+                    {bed.notes}
+                  </p>
+                )}
+
                 {/* Grid */}
                 <div
                   className="inline-block border border-gray-400 print:border-black"

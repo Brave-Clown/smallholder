@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus, Trash2, Download, Upload, Settings, Archive, Share2, Wand2, AlertTriangle, Undo2, Footprints, Copy, Printer, Rows3, Square } from "lucide-react";
+import { Plus, Trash2, Download, Upload, Settings, Archive, Share2, Wand2, AlertTriangle, Undo2, Footprints, Copy, Printer, Rows3, Square, StickyNote } from "lucide-react";
 import {
   DndContext,
   DragOverlay,
@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
-import type { Bed, Garden, CellPlanting, EnvironmentType, GreenhouseConfig, ContainerConfig, RaisedBedConfig, ColdFrameConfig } from "@/types/garden";
+import type { Bed, CellPlanting, EnvironmentType, GreenhouseConfig, ContainerConfig, RaisedBedConfig, ColdFrameConfig } from "@/types/garden";
 import { ENVIRONMENT_ICONS, getFrostProtectionWeeks } from "@/types/garden";
 import type { Plant } from "@/types/plant";
 import { PlantIconDisplay } from "@/components/ui/PlantIconDisplay";
@@ -33,6 +33,7 @@ import { validatePlacement, getCompanionHighlights, getAntagonistHighlights, fir
 import { CellEditor } from "./CellEditor";
 import { recommendBedPlanting, getRecommendedPlants, STRATEGY_DETAILS, DIRECTION_DETAILS, type PlantingStrategy, type PlantingDirection } from "@/lib/bedRecommendation";
 import { expandedBedIds } from "@/lib/bedView";
+import { parseGardensJson } from "@/lib/gardenImport";
 
 const ALL_ENVIRONMENTS: EnvironmentType[] = [
   "outdoor_bed", "raised_bed", "greenhouse", "cold_frame",
@@ -153,6 +154,7 @@ function BedGrid({
   const getPlantName = usePlantName();
   const { removeCell, updateBed, togglePath, gridCellSizeCm } = useStore(useShallow((s) => ({ removeCell: s.removeCell, updateBed: s.updateBed, togglePath: s.togglePath, gridCellSizeCm: s.gridCellSizeCm })));
   const [showConfig, setShowConfig] = useState(false);
+  const [showNotes, setShowNotes] = useState(false);
   const [editingName, setEditingName] = useState(false);
   const [newName, setNewName] = useState(bed.name);
   const [zoom, setZoom] = useState(1); // 0.6 = small, 1 = normal, 1.3 = large
@@ -252,6 +254,15 @@ function BedGrid({
                   {t("planner.clearBed")}
                 </button>
               )}
+              <button
+                onClick={() => setShowNotes(!showNotes)}
+                className={`rounded-lg p-1 hover:bg-gray-100 dark:hover:bg-gray-800 ${
+                  bed.notes ? "text-blue-500 dark:text-blue-400" : "text-gray-400 hover:text-gray-600"
+                }`}
+                title={t("planner.bedNotes")}
+              >
+                <StickyNote size={14} />
+              </button>
               {(envType === "greenhouse" || envType === "cold_frame" || envType === "raised_bed" || envType === "container") && (
                 <button
                   onClick={() => setShowConfig(!showConfig)}
@@ -265,9 +276,26 @@ function BedGrid({
         </div>
       </div>
 
+      {/* Reads at a glance whether the bed is open or shut; the editor below replaces it while open */}
+      {bed.notes && !(isExpanded && showNotes) && (
+        <p className="mt-1.5 whitespace-pre-wrap text-xs italic text-gray-500 dark:text-gray-400">{bed.notes}</p>
+      )}
+
       {!isExpanded && <BedStats bed={bed} plantMap={plantMap} gridCellSizeCm={gridCellSizeCm} />}
 
       {isExpanded && <>
+      {showNotes && (
+        <div className="mb-4 mt-3 rounded-lg bg-blue-50 p-3 dark:bg-blue-900/20">
+          <label className="mb-1 block text-xs text-gray-600 dark:text-gray-400">{t("planner.bedNotes")}</label>
+          <textarea
+            value={bed.notes ?? ""}
+            onChange={(e) => updateBed(gardenId, bed.id, { notes: e.target.value || undefined })}
+            rows={3}
+            placeholder={t("planner.bedNotesPlaceholder")}
+            className="w-full rounded border border-gray-300 bg-white px-2 py-1 text-xs dark:border-gray-600 dark:bg-gray-800"
+          />
+        </div>
+      )}
       {showConfig && envType === "greenhouse" && (
         <GreenhouseConfigPanel
           config={bed.greenhouseConfig ?? { material: "glass", heated: false, ventilation: "manual", minTempC: 5, maxTempC: 35, frostProtectionWeeks: 4 }}
@@ -627,31 +655,27 @@ export function GardenPlanner() {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (ev) => {
+      let imported;
       try {
-        const imported = JSON.parse(ev.target?.result as string) as Garden[];
-        if (!Array.isArray(imported)) throw new Error("Invalid format");
-        const store = useStore.getState();
-        for (const g of imported) {
-          if (g.id && g.name && Array.isArray(g.beds)) {
-            const id = store.addGarden(g.name);
-            for (const bed of g.beds) {
-              store.addBed(id, {
-                name: bed.name, x: bed.x, y: bed.y, width: bed.width, height: bed.height,
-                environmentType: bed.environmentType ?? "outdoor_bed",
-                greenhouseConfig: bed.greenhouseConfig, containerConfig: bed.containerConfig,
-                raisedBedConfig: bed.raisedBedConfig, coldFrameConfig: bed.coldFrameConfig,
-              });
-              const updatedGarden = useStore.getState().gardens.find((sg) => sg.id === id);
-              const newBed = updatedGarden?.beds[updatedGarden.beds.length - 1];
-              if (newBed) {
-                for (const cell of bed.cells) {
-                  store.setCell(id, newBed.id, { cellX: cell.cellX, cellY: cell.cellY, plantId: cell.plantId });
-                }
-              }
-            }
-          }
+        imported = parseGardensJson(JSON.parse(ev.target?.result as string));
+      } catch {
+        imported = null;
+      }
+      if (!imported) {
+        toast(t("planner.importError"), "error");
+        return;
+      }
+
+      const store = useStore.getState();
+      for (const g of imported) {
+        const id = store.addGarden(g.name);
+        for (const { cells, ...bed } of g.beds) {
+          store.addBed(id, bed);
+          const updatedGarden = useStore.getState().gardens.find((sg) => sg.id === id);
+          const newBed = updatedGarden?.beds[updatedGarden.beds.length - 1];
+          if (newBed && cells.length) store.setBedCells(id, newBed.id, cells);
         }
-      } catch { toast(t("planner.importError"), "error"); }
+      }
     };
     reader.readAsText(file);
     if (fileInputRef.current) fileInputRef.current.value = "";
