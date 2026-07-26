@@ -170,7 +170,20 @@
     },
     "raisedBed": {
       "height": "Hauteur du bac (cm)",
-      "layers": "Couches"
+      "layers": "Couches",
+      "soilVolume": "Remplir ce bac demande environ {{litres}} L de terre — {{cubicMetres}} m³, ou {{bags}} sacs de 40 L"
+    },
+    "environmentEffects": {
+      "title": "Ce que {{environment}} change",
+      "toggle": "Réglages du bac et leurs effets",
+      "frost_one": "Les dates de semis et de récolte avancent de {{count}} semaine",
+      "frost_other": "Les dates de semis et de récolte avancent de {{count}} semaines",
+      "noFrost": "Dates traitées comme en pleine terre, sans avance",
+      "sun_full": "Compte comme plein soleil lors du contrôle des besoins en lumière",
+      "sun_partial": "Compte comme mi-ombre lors du contrôle des besoins en lumière",
+      "sun_shade": "Compte comme ombre lors du contrôle des besoins en lumière",
+      "containerVolume": "Les plantes demandant plus de {{litres}} L d'espace racinaire sont signalées à la mise en place",
+      "heatAlerts": "Les alertes météo préviennent quand les prévisions approchent {{min}}°C ou {{max}}°C"
     },
     "container": {
       "volume": "Volume (litres)",

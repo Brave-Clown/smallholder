@@ -170,7 +170,20 @@
     },
     "raisedBed": {
       "height": "Altura del cantero (cm)",
-      "layers": "Capas"
+      "layers": "Capas",
+      "soilVolume": "Llenar este cantero necesita unos {{litres}} L de tierra — {{cubicMetres}} m³, o {{bags}} sacos de 40 L"
+    },
+    "environmentEffects": {
+      "title": "Qué cambia {{environment}}",
+      "toggle": "Ajustes del cantero y su efecto",
+      "frost_one": "Las fechas de siembra y cosecha se adelantan {{count}} semana",
+      "frost_other": "Las fechas de siembra y cosecha se adelantan {{count}} semanas",
+      "noFrost": "Las fechas se tratan como al aire libre, sin adelanto",
+      "sun_full": "Cuenta como sol pleno al comprobar la luz que necesita la planta",
+      "sun_partial": "Cuenta como sol parcial al comprobar la luz que necesita la planta",
+      "sun_shade": "Cuenta como sombra al comprobar la luz que necesita la planta",
+      "containerVolume": "Las plantas que necesitan más espacio de raíz que {{litres}} L se marcan al colocarlas",
+      "heatAlerts": "Los avisos meteorológicos alertan cuando la previsión se acerca a {{min}}°C o {{max}}°C"
     },
     "container": {
       "volume": "Volumen (litros)",

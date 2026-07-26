@@ -17,7 +17,7 @@ export interface PlacementResult {
   isRecommended: boolean;
 }
 
-const ENV_SUN_MAP: Partial<Record<EnvironmentType, "full" | "partial" | "shade">> = {
+export const ENV_SUN_MAP: Partial<Record<EnvironmentType, "full" | "partial" | "shade">> = {
   greenhouse: "full",
   windowsill: "partial",
 };

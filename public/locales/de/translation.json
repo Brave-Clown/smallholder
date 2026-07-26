@@ -170,7 +170,20 @@
     },
     "raisedBed": {
       "height": "Beeth\u00f6he (cm)",
-      "layers": "Schichten"
+      "layers": "Schichten",
+      "soilVolume": "Zum F\u00fcllen dieses Beets werden etwa {{litres}} L Erde gebraucht \u2014 {{cubicMetres}} m\u00b3 oder {{bags}} S\u00e4cke \u00e0 40 L"
+    },
+    "environmentEffects": {
+      "title": "Was {{environment}} ver\u00e4ndert",
+      "toggle": "Beeteinstellungen und ihre Wirkung",
+      "frost_one": "Pflanz- und Erntetermine verschieben sich {{count}} Woche nach vorn",
+      "frost_other": "Pflanz- und Erntetermine verschieben sich {{count}} Wochen nach vorn",
+      "noFrost": "Termine wie im Freiland, ohne Vorsprung",
+      "sun_full": "Z\u00e4hlt als volle Sonne bei der Pr\u00fcfung des Lichtbedarfs",
+      "sun_partial": "Z\u00e4hlt als Halbschatten bei der Pr\u00fcfung des Lichtbedarfs",
+      "sun_shade": "Z\u00e4hlt als Schatten bei der Pr\u00fcfung des Lichtbedarfs",
+      "containerVolume": "Pflanzen, die mehr Wurzelraum als {{litres}} L brauchen, werden beim Setzen markiert",
+      "heatAlerts": "Wetterwarnungen melden, wenn die Vorhersage {{min}}\u00b0C oder {{max}}\u00b0C n\u00e4hert"
     },
     "container": {
       "volume": "Volumen (Liter)",

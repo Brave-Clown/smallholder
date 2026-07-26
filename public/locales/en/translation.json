@@ -170,7 +170,20 @@
     },
     "raisedBed": {
       "height": "Bed height (cm)",
-      "layers": "Layers"
+      "layers": "Layers",
+      "soilVolume": "Filling this bed takes about {{litres}} L of soil — {{cubicMetres}} m³, or {{bags}} bags of 40 L"
+    },
+    "environmentEffects": {
+      "title": "What {{environment}} changes",
+      "toggle": "Bed settings and what they change",
+      "frost_one": "Planting and harvest dates move {{count}} week earlier than open ground",
+      "frost_other": "Planting and harvest dates move {{count}} weeks earlier than open ground",
+      "noFrost": "Dates are treated as open ground, with no head start",
+      "sun_full": "Counted as full sun when checking a plant's light needs",
+      "sun_partial": "Counted as partial sun when checking a plant's light needs",
+      "sun_shade": "Counted as shade when checking a plant's light needs",
+      "containerVolume": "Plants that need more root room than {{litres}} L are flagged when you place them",
+      "heatAlerts": "Weather alerts warn when the forecast nears {{min}}°C or {{max}}°C"
     },
     "container": {
       "volume": "Volume (liters)",

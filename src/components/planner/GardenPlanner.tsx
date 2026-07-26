@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useCallback, useEffect, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus, Trash2, Download, Upload, Settings, Archive, Share2, Wand2, AlertTriangle, Undo2, Footprints, Copy, Printer, Rows3, Square, StickyNote } from "lucide-react";
+import { Plus, Trash2, Download, Upload, Settings, Archive, Share2, Wand2, AlertTriangle, Undo2, Footprints, Copy, Printer, Rows3, Square, StickyNote, Layers } from "lucide-react";
 import {
   DndContext,
   DragOverlay,
@@ -18,6 +18,8 @@ import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 import type { Bed, CellPlanting, EnvironmentType, GreenhouseConfig, ContainerConfig, RaisedBedConfig, ColdFrameConfig } from "@/types/garden";
 import { ENVIRONMENT_ICONS, getFrostProtectionWeeks } from "@/types/garden";
+import { raisedBedSoilVolume } from "@/lib/soilVolume";
+import { environmentEffects } from "@/lib/environmentEffects";
 import type { Plant } from "@/types/plant";
 import { PlantIconDisplay } from "@/components/ui/PlantIconDisplay";
 import { CropRotation } from "./CropRotation";
@@ -263,14 +265,14 @@ function BedGrid({
               >
                 <StickyNote size={14} />
               </button>
-              {(envType === "greenhouse" || envType === "cold_frame" || envType === "raised_bed" || envType === "container") && (
-                <button
-                  onClick={() => setShowConfig(!showConfig)}
-                  className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800"
-                >
-                  <Settings size={14} />
-                </button>
-              )}
+              {/* Every environment has something to explain, even the ones with no settings */}
+              <button
+                onClick={() => setShowConfig(!showConfig)}
+                className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600 dark:hover:bg-gray-800"
+                title={t("planner.environmentEffects.toggle")}
+              >
+                <Settings size={14} />
+              </button>
             </>
           )}
         </div>
@@ -296,6 +298,7 @@ function BedGrid({
           />
         </div>
       )}
+      {showConfig && <EnvironmentEffectsPanel bed={bed} />}
       {showConfig && envType === "greenhouse" && (
         <GreenhouseConfigPanel
           config={bed.greenhouseConfig ?? { material: "glass", heated: false, ventilation: "manual", minTempC: 5, maxTempC: 35, frostProtectionWeeks: 4 }}
@@ -312,6 +315,9 @@ function BedGrid({
         <RaisedBedConfigPanel
           config={bed.raisedBedConfig ?? { heightCm: 80 }}
           onChange={(config) => updateBed(gardenId, bed.id, { raisedBedConfig: config })}
+          widthCells={bed.width}
+          heightCells={bed.height}
+          gridCellSizeCm={gridCellSizeCm}
         />
       )}
       {showConfig && envType === "container" && (
@@ -433,14 +439,60 @@ function ColdFrameConfigPanel({ config, onChange }: { config: ColdFrameConfig; o
   );
 }
 
-function RaisedBedConfigPanel({ config, onChange }: { config: RaisedBedConfig; onChange: (c: RaisedBedConfig) => void }) {
+/** Bed size is entered in metres but stored as whole cells; both the create
+ *  preview and the created bed must round the same way. */
+const cellsForMetres = (metres: number, gridCellSizeCm: number) =>
+  Math.max(1, Math.round(metres / (gridCellSizeCm / 100)));
+
+function RaisedBedConfigPanel({ config, onChange, widthCells, heightCells, gridCellSizeCm }: {
+  config: RaisedBedConfig;
+  onChange: (c: RaisedBedConfig) => void;
+  widthCells: number;
+  heightCells: number;
+  gridCellSizeCm: number;
+}) {
   const { t } = useTranslation();
+  const volume = raisedBedSoilVolume({ width: widthCells, height: heightCells }, config.heightCm, gridCellSizeCm);
   return (
     <div className="mb-4 rounded-lg bg-amber-50 p-3 dark:bg-amber-900/20">
       <div className="flex items-center gap-4">
         <label className="text-xs text-gray-600 dark:text-gray-400">{t("planner.raisedBed.height")}</label>
         <input type="number" min={20} max={150} value={config.heightCm} onChange={(e) => onChange({ ...config, heightCm: Number(e.target.value) })} className="w-20 rounded border border-gray-300 bg-white px-2 py-1 text-xs dark:border-gray-600 dark:bg-gray-800" />
       </div>
+      {volume && (
+        <p className="mt-2 flex items-start gap-1.5 text-xs text-gray-600 dark:text-gray-300">
+          <Layers size={12} className="mt-0.5 shrink-0 text-amber-600 dark:text-amber-400" />
+          <span>
+            {t("planner.raisedBed.soilVolume", {
+              litres: Math.round(volume.litres),
+              cubicMetres: volume.cubicMetres.toFixed(2),
+              bags: volume.bags,
+            })}
+          </span>
+        </p>
+      )}
+    </div>
+  );
+}
+
+function EnvironmentEffectsPanel({ bed }: { bed: Bed }) {
+  const { t } = useTranslation();
+  const effects = environmentEffects(bed);
+  return (
+    <div className="mb-4 rounded-lg bg-gray-50 p-3 dark:bg-gray-800/50">
+      <p className="mb-1.5 text-xs font-medium text-gray-600 dark:text-gray-300">
+        {t("planner.environmentEffects.title", {
+          environment: t(`planner.environmentTypes.${bed.environmentType}`),
+        })}
+      </p>
+      <ul className="space-y-1">
+        {effects.map((effect) => (
+          <li key={effect.messageKey} className="flex items-start gap-1.5 text-xs text-gray-500 dark:text-gray-400">
+            <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-gray-400" />
+            <span>{t(effect.messageKey, effect.params)}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -690,9 +742,8 @@ export function GardenPlanner() {
 
   const handleCreateBed = () => {
     if (!bedName.trim() || !activeGardenId) return;
-    const cellSizeM = gridCellSizeCm / 100;
-    const width = Math.max(1, Math.round(bedWidthM / cellSizeM));
-    const height = Math.max(1, Math.round(bedHeightM / cellSizeM));
+    const width = cellsForMetres(bedWidthM, gridCellSizeCm);
+    const height = cellsForMetres(bedHeightM, gridCellSizeCm);
     const bedCount = activeGarden?.beds.length ?? 0;
     addBed(activeGardenId, {
       name: bedName.trim(), x: 0, y: bedCount, width, height,
@@ -705,6 +756,20 @@ export function GardenPlanner() {
     setBedName("");
     setBedEnvType("outdoor_bed");
     setShowNewBed(false);
+  };
+
+  // Lets the New Bed modal explain a choice before it is committed, using the
+  // same derivation the created bed will use.
+  const newBedPreview: Bed = {
+    id: "", name: "", x: 0, y: 0,
+    width: cellsForMetres(bedWidthM, gridCellSizeCm),
+    height: cellsForMetres(bedHeightM, gridCellSizeCm),
+    cells: [],
+    environmentType: bedEnvType,
+    ...(bedEnvType === "greenhouse" ? { greenhouseConfig: ghConfig } : {}),
+    ...(bedEnvType === "cold_frame" ? { coldFrameConfig: cfConfig } : {}),
+    ...(bedEnvType === "raised_bed" ? { raisedBedConfig: rbConfig } : {}),
+    ...(bedEnvType === "container" ? { containerConfig: ctConfig } : {}),
   };
 
   return (
@@ -1028,12 +1093,21 @@ export function GardenPlanner() {
               <Input label={`${t("planner.height")} (m)`} type="number" min={0.3} max={20} step={0.1} value={bedHeightM} onChange={(e) => setBedHeightM(Number(e.target.value))} />
             </div>
             <p className="text-xs text-gray-400">
-              {t("planner.gridInfo", { cells: `${Math.max(1, Math.round(bedWidthM / (gridCellSizeCm / 100)))} × ${Math.max(1, Math.round(bedHeightM / (gridCellSizeCm / 100)))}`, size: gridCellSizeCm })}
+              {t("planner.gridInfo", { cells: `${cellsForMetres(bedWidthM, gridCellSizeCm)} × ${cellsForMetres(bedHeightM, gridCellSizeCm)}`, size: gridCellSizeCm })}
             </p>
             {bedEnvType === "greenhouse" && <GreenhouseConfigPanel config={ghConfig} onChange={setGhConfig} />}
             {bedEnvType === "cold_frame" && <ColdFrameConfigPanel config={cfConfig} onChange={setCfConfig} />}
-            {bedEnvType === "raised_bed" && <RaisedBedConfigPanel config={rbConfig} onChange={setRbConfig} />}
+            {bedEnvType === "raised_bed" && (
+              <RaisedBedConfigPanel
+                config={rbConfig}
+                onChange={setRbConfig}
+                widthCells={cellsForMetres(bedWidthM, gridCellSizeCm)}
+                heightCells={cellsForMetres(bedHeightM, gridCellSizeCm)}
+                gridCellSizeCm={gridCellSizeCm}
+              />
+            )}
             {bedEnvType === "container" && <ContainerConfigPanel config={ctConfig} onChange={setCtConfig} />}
+            <EnvironmentEffectsPanel bed={newBedPreview} />
             <div className="flex justify-end gap-2">
               <Button variant="secondary" onClick={() => setShowNewBed(false)}>{t("common.cancel")}</Button>
               <Button onClick={handleCreateBed}>{t("common.add")}</Button>
