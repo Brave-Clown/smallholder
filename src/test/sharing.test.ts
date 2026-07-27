@@ -61,6 +61,22 @@ describe("Garden sharing", () => {
     expect(decodeGardenFromUrl("")).toBeNull();
   });
 
+  // A link is hand-editable, and the grid renders one component per cell, so
+  // an unbounded bed hangs the recipient rather than importing badly.
+  it("drops beds whose grid would blow past the cell cap, keeping siblings", () => {
+    const encode = (beds: unknown[]) =>
+      btoa(unescape(encodeURIComponent(JSON.stringify({ v: 1, name: "Shared", beds }))));
+
+    const decoded = decodeGardenFromUrl(encode([
+      { name: "sane", w: 20, h: 20, env: "outdoor_bed", cells: [] },
+      { name: "huge", w: 5000, h: 5000, env: "outdoor_bed", cells: [] },
+      { name: "text", w: "wide", h: 3, env: "outdoor_bed", cells: [] },
+      { name: "zero", w: 0, h: 3, env: "outdoor_bed", cells: [] },
+    ]));
+
+    expect(decoded!.beds.map((b) => b.name)).toEqual(["sane"]);
+  });
+
   it("should produce reasonably sized URLs", () => {
     const encoded = encodeGardenToUrl(garden);
     // base64 of a small garden should be under 1KB

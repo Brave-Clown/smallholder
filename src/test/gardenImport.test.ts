@@ -144,6 +144,22 @@ describe("parseGardensJson", () => {
     expect(garden.beds[0].cells).toEqual([{ cellX: 0, cellY: 0, plantId: "bean" }]);
   });
 
+  // The creation modal refuses these; a hand-edited file has to be refused too,
+  // since the grid renders one component per cell.
+  it("drops a bed whose grid would blow past the cell cap", () => {
+    const [garden] = parseGardensJson([
+      {
+        name: "G",
+        beds: [
+          { name: "field", width: 133, height: 67, cells: [] },   // 8,911 — allowed
+          { name: "absurd", width: 5000, height: 5000, cells: [] },
+        ],
+      },
+    ])!;
+
+    expect(garden.beds.map((b) => b.name)).toEqual(["field"]);
+  });
+
   it("rejects input that yields no usable garden", () => {
     expect(parseGardensJson(null)).toBeNull();
     expect(parseGardensJson({ name: "not an array" })).toBeNull();

@@ -145,12 +145,13 @@ const DroppableCell = memo(function DroppableCell({
 // --- BedGrid with stats and validation ---
 
 function BedGrid({
-  bed, gardenId, selectedPlantId, isPathMode, isExpanded, onToggleExpand, onCellClick, onSelectPlantFromCell,
+  bed, gardenId, selectedPlantId, isPathMode, isExpanded, onToggleExpand, onCellClick, onSelectPlantFromCell, onClearBed,
 }: {
   bed: Bed; gardenId: string; selectedPlantId: string | null; isPathMode: boolean;
   isExpanded: boolean; onToggleExpand: () => void;
   onCellClick: (bedId: string, x: number, y: number) => void;
   onSelectPlantFromCell: (plantId: string, bedId: string, cellX: number, cellY: number) => void;
+  onClearBed: (bedId: string) => void;
 }) {
   const { t } = useTranslation();
   const plantMap = usePlantMap();
@@ -176,6 +177,16 @@ function BedGrid({
     () => selectedPlantId ? getAntagonistHighlights(selectedPlantId, bed, plantMap) : new Set<string>(),
     [selectedPlantId, bed, plantMap]
   );
+
+  // Looked up once per cell during render, so these have to be O(1). Scanning
+  // bed.cells/bed.paths per cell makes the grid quadratic: a 40 × 20 m field at
+  // 30 cm is 8,911 cells, which MAX_BED_CELLS explicitly permits.
+  const cellsByCoord = useMemo(() => {
+    const byCoord = new Map<string, CellPlanting>();
+    for (const c of bed.cells) byCoord.set(`${c.cellX}-${c.cellY}`, c);
+    return byCoord;
+  }, [bed.cells]);
+  const pathSet = useMemo(() => new Set(bed.paths ?? []), [bed.paths]);
 
   // Validate each planted cell, skipping any the gardener has already accepted
   const cellWarnings = useMemo(() => {
@@ -251,7 +262,7 @@ function BedGrid({
               </div>
               {bed.cells.length > 0 && (
                 <button
-                  onClick={() => { for (const cell of [...bed.cells]) removeCell(gardenId, bed.id, cell.cellX, cell.cellY); }}
+                  onClick={() => onClearBed(bed.id)}
                   className="rounded-lg p-1 text-xs text-gray-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20"
                   title={t("planner.clearBed")}
                 >
@@ -347,8 +358,8 @@ function BedGrid({
         {Array.from({ length: bed.height }, (_, y) =>
           Array.from({ length: bed.width }, (_, x) => {
             const cellKey = `${x}-${y}`;
-            const isPath = (bed.paths ?? []).includes(cellKey);
-            const cell = bed.cells.find((c) => c.cellX === x && c.cellY === y);
+            const isPath = pathSet.has(cellKey);
+            const cell = cellsByCoord.get(cellKey);
             const plant = cell ? plantMap.get(cell.plantId) : undefined;
 
             return (
@@ -819,6 +830,20 @@ export function GardenPlanner() {
     toast(t("planner.autoFillDone", { count: cells.length }), "success");
   };
 
+  // Same single-write shape as applyFill, and undoable for the same reason:
+  // this wipes more in one click than any placement it can be used to correct.
+  // It is also the step the cell-size panel sends people to.
+  const handleClearBed = (bedId: string) => {
+    if (!activeGardenId) return;
+    const bed = activeGarden?.beds.find((b) => b.id === bedId);
+    if (!bed || bed.cells.length === 0) return;
+
+    const gid = activeGardenId;
+    const previous = bed.cells;
+    setBedCells(gid, bedId, []);
+    pushUndo({ label: `Clear ${bed.name}`, undo: () => useStore.getState().setBedCells(gid, bedId, previous) });
+  };
+
   // Auto-fill a bed with strategy
   const handleAutoFill = (bedId: string, strategy: PlantingStrategy) => {
     const bed = activeGarden?.beds.find((b) => b.id === bedId);
@@ -1111,6 +1136,7 @@ export function GardenPlanner() {
                       isExpanded={expandedBeds.has(bed.id)}
                       onToggleExpand={() => toggleBedCollapsed(bed.id, bedIds)}
                       onCellClick={handleCellClick}
+                      onClearBed={handleClearBed}
                       onSelectPlantFromCell={(id, bedId, cellX, cellY) => {
                         const p = plantMap.get(id);
                         if (p) setSelectedPlant(p);

@@ -1,4 +1,5 @@
 import type { Garden } from "@/types/garden";
+import { cellCountExceedsLimit } from "@/lib/bedGeometry";
 
 interface SharedGardenTemplate {
   v: 1;
@@ -37,6 +38,18 @@ export function encodeGardenToUrl(garden: Garden): string {
   return encoded;
 }
 
+/**
+ * A link is hand-editable, so its dimensions are untrusted. A bed whose grid
+ * would exceed the cell cap is dropped rather than imported: every cell is a
+ * rendered component, so accepting one hangs the recipient's browser.
+ */
+function isUsableBed(bed: SharedGardenTemplate["beds"][number]): boolean {
+  if (!bed || typeof bed !== "object") return false;
+  if (!Number.isFinite(bed.w) || !Number.isFinite(bed.h)) return false;
+  if (bed.w < 1 || bed.h < 1) return false;
+  return !cellCountExceedsLimit(Math.round(bed.w), Math.round(bed.h));
+}
+
 export function decodeGardenFromUrl(encoded: string): SharedGardenTemplate | null {
   try {
     const json = decodeURIComponent(escape(atob(encoded)));
@@ -44,7 +57,9 @@ export function decodeGardenFromUrl(encoded: string): SharedGardenTemplate | nul
     if (template.v !== 1 || !template.name || !Array.isArray(template.beds)) {
       return null;
     }
-    return template;
+    // Filtered here rather than at import so the preview bed count matches
+    // what actually lands.
+    return { ...template, beds: template.beds.filter(isUsableBed) };
   } catch {
     return null;
   }

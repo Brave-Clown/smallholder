@@ -1,5 +1,6 @@
 import type { Bed, CellPlanting, EnvironmentType } from "@/types/garden";
 import { ENVIRONMENT_ICONS } from "@/types/garden";
+import { cellCountExceedsLimit } from "@/lib/bedGeometry";
 
 /**
  * Normalizes the garden JSON the planner's own export button writes. The file
@@ -53,6 +54,10 @@ function normalizeBed(raw: unknown): ImportedBed | null {
   const name = str(b.name);
   if (!name || !isNum(b.width) || !isNum(b.height)) return null;
   if (b.width < 1 || b.height < 1) return null;
+  // Every cell is a rendered component, so an unbounded grid from a hand-edited
+  // file is a browser hang, not a slow import. The creation modal already
+  // refuses these; the file boundary has to as well.
+  if (cellCountExceedsLimit(Math.round(b.width), Math.round(b.height))) return null;
 
   const envType = str(b.environmentType);
   const environmentType: EnvironmentType =
