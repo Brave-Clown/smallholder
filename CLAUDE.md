@@ -98,8 +98,12 @@ docker compose up --build   # full stack, localhost:8080
   **Never bulk-import datasets licensed NC or SA** (incompatible with MIT).
   Public domain / CC0 sources are fine (USDA FoodData Central for
   nutrition, Wikidata for taxonomy).
-- Every plant carries `dataQuality` ("verified" | "draft" | "community")
-  and `source`. New batches enter as "draft" until human-reviewed.
+- `dataQuality` ("verified" | "draft" | "community") and `source` are a **v2
+  requirement, not the current state**: they exist only on `PlantV2`
+  (`src/types/plantV2.ts:171`), and 0 of the 45 shipped plants carry either —
+  `src/types/plant.ts` doesn't declare them. They land with the Level 2 schema
+  migration, and from then on every plant carries both, with new batches
+  entering as "draft" until human-reviewed.
 - Seed climate data reference: climate-needs data must stay consistent
   with the ClimateNeeds semantics in src/types/plantV2.ts (germination
   floor AND ceiling, frost tolerance class, growth band, heat ceiling,
