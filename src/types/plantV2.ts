@@ -119,6 +119,13 @@ export interface PlantV2 {
   id: string;                       // slug, unique across builtin + custom + packs
   scientificName?: string;          // disambiguation matters at hundreds-scale
   names: { en: string; [locale: string]: string };
+  /**
+   * One-line "what is this plant". Plant knowledge, so it lives here rather
+   * than in the locale files — same en-required/fallback rule as `names`.
+   * Longer-form content (growing notes, pests, varieties) is a later data
+   * axis, not another field.
+   */
+  descriptions?: { en: string; [locale: string]: string };
   category: "vegetable" | "fruit" | "herb" | "grain" | "berry" | "tree";
   family: BotanicalFamily;          // rotation logic reads THIS now
   lifecycle: Lifecycle;
