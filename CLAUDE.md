@@ -100,18 +100,50 @@ docker compose up --build   # full stack, localhost:8080
 
 - Data = compiled horticultural facts, authored for this project.
   **Never bulk-import datasets licensed NC or SA** (incompatible with MIT).
-  Public domain / CC0 sources are fine (USDA FoodData Central for
-  nutrition, Wikidata for taxonomy).
+  Decided sources are tabled below.
 - `dataQuality` ("verified" | "draft" | "community") and `source` are a **v2
   requirement, not the current state**: they exist only on `PlantV2`
   (`src/types/plantV2.ts:171`), and 0 of the 45 shipped plants carry either —
   `src/types/plant.ts` doesn't declare them. They land with the Level 2 schema
   migration, and from then on every plant carries both, with new batches
-  entering as "draft" until human-reviewed.
+  entering as "draft" until human-reviewed. Values taken from the OpenFarm
+  rescue enter as **"community"** — its own maintainer calls it "a useful
+  scaffold, not an authority" — and only become "verified" once a human has
+  actually checked them. Nobody hand-authors 300 plants; they review flagged ones.
 - Seed climate data reference: climate-needs data must stay consistent
   with the ClimateNeeds semantics in src/types/plantV2.ts (germination
   floor AND ceiling, frost tolerance class, growth band, heat ceiling,
   photoperiod, vernalization, perennial winter-kill + chill hours).
+
+### Decided sources (2026-07-28) — licences read from primary sources, not search summaries
+
+| Field | Source | Licence |
+|---|---|---|
+| `family`, `scientificName` | Wikidata | CC0 |
+| `lifecycle`, `habit` | USDA PLANTS — "Duration" and "Growth Habit" are first-class fields | US public domain |
+| `nutritionPer100g` | USDA FoodData Central | US public domain |
+| `rootDepthCm` | USDA NRCS irrigation guides (National Engineering Handbook part 652), effective root-zone depth tables | US public domain |
+| `spacing`, days to maturity, sun, companions | `github.com/thefullnacho/openfarm-crops-rescue` — 340 crops as JSON, recovered from the Wayback Machine after OpenFarm.cc shut down in April 2025 | **CC0** |
+
+**Do not import from** Permapeople (CC BY-SA 4.0, verified in its own database
+FAQ), Plants For A Future, Practical Plants, or Wikipedia. ShareAlike would
+relicense this repo. Permapeople was seeded from a PFAF dump, so that whole
+lineage is out. FAO-56 Table 22 has the best rooting-depth data, but FAO's
+catalogue is largely NC-SA and the USDA NRCS tables say the same thing with no
+licence argument — use those.
+
+**Licences govern expression, not facts.** Reading a Permapeople or extension-
+service page to check one value and recording that value is research and is
+fine; copying their dataset is not. That distinction is what makes "authored for
+this project" honest rather than a fig leaf. Keep it that way, and record where
+each value came from in `source`.
+
+**The bottleneck is `ClimateNeeds`, and it will stay authored.** No open dataset
+carries germination floor *and* ceiling, frost-tolerance class, heat ceiling,
+photoperiod and vernalization together, because that shape is this project's own
+idea. `docs/design/climate-needs-45.json` covers batch 1; every batch after it is
+rate-limited by this, not by the mechanical fields — which is what makes the
+draft → verified pipeline the central mechanism rather than bookkeeping.
 
 ## Don'ts
 
