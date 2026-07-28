@@ -139,7 +139,10 @@ its input, and the solver move as one block, and the ERA5 fetch stays at Level
 - [ ] Climate drift: periodic re-derivation of climate normals (the ERA5 rolling-window design already supports this)
 - [ ] Local AI integration for Q&A/planning over the homestead data
 - [ ] Community crop packs; CONTRIBUTING.md with AI-use policy
-- [ ] Public demo site; revisit hosted offering (donations first — hosting means real data-custody obligations)
+- [ ] **Revisit a hosted offering** (donations first — hosting means real data-custody obligations). *Rewritten 2026-07-28: the "public demo site" half of this item was already done at Level 0 and is live at https://brave-clown.github.io/smallholder/ — it was written when upstream was assumed to be running a VPS, which it is not. What is left is the genuinely unbuilt half, and it is bigger than "put the Docker stack on a public box":*
+  - ***The backend is single-tenant by construction, not by omission.*** *`state_snapshot` is declared `id INTEGER PRIMARY KEY CHECK (id = 1)` (`backend/src/db.ts`), so the table can hold exactly one blob; neither `gardens` nor `tasks` has an owner column; and `backend/src/index.ts` has CORS and rate limiting and **no authentication at all**. Expose that publicly and every visitor shares one garden, with the last sync winning. A hosted offering therefore means accounts, per-user isolation and auth — a schema change — **before** the custody question is even reached.*
+  - ***Self-hosting is a different thing and is already supported.*** *A single person syncing a phone and a laptop through one instance is exactly what one `state_snapshot` row models, which is why the Level 2 `updatedAt` merge item matters more for a self-hoster than for a browser-only user: both devices push and pull the same blob.*
+  - ***Hosting the static build changes nothing functionally.*** *The app is browser-based and stores in localStorage, so a self-hosted static copy and the Pages demo are the same app on different URLs. Moving off GitHub Pages would buy independence, not capability — Pages supports custom domains and serves a static SPA indefinitely. Worth doing on principle if ever, not on need.*
 
 ## Inbox (capture-only, sort later)
 
