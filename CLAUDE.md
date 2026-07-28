@@ -45,13 +45,17 @@ docker compose up --build   # full stack, localhost:8080
   default export (`src/lib/i18n.ts` also default-exports, as an instance).
 - Routes are lazy-loaded through the `lazyRetry()` wrapper, which recovers from
   a stale PWA cache serving a deleted chunk. New routes must use it too.
-- i18n: default locale is `de`, fallback `en`; strings load over HTTP from
-  `public/locales/{lng}/`, so a new key needs the file, not just the code.
-- The persisted localStorage key is still `gardener-storage`, deliberately.
-  Renaming it discards existing gardens, so it is folded into the Level 2
-  schema-v2 migration instead. `src/lib/locale.ts` (which owns the key as
-  `STORAGE_KEY`) and `src/lib/theme.ts` both read it directly at module load,
-  before the store hydrates — a migration must run earlier than both.
+- i18n: default locale is `en`, and a returning user's stored choice beats
+  browser detection; strings load over HTTP from `public/locales/{lng}/`, so a
+  new key needs the file, not just the code.
+- **Persisted state has no version and no migrations, deliberately.** Until
+  real data exists — a self-hosted instance someone actually gardens with, not
+  the dev environment or the demo page — a schema change is free: change the
+  shape, bump `STORAGE_KEY`, start clean. Do not add compat shims for stored
+  data. This ends when real use starts, and then version + migrate come back.
+  The key lives in `src/lib/locale.ts` as `STORAGE_KEY`; that file and
+  `src/lib/theme.ts` both read it at module load, before the store hydrates,
+  so anything that must run earlier than hydration belongs in one of those two.
 - Exports are written with `app: "smallholder"`; imports also accept the legacy
   `"gardener"` id so pre-fork backups keep working. Constants live in
   `src/lib/dataExport.ts`.

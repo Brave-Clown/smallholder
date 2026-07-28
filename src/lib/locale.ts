@@ -9,8 +9,12 @@ export type Locale = (typeof SUPPORTED_LOCALES)[number];
  */
 export const DEFAULT_LOCALE: Locale = "en";
 
-/** Zustand persist key. Renaming it discards existing data — see Level 2. */
-export const STORAGE_KEY = "gardener-storage";
+/**
+ * Zustand persist key. Renaming it discards whatever was stored under the old
+ * one, which is exactly why it kept upstream's name until now — see the Level 2
+ * decision to stop protecting local data while there is none worth protecting.
+ */
+export const STORAGE_KEY = "smallholder-storage";
 
 export function isSupportedLocale(value: unknown): value is Locale {
   return typeof value === "string" && (SUPPORTED_LOCALES as readonly string[]).includes(value);

@@ -48,9 +48,8 @@ test.beforeEach(async ({ page }) => {
           weeklyDigest: true,
         },
       },
-      version: 3,
     };
-    localStorage.setItem("gardener-storage", JSON.stringify(state));
+    localStorage.setItem("smallholder-storage", JSON.stringify(state));
   });
   await page.reload();
 });

@@ -16,7 +16,6 @@ import { createLivestockSlice, type LivestockSlice } from "./livestockSlice";
 import { createPantrySlice, type PantrySlice } from "./pantrySlice";
 import type { SeasonArchive } from "@/types/garden";
 import { STORAGE_KEY } from "@/lib/locale";
-import { migratePersisted } from "./migrations";
 
 export type AppStore = SettingsSlice & GardenSlice & TaskSlice & HarvestSlice & JournalSlice & WeatherSlice & CustomPlantsSlice & ExpenseSlice & SeedSlice & SoilSlice & PestSlice & WaterSlice & LivestockSlice & PantrySlice & {
   seasonArchives: SeasonArchive[];
@@ -69,9 +68,12 @@ export const useStore = create<AppStore>()(
       },
     }),
     {
+      // No version and no migrate on purpose. Until real data exists — which
+      // means a self-hosted instance someone actually gardens with, not this
+      // dev environment or the demo page — a schema change is free: change the
+      // shape, bump the key, start clean. When that stops being true this needs
+      // a version, a migrate, and the discipline that comes with them.
       name: STORAGE_KEY,
-      version: 5,
-      migrate: (persisted, version) => migratePersisted(persisted, version) as AppStore,
     }
   )
 );

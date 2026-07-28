@@ -1,9 +1,8 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { create } from "zustand";
 import { createGardenSlice, type GardenSlice } from "@/store/gardenSlice";
-import { migratePersisted } from "@/store/migrations";
 import { genId } from "@/lib/ids";
-import type { Bed, Garden, SeasonArchive } from "@/types/garden";
+import type { Bed } from "@/types/garden";
 
 function createTestStore() {
   return create<GardenSlice>()((...a) => ({ ...createGardenSlice(...a) }));
@@ -140,87 +139,5 @@ describe("Bed timestamps", () => {
     // real and at least as new as creation rather than strictly increasing.
     expect(stamps).toHaveLength(5);
     for (const s of stamps) expect(s >= initial).toBe(true);
-  });
-});
-
-describe("Persisted-state migrations", () => {
-  const legacyBed = {
-    id: "b1", name: "Bed", x: 0, y: 0, width: 4, height: 3,
-    environmentType: "outdoor_bed" as const,
-    cells: [
-      { cellX: 0, cellY: 0, plantId: "tomato" },
-      { cellX: 1, cellY: 0, plantId: "basil" },
-    ],
-  } as unknown as Bed;
-
-  it("backfills planting ids and bed timestamps in live gardens", () => {
-    const garden = {
-      id: "g1", name: "G", season: "2026", beds: [legacyBed],
-      createdAt: "2026-01-01", updatedAt: "2026-03-01",
-    } as Garden;
-
-    const migrated = migratePersisted({ gardens: [garden] }, 3);
-    const bed = migrated.gardens![0].beds[0];
-
-    expect(bed.updatedAt).toBe("2026-03-01");
-    expect(bed.cells.every((c) => Boolean(c.id))).toBe(true);
-    expect(new Set(bed.cells.map((c) => c.id)).size).toBe(2);
-  });
-
-  it("backfills archived beds too, since they keep their plantings", () => {
-    const archive = {
-      season: "2025", gardenId: "g1", gardenName: "G",
-      beds: [legacyBed], archivedAt: "2025-11-01",
-    } as SeasonArchive;
-
-    const migrated = migratePersisted({ gardens: [], seasonArchives: [archive] }, 3);
-    const bed = migrated.seasonArchives![0].beds[0];
-
-    expect(bed.updatedAt).toBe("2025-11-01");
-    expect(bed.cells.every((c) => Boolean(c.id))).toBe(true);
-  });
-
-  it("leaves ids that already exist alone", () => {
-    const garden = {
-      id: "g1", name: "G", season: "2026",
-      beds: [{ ...legacyBed, updatedAt: "2026-02-02", cells: [{ id: "keep", cellX: 0, cellY: 0, plantId: "tomato" }] }],
-      createdAt: "2026-01-01", updatedAt: "2026-03-01",
-    } as Garden;
-
-    const migrated = migratePersisted({ gardens: [garden] }, 3);
-    const bed = migrated.gardens![0].beds[0];
-
-    expect(bed.updatedAt).toBe("2026-02-02");
-    expect(bed.cells[0].id).toBe("keep");
-  });
-
-  it("keeps only the gardener's own tasks when tasks stopped being stored", () => {
-    // The generator was the only thing that ever set plantId, so it is what
-    // tells a computed row from one somebody typed.
-    const migrated = migratePersisted({
-      gardens: [],
-      tasks: [
-        { id: "gen1", gardenId: "g1", plantId: "tomato", bedId: "b1", type: "sow_indoors", title: "Sow Indoors: Tomato", dueDate: "2026-03-20" },
-        { id: "own1", gardenId: "g1", type: "custom", title: "Order seeds", dueDate: "2026-02-01" },
-      ],
-    }, 4);
-
-    expect(migrated.tasks!.map((t) => t.id)).toEqual(["own1"]);
-  });
-
-  it("still applies the older steps when coming from version 1", () => {
-    const garden = {
-      id: "g1", name: "G",
-      beds: [{ id: "b1", name: "Bed", x: 0, y: 0, width: 2, height: 2, cells: [] }],
-      createdAt: "2026-01-01", updatedAt: "2026-01-01",
-    } as unknown as Garden;
-
-    const migrated = migratePersisted({ gardens: [garden] }, 1);
-    const bed = migrated.gardens![0].beds[0];
-
-    expect(bed.environmentType).toBe("outdoor_bed");
-    expect(migrated.gardens![0].season).toBe(String(new Date().getFullYear()));
-    expect(bed.updatedAt).toBe("2026-01-01");
-    expect(migrated.seasonArchives).toEqual([]);
   });
 });
