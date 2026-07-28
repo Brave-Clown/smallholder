@@ -1,20 +1,19 @@
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus, Check, Calendar, Download, Trash2, Filter } from "lucide-react";
+import { Plus, Check, Download, Trash2, Filter, X } from "lucide-react";
 import { useStore } from "@/store";
 import { useShallow } from "zustand/react/shallow";
 import { usePlantMap } from "@/hooks/usePlants";
-import { usePlantName } from "@/hooks/usePlantName";
+import { useTasks, useTaskTitle } from "@/hooks/useTasks";
 import { PlantIconDisplay } from "@/components/ui/PlantIconDisplay";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
 import { useToast } from "@/components/ui/Toast";
-import type { Task, TaskType } from "@/types/task";
-import { getFrostProtectionWeeks } from "@/types/garden";
+import type { TaskItem, TaskType } from "@/types/task";
 import { downloadIcal } from "@/lib/ical";
-import { format, isAfter, isBefore, startOfWeek, endOfWeek, addWeeks, parseISO } from "date-fns";
+import { format, isAfter, isBefore, startOfWeek, endOfWeek, parseISO } from "date-fns";
 
 const taskTypeColors: Record<TaskType, string> = {
   sow_indoors: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
@@ -37,14 +36,16 @@ type TypeFilter = "all" | TaskType;
 export function TaskCalendar() {
   const { t } = useTranslation();
   const { toast, confirm } = useToast();
-  const { tasks, gardens, lastFrostDate, addTask, completeTask, deleteTask, generateTasks } = useStore(
+  const { gardens, addTask, completeTask, deleteTask, setTaskStatus, clearTaskStatus } = useStore(
     useShallow((s) => ({
-      tasks: s.tasks, gardens: s.gardens, lastFrostDate: s.lastFrostDate,
-      addTask: s.addTask, completeTask: s.completeTask, deleteTask: s.deleteTask, generateTasks: s.generateTasks,
+      gardens: s.gardens,
+      addTask: s.addTask, completeTask: s.completeTask, deleteTask: s.deleteTask,
+      setTaskStatus: s.setTaskStatus, clearTaskStatus: s.clearTaskStatus,
     }))
   );
+  const tasks = useTasks();
   const plantMap = usePlantMap();
-  const getPlantName = usePlantName();
+  const titleOf = useTaskTitle();
   const [showAddTask, setShowAddTask] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newType, setNewType] = useState<TaskType>("custom");
@@ -56,71 +57,51 @@ export function TaskCalendar() {
   const now = new Date();
   const weekStart = startOfWeek(now, { weekStartsOn: 1 });
   const weekEnd = endOfWeek(now, { weekStartsOn: 1 });
+
+  // A dismissed task is the gardener saying "not this one" — it leaves the list
+  // rather than sitting in it as a done-but-not-done row.
+  const visible = useMemo(() => tasks.filter((t) => t.status !== "dismissed"), [tasks]);
+
   const counts = useMemo(() => {
-    const overdue = tasks.filter((t) => !t.completedDate && isBefore(parseISO(t.dueDate), weekStart)).length;
-    const thisWeek = tasks.filter((t) => !t.completedDate && !isBefore(parseISO(t.dueDate), weekStart) && !isAfter(parseISO(t.dueDate), weekEnd)).length;
-    const upcoming = tasks.filter((t) => !t.completedDate && isAfter(parseISO(t.dueDate), weekEnd)).length;
-    const completed = tasks.filter((t) => t.completedDate).length;
-    const active = tasks.filter((t) => !t.completedDate).length;
-    return { overdue, thisWeek, upcoming, completed, active, all: tasks.length };
-  }, [tasks, weekStart, weekEnd]);
+    const open = visible.filter((t) => t.status !== "done");
+    return {
+      overdue: open.filter((t) => isBefore(parseISO(t.dueDate), weekStart)).length,
+      thisWeek: open.filter((t) => !isBefore(parseISO(t.dueDate), weekStart) && !isAfter(parseISO(t.dueDate), weekEnd)).length,
+      upcoming: open.filter((t) => isAfter(parseISO(t.dueDate), weekEnd)).length,
+      completed: visible.filter((t) => t.status === "done").length,
+      active: open.length,
+      all: visible.length,
+    };
+  }, [visible, weekStart, weekEnd]);
 
   const filtered = useMemo(() => {
-    let list = [...tasks];
+    let list = [...visible];
+    const open = (t: TaskItem) => t.status !== "done";
 
-    // View filter
-    if (viewFilter === "active") list = list.filter((t) => !t.completedDate);
-    else if (viewFilter === "overdue") list = list.filter((t) => !t.completedDate && isBefore(parseISO(t.dueDate), weekStart));
-    else if (viewFilter === "thisWeek") list = list.filter((t) => !t.completedDate && !isBefore(parseISO(t.dueDate), weekStart) && !isAfter(parseISO(t.dueDate), weekEnd));
-    else if (viewFilter === "upcoming") list = list.filter((t) => !t.completedDate && isAfter(parseISO(t.dueDate), weekEnd));
-    else if (viewFilter === "completed") list = list.filter((t) => t.completedDate);
+    if (viewFilter === "active") list = list.filter(open);
+    else if (viewFilter === "overdue") list = list.filter((t) => open(t) && isBefore(parseISO(t.dueDate), weekStart));
+    else if (viewFilter === "thisWeek") list = list.filter((t) => open(t) && !isBefore(parseISO(t.dueDate), weekStart) && !isAfter(parseISO(t.dueDate), weekEnd));
+    else if (viewFilter === "upcoming") list = list.filter((t) => open(t) && isAfter(parseISO(t.dueDate), weekEnd));
+    else if (viewFilter === "completed") list = list.filter((t) => t.status === "done");
 
-    // Type filter
     if (typeFilter !== "all") list = list.filter((t) => t.type === typeFilter);
 
-    // Sort: overdue first, then by date
     list.sort((a, b) => {
-      if (a.completedDate && !b.completedDate) return 1;
-      if (!a.completedDate && b.completedDate) return -1;
+      if (a.status === "done" && b.status !== "done") return 1;
+      if (a.status !== "done" && b.status === "done") return -1;
       return a.dueDate.localeCompare(b.dueDate);
     });
 
     return list;
-  }, [tasks, viewFilter, typeFilter, weekStart, weekEnd]);
+  }, [visible, viewFilter, typeFilter, weekStart, weekEnd]);
 
-  const handleGenerateTasks = () => {
-    let count = 0;
-    for (const garden of gardens) {
-      const plantings: Array<{ plantId: string; bedId: string; type: TaskType; title: string; dueDate: string }> = [];
-      const frostDate = parseISO(lastFrostDate);
-
-      for (const bed of garden.beds) {
-        const protection = getFrostProtectionWeeks(bed);
-        const effectiveFrostDate = addWeeks(frostDate, -protection);
-        const envLabel = protection > 0 ? ` (${t(`planner.environmentTypes.${bed.environmentType ?? "outdoor_bed"}`)})` : "";
-        const uniquePlants = new Set(bed.cells.map((c) => c.plantId));
-        for (const plantId of uniquePlants) {
-          const plant = plantMap.get(plantId);
-          if (!plant) continue;
-          const name = getPlantName(plantId) + envLabel;
-
-          if (plant.sowIndoorsWeeks !== null) {
-            plantings.push({ plantId, bedId: bed.id, type: "sow_indoors", title: `${t("calendar.taskTypes.sow_indoors")}: ${name}`, dueDate: format(addWeeks(effectiveFrostDate, plant.sowIndoorsWeeks), "yyyy-MM-dd") });
-          }
-          if (plant.sowOutdoorsWeeks !== null) {
-            plantings.push({ plantId, bedId: bed.id, type: "sow_outdoors", title: `${t("calendar.taskTypes.sow_outdoors")}: ${name}`, dueDate: format(addWeeks(effectiveFrostDate, plant.sowOutdoorsWeeks), "yyyy-MM-dd") });
-          }
-          if (plant.transplantWeeks !== null) {
-            plantings.push({ plantId, bedId: bed.id, type: "transplant", title: `${t("calendar.taskTypes.transplant")}: ${name}`, dueDate: format(addWeeks(effectiveFrostDate, plant.transplantWeeks), "yyyy-MM-dd") });
-          }
-        }
-      }
-      if (plantings.length > 0) {
-        count += plantings.length;
-        generateTasks(garden.id, plantings);
-      }
+  const toggleDone = (task: TaskItem) => {
+    if (task.origin === "manual") {
+      if (!task.completedDate) completeTask(task.id);
+      return;
     }
-    toast(t("calendar.generated", { count }), "success");
+    if (task.status === "done") clearTaskStatus(task.id);
+    else setTaskStatus(task.id, "done");
   };
 
   const handleAddTask = () => {
@@ -130,32 +111,17 @@ export function TaskCalendar() {
     setShowAddTask(false);
   };
 
-  const handleDeleteCompleted = async () => {
-    const completedTasks = tasks.filter((t) => t.completedDate);
-    if (completedTasks.length === 0) return;
-    if (await confirm(t("calendar.deleteCompletedConfirm", { count: completedTasks.length }))) {
-      for (const task of completedTasks) deleteTask(task.id);
-      toast(t("calendar.deletedCompleted", { count: completedTasks.length }), "success");
-    }
-  };
-
-  const isOverdue = (task: Task) => !task.completedDate && isBefore(parseISO(task.dueDate), weekStart);
-  const isThisWeek = (task: Task) => !task.completedDate && !isBefore(parseISO(task.dueDate), weekStart) && !isAfter(parseISO(task.dueDate), weekEnd);
+  const isOverdue = (task: TaskItem) => task.status !== "done" && isBefore(parseISO(task.dueDate), weekStart);
+  const isThisWeek = (task: TaskItem) => task.status !== "done" && !isBefore(parseISO(task.dueDate), weekStart) && !isAfter(parseISO(task.dueDate), weekEnd);
 
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold">{t("nav.tasks")}</h1>
         <div className="flex gap-2">
-          {tasks.length > 0 && (
-            <Button variant="ghost" size="sm" onClick={() => downloadIcal(tasks)} title="iCal">
+          {visible.length > 0 && (
+            <Button variant="ghost" size="sm" onClick={() => downloadIcal(visible, titleOf)} title="iCal">
               <Download size={16} />
-            </Button>
-          )}
-          {gardens.some((g) => g.beds.some((b) => b.cells.length > 0)) && (
-            <Button variant="secondary" size="sm" onClick={handleGenerateTasks}>
-              <Calendar size={16} />
-              {t("calendar.generate")}
             </Button>
           )}
           <Button size="sm" onClick={() => setShowAddTask(true)}>
@@ -166,7 +132,7 @@ export function TaskCalendar() {
       </div>
 
       {/* Stats row */}
-      {tasks.length > 0 && (
+      {visible.length > 0 && (
         <div className="mb-4 grid grid-cols-2 gap-2 sm:grid-cols-5">
           {([
             { key: "active" as ViewFilter, count: counts.active, color: "text-garden-600", label: t("calendar.active") },
@@ -192,7 +158,7 @@ export function TaskCalendar() {
       )}
 
       {/* Type filter */}
-      {tasks.length > 0 && (
+      {visible.length > 0 && (
         <div className="mb-4 flex flex-wrap items-center gap-1">
           <button onClick={() => setShowFilters(!showFilters)} className="mr-1 text-gray-400 hover:text-gray-600">
             <Filter size={14} />
@@ -223,7 +189,7 @@ export function TaskCalendar() {
       {filtered.length === 0 ? (
         <Card>
           <p className="text-center text-gray-500">
-            {tasks.length === 0 ? t("calendar.noTasks") : t("common.noResults")}
+            {visible.length === 0 ? t("calendar.noTasks") : t("common.noResults")}
           </p>
         </Card>
       ) : (
@@ -232,11 +198,12 @@ export function TaskCalendar() {
             const plant = task.plantId ? plantMap.get(task.plantId) : undefined;
             const overdue = isOverdue(task);
             const thisWeek = isThisWeek(task);
+            const done = task.status === "done";
             return (
               <div
                 key={task.id}
                 className={`flex items-center gap-3 rounded-lg border bg-white p-3 transition-colors dark:bg-gray-900 ${
-                  task.completedDate
+                  done
                     ? "border-gray-100 opacity-50 dark:border-gray-800"
                     : overdue
                       ? "border-red-200 dark:border-red-900"
@@ -246,23 +213,26 @@ export function TaskCalendar() {
                 }`}
               >
                 <button
-                  onClick={() => !task.completedDate && completeTask(task.id)}
+                  onClick={() => toggleDone(task)}
                   className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
-                    task.completedDate
+                    done
                       ? "border-green-500 bg-green-500 text-white"
                       : "border-gray-300 hover:border-garden-500"
                   }`}
                 >
-                  {task.completedDate && <Check size={12} />}
+                  {done && <Check size={12} />}
                 </button>
 
                 {plant && <PlantIconDisplay plantId={plant.id} emoji={plant.icon} size={16} />}
 
                 <div className="min-w-0 flex-1">
-                  <p className={`text-sm font-medium ${task.completedDate ? "line-through text-gray-400" : ""}`}>{task.title}</p>
+                  <p className={`text-sm font-medium ${done ? "line-through text-gray-400" : ""}`}>{titleOf(task)}</p>
                   <div className="flex items-center gap-2 text-xs text-gray-400">
                     <span className={overdue ? "font-medium text-red-500" : ""}>{task.dueDate}</span>
                     {overdue && <span className="text-red-500">{t("calendar.overdue")}</span>}
+                    {task.cellCount !== undefined && task.cellCount > 1 && (
+                      <span>{t("calendar.squares", { count: task.cellCount })}</span>
+                    )}
                   </div>
                 </div>
 
@@ -270,24 +240,26 @@ export function TaskCalendar() {
                   {t(`calendar.taskTypes.${task.type}`)}
                 </span>
 
-                <button
-                  onClick={async () => { if (await confirm(t("common.confirmDelete"))) deleteTask(task.id); }}
-                  className="shrink-0 rounded p-1 text-gray-300 hover:text-red-500"
-                >
-                  <Trash2 size={13} />
-                </button>
+                {task.origin === "manual" ? (
+                  <button
+                    onClick={async () => { if (await confirm(t("common.confirmDelete"))) deleteTask(task.id); }}
+                    className="shrink-0 rounded p-1 text-gray-300 hover:text-red-500"
+                    title={t("common.delete")}
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => { setTaskStatus(task.id, "dismissed"); toast(t("calendar.dismissed"), "success"); }}
+                    className="shrink-0 rounded p-1 text-gray-300 hover:text-gray-600"
+                    title={t("calendar.dismiss")}
+                  >
+                    <X size={13} />
+                  </button>
+                )}
               </div>
             );
           })}
-        </div>
-      )}
-
-      {/* Clear completed */}
-      {counts.completed > 0 && viewFilter !== "completed" && (
-        <div className="mt-3 text-right">
-          <button onClick={handleDeleteCompleted} className="text-xs text-gray-400 hover:text-red-500">
-            {t("calendar.deleteCompleted")} ({counts.completed})
-          </button>
         </div>
       )}
 

@@ -70,7 +70,7 @@ export const useStore = create<AppStore>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 4,
+      version: 5,
       migrate: (persisted, version) => migratePersisted(persisted, version) as AppStore,
     }
   )

@@ -1,4 +1,5 @@
 import type { Bed, Garden, SeasonArchive } from "@/types/garden";
+import type { ManualTask } from "@/types/task";
 import { genId } from "@/lib/ids";
 
 /**
@@ -8,6 +9,7 @@ import { genId } from "@/lib/ids";
 export interface PersistedState {
   gardens?: Garden[];
   seasonArchives?: SeasonArchive[];
+  tasks?: ManualTask[];
 }
 
 /** Backfills identity onto beds and plantings stored before they had any. */
@@ -58,6 +60,14 @@ export function migratePersisted(persisted: unknown, version: number): Persisted
         beds: identifyBeds(a.beds, a.archivedAt),
       }));
     }
+  }
+
+  if (version < 5 && Array.isArray(state.tasks)) {
+    // Tasks used to be materialized rows, minted by a Generate button and
+    // dated off the frost date. They are computed now, so the generated ones
+    // are dropped rather than left to sit in the list forever. A plantId is
+    // what tells them apart: only the generator ever set one.
+    state.tasks = state.tasks.filter((t) => !t.plantId);
   }
 
   return state;

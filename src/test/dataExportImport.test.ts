@@ -1,6 +1,7 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach } from "vitest";
 import { buildExportData, type SmallholderExport } from "@/lib/dataExport";
-import { validateExportFile } from "@/lib/dataImport";
+import { validateExportFile, importAllData } from "@/lib/dataImport";
+import { useStore } from "@/store";
 
 function makeExport(overrides: Partial<SmallholderExport["data"]> = {}): SmallholderExport {
   return {
@@ -10,6 +11,7 @@ function makeExport(overrides: Partial<SmallholderExport["data"]> = {}): Smallho
     data: {
       gardens: [],
       tasks: [],
+      taskOverlay: [],
       harvests: [],
       journalEntries: [],
       expenses: [],
@@ -110,5 +112,52 @@ describe("Data import validation", () => {
 
   it("should reject number input", () => {
     expect(validateExportFile(42)).toBe(false);
+  });
+});
+
+describe("Task round-trip", () => {
+  beforeEach(() => {
+    useStore.setState({ tasks: [], taskOverlay: [], gardens: [] });
+  });
+
+  it("carries manual tasks and task verdicts through export and import", () => {
+    useStore.setState({
+      tasks: [{ id: "m1", gardenId: "g1", type: "custom", title: "Fix the gate", dueDate: "2026-08-01" }],
+      taskOverlay: [{ id: "b1:tomato:2026-06-01:harvest:0", status: "done", updatedAt: "2026-07-27T00:00:00.000Z" }],
+    });
+
+    const exported = buildExportData();
+    useStore.setState({ tasks: [], taskOverlay: [] });
+    importAllData(exported, "overwrite");
+
+    expect(useStore.getState().tasks.map((t) => t.title)).toEqual(["Fix the gate"]);
+    expect(useStore.getState().taskOverlay.map((e) => e.id)).toEqual(["b1:tomato:2026-06-01:harvest:0"]);
+  });
+
+  it("drops the generated rows an older backup still carries", () => {
+    // Pre-v5 exports hold materialized task rows. Those are computed now, so
+    // importing one must not resurrect a frozen copy of a stale list.
+    const legacy = makeExport({
+      tasks: [
+        { id: "gen1", gardenId: "g1", plantId: "tomato", bedId: "b1", type: "sow_indoors", title: "Sow Indoors: Tomato", dueDate: "2026-03-20" },
+        { id: "own1", gardenId: "g1", type: "custom", title: "Order seeds", dueDate: "2026-02-01" },
+      ],
+    });
+
+    const result = importAllData(legacy, "overwrite");
+
+    expect(useStore.getState().tasks.map((t) => t.id)).toEqual(["own1"]);
+    expect(result.stats.tasks).toBe(1);
+  });
+
+  it("does not duplicate a verdict when the same backup is imported twice", () => {
+    const exported = makeExport({
+      taskOverlay: [{ id: "b1:tomato:2026-06-01:harvest:0", status: "done", updatedAt: "2026-07-27T00:00:00.000Z" }],
+    });
+
+    importAllData(exported, "merge");
+    importAllData(exported, "merge");
+
+    expect(useStore.getState().taskOverlay).toHaveLength(1);
   });
 });

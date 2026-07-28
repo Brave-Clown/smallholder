@@ -148,6 +148,41 @@ describe("Zustand store", () => {
     });
   });
 
+  describe("Task verdicts", () => {
+    const key = "b1:tomato:2026-06-01:harvest:0";
+
+    it("records a verdict once, however many times it is set", () => {
+      store.getState().setTaskStatus(key, "done");
+      store.getState().setTaskStatus(key, "dismissed");
+
+      expect(store.getState().taskOverlay).toHaveLength(1);
+      expect(store.getState().taskOverlay[0].status).toBe("dismissed");
+    });
+
+    it("stamps a completion date only when the verdict is done", () => {
+      store.getState().setTaskStatus(key, "done");
+      expect(store.getState().taskOverlay[0].completedDate).toBeTruthy();
+
+      store.getState().setTaskStatus(key, "dismissed");
+      expect(store.getState().taskOverlay[0].completedDate).toBeUndefined();
+    });
+
+    it("unticking a task removes the verdict rather than storing a negative", () => {
+      store.getState().setTaskStatus(key, "done");
+      store.getState().clearTaskStatus(key);
+      expect(store.getState().taskOverlay).toHaveLength(0);
+    });
+
+    it("retires verdicts about plantings that are gone, keeping the rest", () => {
+      store.getState().setTaskStatus(key, "done");
+      store.getState().setTaskStatus("b1:radish:planned:sow_outdoors:0", "dismissed");
+
+      store.getState().pruneTaskOverlay(new Set(["b1:tomato:2026-06-01"]));
+
+      expect(store.getState().taskOverlay.map((e) => e.id)).toEqual([key]);
+    });
+  });
+
   describe("Settings", () => {
     it("should update locale", () => {
       store.getState().setLocale("en");

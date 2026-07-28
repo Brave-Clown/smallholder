@@ -10,6 +10,7 @@ import { useShallow } from "zustand/react/shallow";
 import { PlantIconDisplay } from "@/components/ui/PlantIconDisplay";
 import { usePlantMap } from "@/hooks/usePlants";
 import { usePlantName } from "@/hooks/usePlantName";
+import { useTasks, useTaskTitle } from "@/hooks/useTasks";
 import { Card } from "@/components/ui/Card";
 import { PlantingAdvisor } from "./PlantingAdvisor";
 import { isAfter, isBefore, parseISO, startOfWeek, endOfWeek, format } from "date-fns";
@@ -36,7 +37,9 @@ function StatCard({ icon: Icon, value, label, color, onClick }: {
 export function Dashboard() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { gardens, tasks, harvests, expenses, animals, animalProducts, lastBackupDate } = useStore(useShallow((s) => ({ gardens: s.gardens, tasks: s.tasks, harvests: s.harvests, expenses: s.expenses, animals: s.animals, animalProducts: s.animalProducts, lastBackupDate: s.lastBackupDate })));
+  const { gardens, harvests, expenses, animals, animalProducts, lastBackupDate } = useStore(useShallow((s) => ({ gardens: s.gardens, harvests: s.harvests, expenses: s.expenses, animals: s.animals, animalProducts: s.animalProducts, lastBackupDate: s.lastBackupDate })));
+  const tasks = useTasks();
+  const taskTitle = useTaskTitle();
   const plantMap = usePlantMap();
   const getPlantName = usePlantName();
 
@@ -49,15 +52,17 @@ export function Dashboard() {
   const uniquePlantIds = new Set<string>();
   for (const g of gardens) for (const b of g.beds) for (const c of b.cells) uniquePlantIds.add(c.plantId);
 
+  const openTasks = useMemo(() => tasks.filter((t) => t.status === "pending"), [tasks]);
+
   const upcomingTasks = useMemo(() =>
-    tasks
-      .filter((t) => !t.completedDate && !isAfter(parseISO(t.dueDate), weekEnd))
+    openTasks
+      .filter((t) => !isAfter(parseISO(t.dueDate), weekEnd))
       .sort((a, b) => a.dueDate.localeCompare(b.dueDate))
       .slice(0, 5),
-    [tasks, weekEnd]
+    [openTasks, weekEnd]
   );
 
-  const overdueTasks = tasks.filter((t) => !t.completedDate && isBefore(parseISO(t.dueDate), weekStart));
+  const overdueTasks = openTasks.filter((t) => isBefore(parseISO(t.dueDate), weekStart));
 
   const totalHarvestKg = harvests.reduce((s, h) => s + (h.weightGrams ?? 0), 0) / 1000;
   const totalExpenseEur = expenses.reduce((s, e) => s + e.amountCents, 0) / 100;
@@ -131,7 +136,7 @@ export function Dashboard() {
             <div className="space-y-2">
               {upcomingTasks.map((task) => (
                 <div key={task.id} className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 dark:bg-gray-800">
-                  <span className="text-sm">{task.title}</span>
+                  <span className="text-sm">{taskTitle(task)}</span>
                   <span className="text-xs text-gray-400">{task.dueDate}</span>
                 </div>
               ))}

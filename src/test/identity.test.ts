@@ -143,7 +143,7 @@ describe("Bed timestamps", () => {
   });
 });
 
-describe("Schema v4 migration", () => {
+describe("Persisted-state migrations", () => {
   const legacyBed = {
     id: "b1", name: "Bed", x: 0, y: 0, width: 4, height: 3,
     environmentType: "outdoor_bed" as const,
@@ -192,6 +192,20 @@ describe("Schema v4 migration", () => {
 
     expect(bed.updatedAt).toBe("2026-02-02");
     expect(bed.cells[0].id).toBe("keep");
+  });
+
+  it("keeps only the gardener's own tasks when tasks stopped being stored", () => {
+    // The generator was the only thing that ever set plantId, so it is what
+    // tells a computed row from one somebody typed.
+    const migrated = migratePersisted({
+      gardens: [],
+      tasks: [
+        { id: "gen1", gardenId: "g1", plantId: "tomato", bedId: "b1", type: "sow_indoors", title: "Sow Indoors: Tomato", dueDate: "2026-03-20" },
+        { id: "own1", gardenId: "g1", type: "custom", title: "Order seeds", dueDate: "2026-02-01" },
+      ],
+    }, 4);
+
+    expect(migrated.tasks!.map((t) => t.id)).toEqual(["own1"]);
   });
 
   it("still applies the older steps when coming from version 1", () => {

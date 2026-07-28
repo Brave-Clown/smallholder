@@ -1,6 +1,6 @@
 import { useStore } from "@/store";
 import type { Garden, SeasonArchive } from "@/types/garden";
-import type { Task } from "@/types/task";
+import type { ManualTask, TaskOverlayEntry } from "@/types/task";
 import type { HarvestEntry } from "@/types/harvest";
 import type { JournalEntry } from "@/types/journal";
 import type { Expense } from "@/types/expense";
@@ -25,7 +25,8 @@ export interface SmallholderExport {
   app: typeof EXPORT_APP_ID | typeof LEGACY_EXPORT_APP_ID;
   data: {
     gardens: Garden[];
-    tasks: Task[];
+    tasks: ManualTask[];
+    taskOverlay: TaskOverlayEntry[];
     harvests: HarvestEntry[];
     journalEntries: JournalEntry[];
     expenses: Expense[];
@@ -64,6 +65,7 @@ export function buildExportData(): SmallholderExport {
     data: {
       gardens: state.gardens,
       tasks: state.tasks,
+      taskOverlay: state.taskOverlay,
       harvests: state.harvests,
       journalEntries: state.journalEntries,
       expenses: state.expenses,

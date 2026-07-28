@@ -109,7 +109,7 @@ export function useBackendSync() {
 
         // Merge arrays by ID
         const arrayKeys = [
-          "gardens", "tasks", "harvests", "journalEntries", "expenses", "seeds",
+          "gardens", "tasks", "taskOverlay", "harvests", "journalEntries", "expenses", "seeds",
           "soilTests", "amendments", "pests", "waterEntries", "animals",
           "animalProducts", "feedEntries", "healthEvents", "pantryItems",
           "customPlants", "seasonArchives",

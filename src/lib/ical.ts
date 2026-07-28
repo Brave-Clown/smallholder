@@ -1,4 +1,4 @@
-import type { Task } from "@/types/task";
+import type { TaskItem } from "@/types/task";
 
 function escapeIcal(str: string): string {
   return str.replace(/[\\;,]/g, (c) => `\\${c}`).replace(/\n/g, "\\n");
@@ -8,11 +8,21 @@ function formatIcalDate(dateStr: string): string {
   return dateStr.replace(/-/g, "");
 }
 
-export function tasksToIcal(tasks: Task[], calendarName: string = "Smallholder"): string {
+/**
+ * Generated tasks carry no text of their own, so the caller supplies the same
+ * naming the list uses. Their id is a stable key rather than a fresh row id,
+ * which means re-exporting updates the existing calendar entries instead of
+ * duplicating every one of them.
+ */
+export function tasksToIcal(
+  tasks: TaskItem[],
+  titleOf: (task: TaskItem) => string,
+  calendarName: string = "Smallholder",
+): string {
   const now = new Date().toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
 
   const events = tasks
-    .filter((t) => !t.completedDate)
+    .filter((t) => t.status === "pending")
     .map((task) => {
       const dtStart = formatIcalDate(task.dueDate);
       // All-day event: DTEND is next day
@@ -26,7 +36,7 @@ export function tasksToIcal(tasks: Task[], calendarName: string = "Smallholder")
         `DTSTAMP:${now}`,
         `DTSTART;VALUE=DATE:${dtStart}`,
         `DTEND;VALUE=DATE:${dtEnd}`,
-        `SUMMARY:${escapeIcal(task.title)}`,
+        `SUMMARY:${escapeIcal(titleOf(task))}`,
         task.description ? `DESCRIPTION:${escapeIcal(task.description)}` : "",
         `CATEGORIES:${task.type}`,
         "END:VEVENT",
@@ -45,8 +55,12 @@ export function tasksToIcal(tasks: Task[], calendarName: string = "Smallholder")
   ].join("\r\n");
 }
 
-export function downloadIcal(tasks: Task[], filename: string = "smallholder-tasks.ics"): void {
-  const ical = tasksToIcal(tasks);
+export function downloadIcal(
+  tasks: TaskItem[],
+  titleOf: (task: TaskItem) => string,
+  filename: string = "smallholder-tasks.ics",
+): void {
+  const ical = tasksToIcal(tasks, titleOf);
   const blob = new Blob([ical], { type: "text/calendar;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");

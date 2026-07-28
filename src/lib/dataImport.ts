@@ -1,6 +1,15 @@
 import { useStore } from "@/store";
 import { EXPORT_APP_ID, LEGACY_EXPORT_APP_ID, type SmallholderExport } from "./dataExport";
 import { STORAGE_KEY } from "./locale";
+import type { ManualTask } from "@/types/task";
+
+/**
+ * Older exports carry generated task rows. Those are computed now, so only
+ * what the gardener wrote survives an import — the same rule the store
+ * migration applies, since a backup file predates it either way.
+ */
+const manualOnly = (tasks: ManualTask[] | undefined): ManualTask[] =>
+  (tasks ?? []).filter((t) => !t.plantId);
 
 export type ImportMode = "overwrite" | "merge";
 
@@ -69,7 +78,8 @@ function importOverwrite(data: SmallholderExport["data"]): ImportResult {
   set({
     gardens: data.gardens ?? [],
     activeGardenId: data.gardens?.[0]?.id ?? null,
-    tasks: data.tasks ?? [],
+    tasks: manualOnly(data.tasks),
+    taskOverlay: data.taskOverlay ?? [],
     harvests: data.harvests ?? [],
     journalEntries: data.journalEntries ?? [],
     expenses: data.expenses ?? [],
@@ -109,7 +119,7 @@ function importOverwrite(data: SmallholderExport["data"]): ImportResult {
     success: true,
     stats: {
       gardens: data.gardens?.length ?? 0,
-      tasks: data.tasks?.length ?? 0,
+      tasks: manualOnly(data.tasks).length,
       harvests: data.harvests?.length ?? 0,
       journalEntries: data.journalEntries?.length ?? 0,
       expenses: data.expenses?.length ?? 0,
@@ -143,7 +153,8 @@ function importMerge(
   };
 
   const mergedGardens = mergeById(current.gardens, data.gardens ?? []);
-  const mergedTasks = mergeById(current.tasks, data.tasks ?? []);
+  const mergedTasks = mergeById(current.tasks, manualOnly(data.tasks));
+  const mergedOverlay = mergeById(current.taskOverlay, data.taskOverlay ?? []);
   const mergedHarvests = mergeById(current.harvests, data.harvests ?? []);
   const mergedJournal = mergeById(current.journalEntries, data.journalEntries ?? []);
   const mergedExpenses = mergeById(current.expenses, data.expenses ?? []);
@@ -178,6 +189,7 @@ function importMerge(
   set({
     gardens: mergedGardens,
     tasks: mergedTasks,
+    taskOverlay: mergedOverlay,
     harvests: mergedHarvests,
     journalEntries: mergedJournal,
     expenses: mergedExpenses,

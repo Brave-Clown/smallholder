@@ -7,6 +7,7 @@ import { useShallow } from "zustand/react/shallow";
 import { usePlants } from "@/hooks/usePlants";
 import { usePlantName } from "@/hooks/usePlantName";
 import { useBackendSync } from "@/hooks/useBackendSync";
+import { useTasks, useTaskTitle } from "@/hooks/useTasks";
 
 interface TopBarProps {
   onMenuClick: () => void;
@@ -15,7 +16,9 @@ interface TopBarProps {
 export function TopBar({ onMenuClick }: TopBarProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { backendUrl, journalEntries, tasks } = useStore(useShallow((s) => ({ backendUrl: s.backendUrl, journalEntries: s.journalEntries, tasks: s.tasks })));
+  const { backendUrl, journalEntries } = useStore(useShallow((s) => ({ backendUrl: s.backendUrl, journalEntries: s.journalEntries })));
+  const tasks = useTasks();
+  const taskTitle = useTaskTitle();
   const { connected, syncing } = useBackendSync();
   const plants = usePlants();
   const getPlantName = usePlantName();
@@ -71,14 +74,15 @@ export function TopBar({ onMenuClick }: TopBarProps) {
 
     // Search tasks
     for (const task of tasks) {
-      if (task.title.toLowerCase().includes(q)) {
-        items.push({ type: t("nav.calendar"), label: task.title, icon: "\ud83d\udcc5", path: "/calendar" });
+      const title = taskTitle(task);
+      if (title.toLowerCase().includes(q)) {
+        items.push({ type: t("nav.calendar"), label: title, icon: "\ud83d\udcc5", path: "/calendar" });
       }
       if (items.length >= 12) break;
     }
 
     return items.slice(0, 8);
-  }, [debouncedQuery, plants, journalEntries, tasks, getPlantName, t]);
+  }, [debouncedQuery, plants, journalEntries, tasks, getPlantName, taskTitle, t]);
 
   return (
     <header className="flex h-16 items-center justify-between border-b border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-900">
