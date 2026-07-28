@@ -68,6 +68,13 @@ export default defineConfig({
       "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
+  server: {
+    // Vite reads --port and server.port but not PORT, so a tool that assigns a
+    // free port through the environment is ignored and Vite drifts to its own
+    // fallback instead. Honouring PORT lets several dev servers coexist on this
+    // repo; a bare `npm run dev` still lands on 5173.
+    port: Number(process.env.PORT) || 5173,
+  },
   test: {
     environment: "jsdom",
     globals: true,
