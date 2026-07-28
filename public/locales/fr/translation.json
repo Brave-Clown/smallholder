@@ -337,6 +337,9 @@
     "squares_other": "{{count}} cases",
     "dismiss": "Pas celle-ci",
     "dismissed": "Tâche masquée",
+    "undismiss": "Récupérer",
+    "estimated": "estimé",
+    "estimatedHint": "Calculé depuis votre plan. Indiquez une date de plantation pour une date réelle.",
     "taskTypes": {
       "sow_indoors": "Semis en intérieur",
       "sow_outdoors": "Semis en extérieur",

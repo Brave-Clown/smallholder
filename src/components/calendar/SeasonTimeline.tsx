@@ -8,6 +8,7 @@ import { PlantIconDisplay } from "@/components/ui/PlantIconDisplay";
 import { Card } from "@/components/ui/Card";
 import { addWeeks, addDays, parseISO, format } from "date-fns";
 import { getFrostProtectionWeeks, ENVIRONMENT_ICONS } from "@/types/garden";
+import { impliedPlantingDate } from "@/lib/taskGeneration";
 import { monthFraction, axisPercent } from "@/lib/timeline";
 
 const MONTHS_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -118,11 +119,9 @@ export function SeasonTimeline() {
             tl.transplant = { start: monthFraction(start), end: monthFraction(end), startDate: fmt(start), endDate: fmt(end) };
           }
 
-          const harvestBase = plant.transplantWeeks !== null
-            ? addWeeks(effectiveFrostDate, plant.transplantWeeks)
-            : plant.sowOutdoorsWeeks !== null
-              ? addWeeks(effectiveFrostDate, plant.sowOutdoorsWeeks)
-              : effectiveFrostDate;
+          // Shared with the task generator: this bar and the harvest task must
+          // name the same date, and they did not when each had its own copy.
+          const harvestBase = impliedPlantingDate(plant, effectiveFrostDate);
           const harvestStart = addDays(harvestBase, plant.harvestDaysMin);
           const harvestEnd = addDays(harvestBase, plant.harvestDaysMax);
           if (plant.harvestDaysMax < 365) {

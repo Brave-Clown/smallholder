@@ -14,7 +14,7 @@ export interface TaskSlice {
   addTask: (task: Omit<ManualTask, "id">) => void;
   updateTask: (id: string, updates: Partial<ManualTask>) => void;
   deleteTask: (id: string) => void;
-  completeTask: (id: string) => void;
+  setTaskDone: (id: string, done: boolean) => void;
   setTaskStatus: (key: string, status: Exclude<TaskStatus, "pending">) => void;
   clearTaskStatus: (key: string) => void;
   /** Drops verdicts about plantings that no longer exist. */
@@ -40,10 +40,13 @@ export const createTaskSlice: StateCreator<TaskSlice> = (set) => ({
       tasks: state.tasks.filter((t) => t.id !== id),
     })),
 
-  completeTask: (id) =>
+  // Ticking a manual task has to be as reversible as ticking a computed one.
+  // It used to be one-way, so a mis-tick could only be fixed by deleting the
+  // task and typing it again.
+  setTaskDone: (id, done) =>
     set((state) => ({
       tasks: state.tasks.map((t) =>
-        t.id === id ? { ...t, completedDate: new Date().toISOString() } : t
+        t.id === id ? { ...t, completedDate: done ? new Date().toISOString() : undefined } : t
       ),
     })),
 

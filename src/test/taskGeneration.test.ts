@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { generateTasks, livePlantingGroupKeys, taskGroupKey, HORIZON_DAYS } from "@/lib/taskGeneration";
+import { generateTasks, livePlantingGroupKeys, taskGroupKey, impliedPlantingDate, HORIZON_DAYS } from "@/lib/taskGeneration";
+import { addDays, format, parseISO } from "date-fns";
 import type { Garden, Bed, CellPlantingDraft } from "@/types/garden";
 import type { Plant } from "@/types/plant";
 
@@ -68,21 +69,66 @@ describe("Mid-season adoption", () => {
       new Date("2026-03-15T00:00:00")
     );
 
+    // Harvest (2026-07-28) is still beyond the 120-day horizon in March.
     expect(tasks.map((t) => t.type).sort()).toEqual(["sow_indoors", "transplant"]);
-    expect(tasks.some((t) => t.type === "harvest")).toBe(false);
   });
 
-  it("says nothing about a planned cell whose windows have all closed", () => {
+  it("drops a planned cell's sowing tasks once their windows shut, keeping harvest", () => {
     // Tomato sows indoors 2026-03-20 and transplants 2026-05-29; by late July
-    // both are moot. Under the old generator these sat in the list forever.
-    expect(run(garden([{ cellX: 0, cellY: 0, plantId: "tomato" }]))).toEqual([]);
+    // both are moot. Under the old generator they sat in the list forever.
+    const tasks = run(garden([{ cellX: 0, cellY: 0, plantId: "tomato" }]));
+
+    expect(tasks.map((t) => t.type)).toEqual(["harvest"]);
+  });
+
+  // The bug this rule exists to fix: a bed planned in the planner, with no
+  // planting dates typed in anywhere, showed harvest bars on the season
+  // timeline and produced an entirely empty task list.
+  it("still answers for a bed nobody has typed planting dates into", () => {
+    const tasks = run(
+      garden([
+        { cellX: 0, cellY: 0, plantId: "tomato" },
+        { cellX: 1, cellY: 0, plantId: "radish" },
+      ]),
+      new Date("2026-05-20T00:00:00")
+    );
+
+    expect(tasks.filter((t) => t.type === "harvest")).toHaveLength(2);
+    expect(tasks.filter((t) => t.type === "harvest").every((t) => t.estimated)).toBe(true);
+    // A sowing date is an instruction, not an estimate of anything.
+    expect(tasks.filter((t) => t.type !== "harvest").every((t) => !t.estimated)).toBe(true);
+  });
+
+  it("prefers a recorded planting date over the one implied by the plan", () => {
+    const planned = run(garden([{ cellX: 0, cellY: 0, plantId: "tomato" }]));
+    const dated = run(garden([
+      { cellX: 0, cellY: 0, plantId: "tomato", plantedDate: "2026-06-01" },
+    ]));
+
+    expect(planned[0].estimated).toBe(true);
+    expect(dated[0].estimated).toBeUndefined();
+    expect(dated[0].dueDate).not.toBe(planned[0].dueDate);
+  });
+
+  it("agrees with the season timeline about when a crop is ready", () => {
+    // Both surfaces call impliedPlantingDate, so they cannot drift. Tomato
+    // transplants 2 weeks after frost (2026-05-29), + 60 days.
+    const frost = parseISO(FROST);
+    const base = impliedPlantingDate(tomato, frost);
+    const tasks = run(garden([{ cellX: 0, cellY: 0, plantId: "tomato" }]));
+
+    expect(tasks[0].dueDate).toBe(format(addDays(base, tomato.harvestDaysMin), "yyyy-MM-dd"));
+    expect(tasks[0].dueDate).toBe("2026-07-28");
   });
 
   it("stops generating a sowing task once its window is long past", () => {
     // Radish sows 4 weeks before frost: 2026-04-17, plus 21 days of grace.
     const planned = garden([{ cellX: 0, cellY: 0, plantId: "radish" }]);
 
-    expect(run(planned, new Date("2026-05-01T00:00:00")).map((t) => t.type)).toEqual(["sow_outdoors"]);
+    expect(run(planned, new Date("2026-05-01T00:00:00")).map((t) => t.type).sort())
+      .toEqual(["harvest", "sow_outdoors"]);
+    // By late July the sowing window and the estimated harvest have both shut,
+    // so a spring radish nobody ever dated stops nagging entirely.
     expect(run(planned, new Date("2026-07-27T00:00:00"))).toEqual([]);
   });
 

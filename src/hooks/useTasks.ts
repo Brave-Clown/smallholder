@@ -47,6 +47,7 @@ export function useTasks(): TaskItem[] {
         status: (verdict?.status ?? "pending") as TaskStatus,
         completedDate: verdict?.completedDate,
         cellCount: g.cellCount,
+        estimated: g.estimated,
       };
     });
 

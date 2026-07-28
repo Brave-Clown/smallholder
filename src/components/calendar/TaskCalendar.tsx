@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { Plus, Check, Download, Trash2, Filter, X } from "lucide-react";
+import { Plus, Check, Download, Trash2, Filter, X, Undo2 } from "lucide-react";
 import { useStore } from "@/store";
 import { useShallow } from "zustand/react/shallow";
 import { usePlantMap } from "@/hooks/usePlants";
@@ -36,10 +36,10 @@ type TypeFilter = "all" | TaskType;
 export function TaskCalendar() {
   const { t } = useTranslation();
   const { toast, confirm } = useToast();
-  const { gardens, addTask, completeTask, deleteTask, setTaskStatus, clearTaskStatus } = useStore(
+  const { gardens, addTask, setTaskDone, deleteTask, setTaskStatus, clearTaskStatus } = useStore(
     useShallow((s) => ({
       gardens: s.gardens,
-      addTask: s.addTask, completeTask: s.completeTask, deleteTask: s.deleteTask,
+      addTask: s.addTask, setTaskDone: s.setTaskDone, deleteTask: s.deleteTask,
       setTaskStatus: s.setTaskStatus, clearTaskStatus: s.clearTaskStatus,
     }))
   );
@@ -53,17 +53,26 @@ export function TaskCalendar() {
   const [viewFilter, setViewFilter] = useState<ViewFilter>("active");
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("all");
   const [showFilters, setShowFilters] = useState(false);
+  // Tasks acted on during this visit, kept on screen so the action can be
+  // taken back. Component state on purpose: leaving the page clears it.
+  const [stickyIds, setStickyIds] = useState<Set<string>>(() => new Set());
 
   const now = new Date();
   const weekStart = startOfWeek(now, { weekStartsOn: 1 });
   const weekEnd = endOfWeek(now, { weekStartsOn: 1 });
 
   // A dismissed task is the gardener saying "not this one" — it leaves the list
-  // rather than sitting in it as a done-but-not-done row.
-  const visible = useMemo(() => tasks.filter((t) => t.status !== "dismissed"), [tasks]);
+  // rather than sitting in it as a done-but-not-done row. Unless it was
+  // dismissed just now, in which case it stays put so the click can be undone.
+  const visible = useMemo(
+    () => tasks.filter((t) => t.status !== "dismissed" || stickyIds.has(t.id)),
+    [tasks, stickyIds]
+  );
 
+  // Counts report the truth, not what is on screen: a task kept visible after
+  // being ticked is still done, and says so by being struck through.
   const counts = useMemo(() => {
-    const open = visible.filter((t) => t.status !== "done");
+    const open = visible.filter((t) => t.status === "pending");
     return {
       overdue: open.filter((t) => isBefore(parseISO(t.dueDate), weekStart)).length,
       thisWeek: open.filter((t) => !isBefore(parseISO(t.dueDate), weekStart) && !isAfter(parseISO(t.dueDate), weekEnd)).length,
@@ -76,7 +85,8 @@ export function TaskCalendar() {
 
   const filtered = useMemo(() => {
     let list = [...visible];
-    const open = (t: TaskItem) => t.status !== "done";
+    // Still-open tasks, plus anything acted on this visit so it can be undone.
+    const open = (t: TaskItem) => t.status === "pending" || stickyIds.has(t.id);
 
     if (viewFilter === "active") list = list.filter(open);
     else if (viewFilter === "overdue") list = list.filter((t) => open(t) && isBefore(parseISO(t.dueDate), weekStart));
@@ -93,15 +103,34 @@ export function TaskCalendar() {
     });
 
     return list;
-  }, [visible, viewFilter, typeFilter, weekStart, weekEnd]);
+  }, [visible, viewFilter, typeFilter, weekStart, weekEnd, stickyIds]);
 
   const toggleDone = (task: TaskItem) => {
-    if (task.origin === "manual") {
-      if (!task.completedDate) completeTask(task.id);
+    const done = task.status === "done";
+
+    // Ticking something makes it leave the list it was ticked in, which is
+    // where an accidental tick becomes unfixable without hunting for the
+    // Completed filter. Keep it on screen, struck through, for this visit.
+    setStickyIds((prev) => {
+      const next = new Set(prev);
+      if (done) next.delete(task.id);
+      else next.add(task.id);
+      return next;
+    });
+
+    if (task.origin === "manual") setTaskDone(task.id, !done);
+    else if (done) clearTaskStatus(task.id);
+    else setTaskStatus(task.id, "done");
+  };
+
+  const toggleDismissed = (task: TaskItem) => {
+    if (task.status === "dismissed") {
+      clearTaskStatus(task.id);
       return;
     }
-    if (task.status === "done") clearTaskStatus(task.id);
-    else setTaskStatus(task.id, "done");
+    setStickyIds((prev) => new Set(prev).add(task.id));
+    setTaskStatus(task.id, "dismissed");
+    toast(t("calendar.dismissed"), "success");
   };
 
   const handleAddTask = () => {
@@ -199,11 +228,12 @@ export function TaskCalendar() {
             const overdue = isOverdue(task);
             const thisWeek = isThisWeek(task);
             const done = task.status === "done";
+            const settled = task.status !== "pending";
             return (
               <div
                 key={task.id}
                 className={`flex items-center gap-3 rounded-lg border bg-white p-3 transition-colors dark:bg-gray-900 ${
-                  done
+                  settled
                     ? "border-gray-100 opacity-50 dark:border-gray-800"
                     : overdue
                       ? "border-red-200 dark:border-red-900"
@@ -226,10 +256,11 @@ export function TaskCalendar() {
                 {plant && <PlantIconDisplay plantId={plant.id} emoji={plant.icon} size={16} />}
 
                 <div className="min-w-0 flex-1">
-                  <p className={`text-sm font-medium ${done ? "line-through text-gray-400" : ""}`}>{titleOf(task)}</p>
+                  <p className={`text-sm font-medium ${settled ? "line-through text-gray-400" : ""}`}>{titleOf(task)}</p>
                   <div className="flex items-center gap-2 text-xs text-gray-400">
-                    <span className={overdue ? "font-medium text-red-500" : ""}>{task.dueDate}</span>
-                    {overdue && <span className="text-red-500">{t("calendar.overdue")}</span>}
+                    <span className={overdue && !settled ? "font-medium text-red-500" : ""}>{task.dueDate}</span>
+                    {task.estimated && <span title={t("calendar.estimatedHint")}>{t("calendar.estimated")}</span>}
+                    {overdue && !settled && <span className="text-red-500">{t("calendar.overdue")}</span>}
                     {task.cellCount !== undefined && task.cellCount > 1 && (
                       <span>{t("calendar.squares", { count: task.cellCount })}</span>
                     )}
@@ -250,11 +281,11 @@ export function TaskCalendar() {
                   </button>
                 ) : (
                   <button
-                    onClick={() => { setTaskStatus(task.id, "dismissed"); toast(t("calendar.dismissed"), "success"); }}
+                    onClick={() => toggleDismissed(task)}
                     className="shrink-0 rounded p-1 text-gray-300 hover:text-gray-600"
-                    title={t("calendar.dismiss")}
+                    title={task.status === "dismissed" ? t("calendar.undismiss") : t("calendar.dismiss")}
                   >
-                    <X size={13} />
+                    {task.status === "dismissed" ? <Undo2 size={13} /> : <X size={13} />}
                   </button>
                 )}
               </div>

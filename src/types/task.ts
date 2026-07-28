@@ -59,6 +59,11 @@ export interface GeneratedTask {
   expiresOn: string;
   /** How many plantings this one job covers, for the UI to mention. */
   cellCount: number;
+  /**
+   * The date was worked out from the plan rather than from a planting date the
+   * gardener recorded. Say so, rather than presenting a guess as a fact.
+   */
+  estimated?: boolean;
 }
 
 /** What every surface renders: manual and generated tasks in one shape. */
@@ -77,4 +82,5 @@ export interface TaskItem {
   title?: string;
   description?: string;
   cellCount?: number;
+  estimated?: boolean;
 }

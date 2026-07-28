@@ -337,6 +337,9 @@
     "squares_other": "{{count}} casillas",
     "dismiss": "Esta no",
     "dismissed": "Tarea descartada",
+    "undismiss": "Recuperar",
+    "estimated": "estimado",
+    "estimatedHint": "Calculado desde tu plan. Anota una fecha de plantación para una fecha real.",
     "taskTypes": {
       "sow_indoors": "Sembrar en interior",
       "sow_outdoors": "Sembrar al aire libre",

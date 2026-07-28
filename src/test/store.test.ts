@@ -131,8 +131,18 @@ describe("Zustand store", () => {
       expect(store.getState().tasks[0].completedDate).toBeUndefined();
 
       const taskId = store.getState().tasks[0].id;
-      store.getState().completeTask(taskId);
+      store.getState().setTaskDone(taskId, true);
       expect(store.getState().tasks[0].completedDate).toBeTruthy();
+    });
+
+    it("un-ticks a task it just ticked, same as a computed one", () => {
+      store.getState().addTask({ gardenId: "g1", type: "custom", title: "Fix the gate", dueDate: "2026-05-01" });
+      const taskId = store.getState().tasks[0].id;
+
+      store.getState().setTaskDone(taskId, true);
+      store.getState().setTaskDone(taskId, false);
+
+      expect(store.getState().tasks[0].completedDate).toBeUndefined();
     });
 
     it("should delete a task", () => {

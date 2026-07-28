@@ -99,24 +99,39 @@ function groupPlantings(bed: Bed, plantMap: Map<string, Plant>): PlantingGroup[]
   return [...groups.values()];
 }
 
+/** The bed's own frost date: shelter buys weeks against the garden's. */
+function bedFrostDate(bed: Bed, lastFrostDate: string): Date {
+  return addWeeks(parseISO(lastFrostDate), -getFrostProtectionWeeks(bed));
+}
+
 /**
- * MIGRATION DEBT, deliberately fenced into one function.
+ * When a planting goes in the ground if the gardener has not said. This is the
+ * same base the season timeline draws its harvest bar from, shared so the two
+ * cannot disagree — they did, and the task list was the one that lost: a bed
+ * plan with no dates entered showed harvest bars on the timeline and produced
+ * no tasks at all.
  *
- * These dates come from the plant's frost offsets, which CLAUDE.md declares
- * dead: real sowing windows are computed by the climate engine from a
- * ClimateProfile against the plant's ClimateNeeds. Until that engine lands,
- * dropping these rules would leave a pre-season gardener with no answer to
- * "when do I sow this?", so they stay — in here, alone, as the seam the
- * engine replaces. Nothing else in this file reads a frost offset.
+ * MIGRATION DEBT, along with prePlantingTasks below: both read the frost
+ * offsets CLAUDE.md declares dead. Real windows come from the climate engine
+ * (Level 3) against each plant's ClimateNeeds. These two functions are the
+ * seam it replaces; nothing else in this file reads an offset.
  */
-function prePlantingTasks(group: PlantingGroup, lastFrostDate: string): Array<{
+export function impliedPlantingDate(plant: Plant, bedFrost: Date): Date {
+  if (plant.transplantWeeks !== null) return addWeeks(bedFrost, plant.transplantWeeks);
+  if (plant.sowOutdoorsWeeks !== null) return addWeeks(bedFrost, plant.sowOutdoorsWeeks);
+  return bedFrost;
+}
+
+interface RuleResult {
   type: TaskType;
   dueDate: string;
   expiresOn: string;
-}> {
-  const protection = getFrostProtectionWeeks(group.bed);
-  const frostDate = addWeeks(parseISO(lastFrostDate), -protection);
-  const out: Array<{ type: TaskType; dueDate: string; expiresOn: string }> = [];
+  estimated?: boolean;
+}
+
+function prePlantingTasks(group: PlantingGroup, lastFrostDate: string): RuleResult[] {
+  const frostDate = bedFrostDate(group.bed, lastFrostDate);
+  const out: RuleResult[] = [];
 
   const offsets: Array<[TaskType, number | null]> = [
     ["sow_indoors", group.plant.sowIndoorsWeeks],
@@ -137,28 +152,32 @@ function prePlantingTasks(group: PlantingGroup, lastFrostDate: string): Array<{
 }
 
 /**
- * Perennials are skipped: harvestDaysMax >= 365 is the placeholder the
- * lifecycle split exists to kill, and "harvest your blueberry 730 days after
- * planting" is worse than saying nothing. They get real harvest months once
- * PerennialMaturity lands with the schema v2 migration.
+ * Harvest applies to every planting, not just the dated ones. A recorded
+ * plantedDate is the truth when it exists; without one the date is worked out
+ * from the plan and flagged `estimated`, so the list says something useful
+ * about a bed nobody has typed dates into — which is most beds.
+ *
+ * Perennials are skipped either way: harvestDaysMax >= 365 is the placeholder
+ * the lifecycle split exists to kill, and "harvest your blueberry 730 days
+ * after planting" is worse than saying nothing. They get real harvest months
+ * once PerennialMaturity lands with the schema v2 migration.
  */
-function postPlantingTasks(group: PlantingGroup): Array<{
-  type: TaskType;
-  dueDate: string;
-  expiresOn: string;
-}> {
-  if (!group.plantedDate) return [];
+function harvestTasks(group: PlantingGroup, lastFrostDate: string): RuleResult[] {
   if (group.plant.harvestDaysMax >= 365) return [];
 
-  const planted = parseISO(group.plantedDate);
-  if (Number.isNaN(planted.getTime())) return [];
+  const estimated = !group.plantedDate;
+  const base = group.plantedDate
+    ? parseISO(group.plantedDate)
+    : impliedPlantingDate(group.plant, bedFrostDate(group.bed, lastFrostDate));
+  if (Number.isNaN(base.getTime())) return [];
 
   return [{
     type: "harvest",
-    dueDate: format(addDays(planted, group.plant.harvestDaysMin), "yyyy-MM-dd"),
+    dueDate: format(addDays(base, group.plant.harvestDaysMin), "yyyy-MM-dd"),
     // The crop is in the ground until the window closes, so the task stays
     // relevant well past its due date — unlike a missed sowing.
-    expiresOn: format(addDays(planted, group.plant.harvestDaysMax + HARVEST_SLACK_DAYS), "yyyy-MM-dd"),
+    expiresOn: format(addDays(base, group.plant.harvestDaysMax + HARVEST_SLACK_DAYS), "yyyy-MM-dd"),
+    ...(estimated ? { estimated: true } : {}),
   }];
 }
 
@@ -175,10 +194,13 @@ export function generateTasks(
     for (const bed of garden.beds) {
       for (const group of groupPlantings(bed, plantMap)) {
         // A planting in the ground is past its sowing, so those tasks are not
-        // generated at all rather than generated and back-dated.
-        const rules = group.plantedDate
-          ? postPlantingTasks(group)
-          : prePlantingTasks(group, ctx.lastFrostDate);
+        // generated at all rather than generated and back-dated. Harvest
+        // applies either way — that is what a bed full of undated plantings
+        // has to show for itself.
+        const rules = [
+          ...(group.plantedDate ? [] : prePlantingTasks(group, ctx.lastFrostDate)),
+          ...harvestTasks(group, ctx.lastFrostDate),
+        ];
 
         for (const rule of rules) {
           if (rule.dueDate > horizon) continue;
@@ -194,6 +216,7 @@ export function generateTasks(
             dueDate: rule.dueDate,
             expiresOn: rule.expiresOn,
             cellCount: group.cellCount,
+            ...(rule.estimated ? { estimated: true } : {}),
           });
         }
       }
