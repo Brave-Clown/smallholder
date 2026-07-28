@@ -123,14 +123,63 @@ docker compose up --build   # full stack, localhost:8080
 | `lifecycle`, `habit` | USDA PLANTS — "Duration" and "Growth Habit" are first-class fields | US public domain |
 | `nutritionPer100g` | USDA FoodData Central | US public domain |
 | `rootDepthCm` | USDA NRCS irrigation guides (National Engineering Handbook part 652), effective root-zone depth tables | US public domain |
-| `spacing`, days to maturity, sun, companions | `github.com/thefullnacho/openfarm-crops-rescue` — 340 crops as JSON, recovered from the Wayback Machine after OpenFarm.cc shut down in April 2025 | **CC0** |
+| `growthRangeC`, `heatCeilingC`, `frostTolerance`, `minWinterTempC`, `photoperiod`; also corroborates `lifecycle`, `habit`, `family`, days to maturity | **FAO ECOCROP** — 2568 species × 55 columns | **CC BY 4.0** — attribution required, no SA, no NC |
+| candidate crop list for batches 2+; `heightCm` → `habit` corroboration | `github.com/thefullnacho/openfarm-crops-rescue` — 340 crops as JSON, recovered from the Wayback Machine after OpenFarm.cc shut down in April 2025 | **CC0** |
+
+***The OpenFarm row was corrected 2026-07-28 after actually opening `crops.json`
+(340 records, 375 KB).*** *It has exactly 14 keys — slug, name, binomialName,
+taxon, description, sun, sowingMethod, spreadCm, rowSpacingCm, heightCm,
+companions, source, growingDegreeDays, tags — so it carries **no days to
+maturity at all** (the earlier row credited it with that, wrongly; the 57
+"matur" hits in the corpus are prose inside `description`). `sun` is 255× "Full
+Sun" of 284 present — one value 90% of the time, no signal. `sowingMethod` is
+183 distinct free-text strings across 282 records, not a vocabulary. Its
+`binomialName` loses to Wikidata anyway: 46 of 305 are malformed, including
+genus-only entries, `morning-glory: "Convolvulaceae"` (a family) and
+`ferry-morse-contender-bush-bean: "acacia maconochiena"`. What survives is the
+crop list itself and `heightCm`.*
 
 **Do not import from** Permapeople (CC BY-SA 4.0, verified in its own database
 FAQ), Plants For A Future, Practical Plants, or Wikipedia. ShareAlike would
 relicense this repo. Permapeople was seeded from a PFAF dump, so that whole
-lineage is out. FAO-56 Table 22 has the best rooting-depth data, but FAO's
-catalogue is largely NC-SA and the USDA NRCS tables say the same thing with no
-licence argument — use those.
+lineage is out. FAO-56 Table 22 has the best rooting-depth data, but that
+document is NC-SA and the USDA NRCS tables say the same thing with no licence
+argument — use those. **"FAO is NC-SA" is not true catalogue-wide**, which the
+earlier wording implied and which nearly cost us ECOCROP: FAO licenses
+per-dataset, and ECOCROP is CC BY 4.0. Read the dataset's own licence, not the
+publisher's reputation.
+
+### ECOCROP (added 2026-07-28) — the answer to "where does climate data come from"
+
+*Licence verified from FAO's own catalogue API, not a search summary:
+`data.apps.fao.org/catalog/api/3/action/package_show?id=ecocrop` returns
+`license_id: "CC-BY-4.0"`. Attribution is required — every value taken from it
+carries its `EcoPortCode` in `source`.*
+
+*Measured, 2568 rows × 55 columns: `TOPMN`/`TOPMX` (optimal growth band, 81%
+filled) → `growthRangeC`. `TMIN`/`TMAX` (absolute survivable range, 81%) →
+`heatCeilingC`. `KTMP` (killing temperature, 45%) → `frostTolerance` and
+perennial `minWinterTempC`. `PHOTO` (67%) is a three-bucket string that maps
+1:1 onto our `Photoperiod` union. `LISPA` (89%) is literally
+annual/biennial/perennial. `FAMNAME` 93%, `GMIN`/`GMAX` (crop cycle days) 100%.*
+
+***Four `ClimateNeeds` fields are not in it and never will be:***
+*`soilGerminationMinC`, `soilGerminationMaxC`, `vernalization`, `chillHoursMin`.
+ECOCROP's temperatures are **growth** temperatures — reading `TOPMN` as a
+germination floor is the silent-wrong-value failure this file warns about
+elsewhere. So the paragraph below still stands, narrowed: the authored core is
+those four fields, not all nine.*
+
+***The work is the mapping table, not the values.*** *A naive
+scientific-name match got 4 of 45 wrong in the first pass: every brassica
+collapsed onto `var. botrytis` (cauliflower) when ECOCROP has correct separate
+rows for capitata / italica / gongyloides / gemmifera / acephala, and
+pumpkin+squash landed on `Cucurbita foetidissima` — buffalo gourd, a wild
+inedible. Tomato and leek looked "absent" until searched by synonym
+(`Lycopersicon esculentum`, `Allium ampeloprasum`); only 757 of 2568 rows carry
+a `SYNO` at all. Also 686 rows have a zero in `GMIN`/`GMAX`. **Every plant needs
+its EcoPortCode chosen by a human and the common name checked**, which is the
+review job the draft → verified pipeline was designed for.*
 
 **Licences govern expression, not facts.** Reading a Permapeople or extension-
 service page to check one value and recording that value is research and is
@@ -138,12 +187,18 @@ fine; copying their dataset is not. That distinction is what makes "authored for
 this project" honest rather than a fig leaf. Keep it that way, and record where
 each value came from in `source`.
 
-**The bottleneck is `ClimateNeeds`, and it will stay authored.** No open dataset
-carries germination floor *and* ceiling, frost-tolerance class, heat ceiling,
-photoperiod and vernalization together, because that shape is this project's own
-idea. `docs/design/climate-needs-45.json` covers batch 1; every batch after it is
-rate-limited by this, not by the mechanical fields — which is what makes the
-draft → verified pipeline the central mechanism rather than bookkeeping.
+**The bottleneck is `ClimateNeeds`, and part of it stays authored.** *Narrowed
+2026-07-28 after ECOCROP.* The original claim was that no open dataset carries
+this shape at all; that was too strong — ECOCROP supplies the growth band, heat
+ceiling, frost-tolerance signal and photoperiod for ~2000 species under CC BY.
+What survives the correction is the harder half: **germination floor *and*
+ceiling, vernalization, and chill hours are carried by no open dataset**,
+because sowing-side thresholds are what a *planner* needs and ECOCROP was built
+to answer "will this crop grow here", not "when do I sow it". That gap is the
+fork's actual contribution. `docs/design/climate-needs-45.json` covers batch 1;
+later batches are rate-limited by those four fields plus the human choice of
+which ECOCROP row a plant is — which is what makes the draft → verified pipeline
+the central mechanism rather than bookkeeping.
 
 ## Don'ts
 
