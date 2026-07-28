@@ -2,11 +2,11 @@ import { useTranslation } from "react-i18next";
 import { Sparkles } from "lucide-react";
 import { GUILDS, type PlantGuild } from "@/data/guilds";
 import { tileGuild, guildFitsBed } from "@/lib/guildFill";
-import type { Bed, CellPlanting } from "@/types/garden";
+import type { Bed, CellPlantingDraft } from "@/types/garden";
 
 interface Props {
   bed: Bed;
-  onApply: (guild: PlantGuild, cells: CellPlanting[]) => void;
+  onApply: (guild: PlantGuild, cells: CellPlantingDraft[]) => void;
 }
 
 export function GuildPicker({ bed, onApply }: Props) {

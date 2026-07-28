@@ -14,18 +14,14 @@ import { createPestSlice, type PestSlice } from "./pestSlice";
 import { createWaterSlice, type WaterSlice } from "./waterSlice";
 import { createLivestockSlice, type LivestockSlice } from "./livestockSlice";
 import { createPantrySlice, type PantrySlice } from "./pantrySlice";
-import type { Garden, SeasonArchive } from "@/types/garden";
+import type { SeasonArchive } from "@/types/garden";
 import { STORAGE_KEY } from "@/lib/locale";
+import { migratePersisted } from "./migrations";
 
 export type AppStore = SettingsSlice & GardenSlice & TaskSlice & HarvestSlice & JournalSlice & WeatherSlice & CustomPlantsSlice & ExpenseSlice & SeedSlice & SoilSlice & PestSlice & WaterSlice & LivestockSlice & PantrySlice & {
   seasonArchives: SeasonArchive[];
   archiveSeason: (gardenId: string) => void;
 };
-
-interface PersistedState {
-  gardens?: Garden[];
-  seasonArchives?: SeasonArchive[];
-}
 
 export const useStore = create<AppStore>()(
   persist(
@@ -61,7 +57,12 @@ export const useStore = create<AppStore>()(
           seasonArchives: [...state.seasonArchives, archive],
           gardens: state.gardens.map((g) =>
             g.id === gardenId
-              ? { ...g, season: nextYear, beds: g.beds.map((b) => ({ ...b, cells: [] })), updatedAt: new Date().toISOString() }
+              ? {
+                  ...g,
+                  season: nextYear,
+                  beds: g.beds.map((b) => ({ ...b, cells: [], updatedAt: new Date().toISOString() })),
+                  updatedAt: new Date().toISOString(),
+                }
               : g
           ),
         }));
@@ -69,30 +70,8 @@ export const useStore = create<AppStore>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 3,
-      migrate: (persisted, version) => {
-        const state = persisted as PersistedState;
-        if (version < 2 && state.gardens) {
-          state.gardens = state.gardens.map((g) => ({
-            ...g,
-            beds: g.beds.map((b) => ({
-              ...b,
-              environmentType: b.environmentType ?? "outdoor_bed",
-            })),
-          }));
-        }
-        if (version < 3 && state.gardens) {
-          const currentYear = String(new Date().getFullYear());
-          state.gardens = state.gardens.map((g) => ({
-            ...g,
-            season: g.season ?? currentYear,
-          }));
-          if (!state.seasonArchives) {
-            state.seasonArchives = [];
-          }
-        }
-        return state as AppStore;
-      },
+      version: 4,
+      migrate: (persisted, version) => migratePersisted(persisted, version) as AppStore,
     }
   )
 );

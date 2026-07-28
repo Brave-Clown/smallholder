@@ -32,6 +32,10 @@ export interface ColdFrameConfig {
 }
 
 export interface CellPlanting {
+  // Stable identity, independent of where the planting sits in the grid.
+  // Task state is keyed by this, so moving a plant carries its history with
+  // it and re-gridding a bed does not orphan it.
+  id: string;
   cellX: number;
   cellY: number;
   plantId: string;
@@ -43,6 +47,13 @@ export interface CellPlanting {
   overrideWarnings?: boolean;
 }
 
+/**
+ * A planting before the store gives it identity. Layout engines and file
+ * imports build these; `setCell`/`setBedCells` mint the id, so identity has
+ * exactly one source.
+ */
+export type CellPlantingDraft = Omit<CellPlanting, "id"> & { id?: string };
+
 export interface Bed {
   id: string;
   name: string;
@@ -50,6 +61,7 @@ export interface Bed {
   y: number;
   width: number;
   height: number;
+  updatedAt: string;
   cells: CellPlanting[];
   notes?: string;
   paths?: string[]; // "x-y" keys for path cells
@@ -62,6 +74,13 @@ export interface Bed {
   raisedBedConfig?: RaisedBedConfig;
   coldFrameConfig?: ColdFrameConfig;
 }
+
+/**
+ * A bed whose plantings may not have identity yet — what a layout engine holds
+ * mid-generation and what the New Bed preview builds. `Bed` satisfies it, so
+ * the validators accept either.
+ */
+export type BedDraft = Omit<Bed, "cells"> & { cells: CellPlantingDraft[] };
 
 export interface Garden {
   id: string;

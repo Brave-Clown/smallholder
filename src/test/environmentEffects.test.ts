@@ -14,7 +14,7 @@ const ALL: EnvironmentType[] = Object.keys(ENVIRONMENT_ICONS) as EnvironmentType
 function makeBed(over: Partial<Bed> = {}): Bed {
   return {
     id: "b1", name: "Bed", x: 0, y: 0, width: 4, height: 3,
-    cells: [], environmentType: "outdoor_bed", ...over,
+    updatedAt: "2026-01-01T00:00:00.000Z", cells: [], environmentType: "outdoor_bed", ...over,
   };
 }
 

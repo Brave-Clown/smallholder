@@ -1,5 +1,5 @@
 import type { Plant } from "@/types/plant";
-import type { Bed, CellPlanting } from "@/types/garden";
+import type { Bed, BedDraft, CellPlantingDraft } from "@/types/garden";
 import { plantFamilyMap, type PlantFamily } from "@/data/plantFamilies";
 import { validatePlacement } from "./placementValidation";
 import { differenceInWeeks, parseISO, addWeeks } from "date-fns";
@@ -49,7 +49,7 @@ export function recommendBedPlanting(
   bed: Bed,
   allPlants: Plant[],
   config: RecommendationConfig,
-): CellPlanting[] {
+): CellPlantingDraft[] {
   const totalCells = bed.width * bed.height;
   const strategy = config.strategy ?? "balanced";
   const direction = config.direction ?? "rows_ew";
@@ -112,14 +112,14 @@ function hasEnvironmentIssue(
 // severity bar the grid marks cells with, is what stops the engine from
 // producing a layout the UI flags a moment later.
 function dropCellsTheValidatorWouldFlag(
-  cells: CellPlanting[],
+  cells: CellPlantingDraft[],
   bed: Bed,
   plantMap: Map<string, Plant>,
   cellSizeCm: number,
-): CellPlanting[] {
-  const accepted: CellPlanting[] = [];
+): CellPlantingDraft[] {
+  const accepted: CellPlantingDraft[] = [];
   for (const cell of cells) {
-    const soFar: Bed = { ...bed, cells: accepted };
+    const soFar: BedDraft = { ...bed, cells: accepted };
     const { issues } = validatePlacement(cell.plantId, cell.cellX, cell.cellY, soFar, plantMap, cellSizeCm);
     if (issues.some((i) => i.severity === "error" || i.severity === "warning")) continue;
     accepted.push(cell);
@@ -321,7 +321,7 @@ function placePlantsOnGrid(
   bed: Bed,
   cellSizeCm: number,
   direction: PlantingDirection,
-): CellPlanting[] {
+): CellPlantingDraft[] {
   if (plants.length === 0) return [];
 
   const { width, height } = bed;
@@ -347,8 +347,8 @@ function placeInRows(
   height: number,
   cellSizeCm: number,
   orientation: "horizontal" | "vertical",
-): CellPlanting[] {
-  const cells: CellPlanting[] = [];
+): CellPlantingDraft[] {
+  const cells: CellPlantingDraft[] = [];
 
   // In horizontal mode, rows go left-to-right (y is the row axis)
   // In vertical mode, columns go top-to-bottom (x is the row axis)
@@ -430,8 +430,8 @@ function placeInBlocks(
   width: number,
   height: number,
   cellSizeCm: number,
-): CellPlanting[] {
-  const cells: CellPlanting[] = [];
+): CellPlantingDraft[] {
+  const cells: CellPlantingDraft[] = [];
   const blocks = calculateBlocks(plants.length, width, height);
 
   for (let i = 0; i < plants.length && i < blocks.length; i++) {
@@ -492,8 +492,8 @@ function placeInCompanionClusters(
   width: number,
   height: number,
   cellSizeCm: number,
-): CellPlanting[] {
-  const cells: CellPlanting[] = [];
+): CellPlantingDraft[] {
+  const cells: CellPlantingDraft[] = [];
   const occupied = new Set<string>();
   const key = (x: number, y: number) => `${x}-${y}`;
 
@@ -568,7 +568,7 @@ function placeInCompanionClusters(
 
 // Find a good starting position for a plant near its companions
 function findBestStartPosition(
-  existingCells: CellPlanting[],
+  existingCells: CellPlantingDraft[],
   companionIds: string[],
   width: number,
   height: number,
@@ -619,7 +619,7 @@ function findBestStartPosition(
 
 // Fill remaining empty cells to avoid gaps
 function fillRemainingCells(
-  cells: CellPlanting[],
+  cells: CellPlantingDraft[],
   plants: Plant[],
   width: number,
   height: number,

@@ -24,14 +24,14 @@ const bean: Plant = {
 const garden: Garden = {
   id: "g1", name: "Test", season: "2026",
   beds: [{
-    id: "b1", name: "Bed 1", x: 0, y: 0, width: 4, height: 3,
+    id: "b1", name: "Bed 1", x: 0, y: 0, width: 4, height: 3, updatedAt: "2026-01-01",
     environmentType: "outdoor_bed",
     cells: [
-      { cellX: 0, cellY: 0, plantId: "tomato" },
-      { cellX: 1, cellY: 0, plantId: "tomato" },
-      { cellX: 2, cellY: 0, plantId: "bean" },
-      { cellX: 3, cellY: 0, plantId: "bean" },
-      { cellX: 0, cellY: 1, plantId: "bean" },
+      { id: "c0-0", cellX: 0, cellY: 0, plantId: "tomato" },
+      { id: "c1-0", cellX: 1, cellY: 0, plantId: "tomato" },
+      { id: "c2-0", cellX: 2, cellY: 0, plantId: "bean" },
+      { id: "c3-0", cellX: 3, cellY: 0, plantId: "bean" },
+      { id: "c0-1", cellX: 0, cellY: 1, plantId: "bean" },
     ],
   }],
   createdAt: "2026-01-01", updatedAt: "2026-01-01",
@@ -50,9 +50,9 @@ describe("Sufficiency calculator", () => {
       beds: [
         garden.beds[0], // inherits 30 cm: 2 tomato cells = 0.18 m²
         {
-          id: "b2", name: "Bed 2", x: 0, y: 1, width: 2, height: 2,
+          id: "b2", name: "Bed 2", x: 0, y: 1, width: 2, height: 2, updatedAt: "2026-01-01",
           environmentType: "outdoor_bed", cellSizeCm: 50,
-          cells: [{ cellX: 0, cellY: 0, plantId: "tomato" }], // 0.25 m²
+          cells: [{ id: "c0-0", cellX: 0, cellY: 0, plantId: "tomato" }], // 0.25 m²
         },
       ],
     };
@@ -94,6 +94,7 @@ describe("Sufficiency calculator", () => {
         ...garden.beds[0],
         width: 20, height: 20,
         cells: Array.from({ length: 200 }, (_, i) => ({
+          id: `c${i}`,
           cellX: i % 20, cellY: Math.floor(i / 20), plantId: i < 100 ? "tomato" : "bean",
         })),
       }],

@@ -10,6 +10,7 @@ function makeBed(overrides: Partial<Bed> = {}): Bed {
     width: 4,
     height: 3,
     cells: [],
+    updatedAt: "2026-01-01T00:00:00.000Z",
     environmentType: "outdoor_bed",
     ...overrides,
   };

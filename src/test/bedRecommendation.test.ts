@@ -3,14 +3,14 @@ import { recommendBedPlanting, getRecommendedPlants } from "@/lib/bedRecommendat
 import { validatePlacement } from "@/lib/placementValidation";
 import plantsData from "@/data/plants.json";
 import type { Plant } from "@/types/plant";
-import type { Bed } from "@/types/garden";
+import type { Bed, BedDraft } from "@/types/garden";
 
 const plants = plantsData as Plant[];
 
 function makeBed(width = 6, height = 4, envType: Bed["environmentType"] = "outdoor_bed"): Bed {
   return {
     id: "b1", name: "Test", x: 0, y: 0, width, height,
-    environmentType: envType, cells: [],
+    environmentType: envType, cells: [], updatedAt: "2026-01-01T00:00:00.000Z",
   };
 }
 
@@ -109,7 +109,7 @@ describe("Bed recommendation engine", () => {
           expect(cells.length, `${envType}/${direction}/${strategy} produced nothing`).toBeGreaterThan(0);
 
           // Re-validate the finished layout exactly as the grid does
-          const planted: Bed = { ...bed, cells };
+          const planted: BedDraft = { ...bed, cells };
           for (const cell of cells) {
             const { issues } = validatePlacement(cell.plantId, cell.cellX, cell.cellY, planted, plantMap, 30);
             const flagged = issues.filter((i) => i.severity === "error" || i.severity === "warning");
@@ -128,7 +128,7 @@ describe("Bed recommendation engine", () => {
     // 30L, so this is the case where position-independent fit actually bites.
     const bed: Bed = {
       id: "b1", name: "Pot", x: 0, y: 0, width: 4, height: 3,
-      environmentType: "container", containerConfig: { volumeLiters: 30, material: "terracotta" },
+      environmentType: "container", containerConfig: { volumeLiters: 30, material: "terracotta" }, updatedAt: "2026-01-01T00:00:00.000Z",
       cells: [],
     };
     const plantMap = new Map(plants.map((p) => [p.id, p]));
@@ -139,7 +139,7 @@ describe("Bed recommendation engine", () => {
       });
       expect(cells.length, `${strategy} produced nothing for a container`).toBeGreaterThan(0);
 
-      const planted: Bed = { ...bed, cells };
+      const planted: BedDraft = { ...bed, cells };
       for (const cell of cells) {
         const { issues } = validatePlacement(cell.plantId, cell.cellX, cell.cellY, planted, plantMap, 30);
         expect(

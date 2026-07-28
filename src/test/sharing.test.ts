@@ -8,6 +8,7 @@ const garden: Garden = {
   season: "2026",
   beds: [{
     id: "b1",
+    updatedAt: "2026-01-01",
     name: "Tomato Bed",
     x: 0,
     y: 0,
@@ -24,9 +25,9 @@ const garden: Garden = {
       frostProtectionWeeks: 4,
     },
     cells: [
-      { cellX: 0, cellY: 0, plantId: "tomato" },
-      { cellX: 1, cellY: 0, plantId: "basil" },
-      { cellX: 2, cellY: 0, plantId: "tomato", variety: "San Marzano" },
+      { id: "c0-0", cellX: 0, cellY: 0, plantId: "tomato" },
+      { id: "c1-0", cellX: 1, cellY: 0, plantId: "basil" },
+      { id: "c2-0", cellX: 2, cellY: 0, plantId: "tomato", variety: "San Marzano" },
     ],
   }],
   createdAt: "2026-01-01",

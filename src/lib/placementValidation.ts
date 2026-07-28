@@ -1,5 +1,5 @@
 import type { Plant } from "@/types/plant";
-import type { Bed, EnvironmentType } from "@/types/garden";
+import type { BedDraft, EnvironmentType } from "@/types/garden";
 
 export type ValidationSeverity = "error" | "warning" | "info";
 
@@ -26,7 +26,7 @@ export function validatePlacement(
   plantId: string,
   cellX: number,
   cellY: number,
-  bed: Bed,
+  bed: BedDraft,
   plantMap: Map<string, Plant>,
   cellSizeCm: number,
 ): PlacementResult {
@@ -139,7 +139,7 @@ export function firstNotableIssue(result: PlacementResult): PlacementIssue | und
 
 export function getCompanionHighlights(
   plantId: string,
-  bed: Bed,
+  bed: BedDraft,
   plantMap: Map<string, Plant>,
 ): Set<string> {
   const plant = plantMap.get(plantId);
@@ -156,7 +156,7 @@ export function getCompanionHighlights(
 
 export function getAntagonistHighlights(
   plantId: string,
-  bed: Bed,
+  bed: BedDraft,
   plantMap: Map<string, Plant>,
 ): Set<string> {
   const plant = plantMap.get(plantId);
@@ -171,7 +171,7 @@ export function getAntagonistHighlights(
   return highlighted;
 }
 
-export function calculateBedScore(bed: Bed, plantMap: Map<string, Plant>): {
+export function calculateBedScore(bed: BedDraft, plantMap: Map<string, Plant>): {
   companionPairs: number;
   antagonistPairs: number;
   score: number; // 0-100

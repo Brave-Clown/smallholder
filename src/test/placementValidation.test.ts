@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { validatePlacement, calculateBedScore, firstNotableIssue, resolveIssueParams } from "@/lib/placementValidation";
 import type { Plant } from "@/types/plant";
-import type { Bed } from "@/types/garden";
+import type { BedDraft } from "@/types/garden";
 
 const tomato: Plant = {
   id: "tomato", category: "vegetable", sowIndoorsWeeks: -8, sowOutdoorsWeeks: null,
@@ -31,10 +31,10 @@ const plantMap = new Map<string, Plant>([
   ["tomato", tomato], ["potato", potato], ["basil", basil],
 ]);
 
-function makeBed(cells: Array<{ cellX: number; cellY: number; plantId: string }> = []): Bed {
+function makeBed(cells: Array<{ cellX: number; cellY: number; plantId: string }> = []): BedDraft {
   return {
     id: "b1", name: "Test", x: 0, y: 0, width: 6, height: 4,
-    environmentType: "outdoor_bed", cells,
+    environmentType: "outdoor_bed", updatedAt: "2026-01-01", cells,
   };
 }
 

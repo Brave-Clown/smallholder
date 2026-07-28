@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/Button";
 import { Modal } from "@/components/ui/Modal";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
-import type { Bed, CellPlanting, EnvironmentType, GreenhouseConfig, ContainerConfig, RaisedBedConfig, ColdFrameConfig } from "@/types/garden";
+import type { Bed, CellPlanting, CellPlantingDraft, EnvironmentType, GreenhouseConfig, ContainerConfig, RaisedBedConfig, ColdFrameConfig } from "@/types/garden";
 import { ENVIRONMENT_ICONS, getFrostProtectionWeeks } from "@/types/garden";
 import { raisedBedSoilVolume } from "@/lib/soilVolume";
 import { bedCellSizeCm, bedSizeM, regridToCellSize, cellCountExceedsLimit, MAX_BED_CELLS, MIN_CELL_SIZE_CM, MAX_CELL_SIZE_CM } from "@/lib/bedGeometry";
@@ -814,14 +814,16 @@ export function GardenPlanner() {
 
   // Single write path for every bulk fill (guild and strategy alike): one store
   // update instead of one per cell, and one undo entry that restores the bed.
-  const applyFill = (bedId: string, label: string, cells: CellPlanting[]) => {
+  const applyFill = (bedId: string, label: string, cells: CellPlantingDraft[]) => {
     if (!activeGardenId) return;
     const bed = activeGarden?.beds.find((b) => b.id === bedId);
     if (!bed) return;
 
     const gid = activeGardenId;
     const previous = bed.cells;
-    const byCoord = new Map(previous.map((c) => [`${c.cellX}-${c.cellY}`, c]));
+    // Untouched cells keep their identity; a filled-over cell is a new planting
+    // and gets a fresh id from the store.
+    const byCoord = new Map<string, CellPlantingDraft>(previous.map((c) => [`${c.cellX}-${c.cellY}`, c]));
     for (const cell of cells) byCoord.set(`${cell.cellX}-${cell.cellY}`, cell);
 
     setBedCells(gid, bedId, [...byCoord.values()]);
@@ -929,7 +931,7 @@ export function GardenPlanner() {
   // Lets the New Bed modal explain a choice before it is committed, using the
   // same derivation the created bed will use.
   const newBedPreview: Bed = {
-    id: "", name: "", x: 0, y: 0,
+    id: "", name: "", x: 0, y: 0, updatedAt: "",
     width: cellsForMetres(bedWidthM, bedCellSize ?? gridCellSizeCm),
     height: cellsForMetres(bedHeightM, bedCellSize ?? gridCellSizeCm),
     ...(bedCellSize !== null ? { cellSizeCm: bedCellSize } : {}),

@@ -1,4 +1,4 @@
-import type { Bed, CellPlanting } from "@/types/garden";
+import type { Bed, CellPlantingDraft } from "@/types/garden";
 import type { PlantGuild } from "@/data/guilds";
 
 /**
@@ -29,12 +29,12 @@ export function guildFitsBed(guild: PlantGuild, bed: Bed): boolean {
  * scaling one to fit the bed would silently destroy the spacing it exists
  * to express.
  */
-export function tileGuild(guild: PlantGuild, bed: Bed): CellPlanting[] {
+export function tileGuild(guild: PlantGuild, bed: Bed): CellPlantingDraft[] {
   const { width: patternWidth, height: patternHeight } = guildPatternSize(guild);
   if (patternWidth === 0 || patternHeight === 0) return [];
 
   const paths = new Set(bed.paths ?? []);
-  const cells: CellPlanting[] = [];
+  const cells: CellPlantingDraft[] = [];
 
   for (let originY = 0; originY < bed.height; originY += patternHeight) {
     for (let originX = 0; originX < bed.width; originX += patternWidth) {

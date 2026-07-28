@@ -7,12 +7,17 @@ import { cellCountExceedsLimit } from "@/lib/bedGeometry";
  * is untrusted input — hand-edited, from an older build, or not ours at all —
  * so every field is checked rather than cast.
  *
- * Ids are deliberately dropped: the store mints fresh ones on import, so a file
- * without them still loads.
+ * Ids are deliberately dropped — beds' and plantings' alike: the store mints
+ * fresh ones on import, so a file without them still loads, and importing the
+ * same file twice gives two independent gardens rather than two gardens whose
+ * plantings share identity.
  */
 
-export interface ImportedBed extends Omit<Bed, "id" | "cells"> {
-  cells: CellPlanting[];
+/** A planting as it arrives from a file: no identity yet, the store assigns it. */
+export type ImportedCell = Omit<CellPlanting, "id">;
+
+export interface ImportedBed extends Omit<Bed, "id" | "cells" | "updatedAt"> {
+  cells: ImportedCell[];
 }
 
 export interface ImportedGarden {
@@ -28,7 +33,7 @@ function str(v: unknown): string | undefined {
   return typeof v === "string" && v !== "" ? v : undefined;
 }
 
-function normalizeCell(raw: unknown): CellPlanting | null {
+function normalizeCell(raw: unknown): ImportedCell | null {
   if (!raw || typeof raw !== "object") return null;
   const c = raw as Record<string, unknown>;
   const plantId = str(c.plantId);
@@ -64,7 +69,7 @@ function normalizeBed(raw: unknown): ImportedBed | null {
     envType && envType in ENVIRONMENT_ICONS ? (envType as EnvironmentType) : "outdoor_bed";
 
   const cells = Array.isArray(b.cells)
-    ? b.cells.map(normalizeCell).filter((c): c is CellPlanting => c !== null)
+    ? b.cells.map(normalizeCell).filter((c): c is ImportedCell => c !== null)
     : [];
   const paths = Array.isArray(b.paths) ? b.paths.filter((p): p is string => typeof p === "string") : [];
   const notes = str(b.notes);

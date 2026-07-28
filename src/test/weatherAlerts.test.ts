@@ -44,7 +44,7 @@ describe("Frost alerts", () => {
 
 describe("Greenhouse alerts", () => {
   const ghBed: Bed = {
-    id: "gh1", name: "Greenhouse", x: 0, y: 0, width: 4, height: 3, cells: [],
+    id: "gh1", name: "Greenhouse", x: 0, y: 0, width: 4, height: 3, cells: [], updatedAt: "2026-01-01",
     environmentType: "greenhouse",
     greenhouseConfig: {
       material: "glass", heated: false, ventilation: "manual",

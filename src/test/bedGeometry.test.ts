@@ -5,12 +5,12 @@ import type { Bed, Garden } from "@/types/garden";
 function makeBed(over: Partial<Bed> = {}): Bed {
   return {
     id: "b", name: "Bed", x: 0, y: 0, width: 6, height: 4,
-    cells: [], environmentType: "outdoor_bed", ...over,
+    updatedAt: "2026-01-01T00:00:00.000Z", cells: [], environmentType: "outdoor_bed", ...over,
   };
 }
 
 const cells = (plantId: string, n: number) =>
-  Array.from({ length: n }, (_, i) => ({ cellX: i, cellY: 0, plantId }));
+  Array.from({ length: n }, (_, i) => ({ id: `${plantId}-${i}`, cellX: i, cellY: 0, plantId }));
 
 describe("bedGeometry", () => {
   it("inherits the default when the bed has no size of its own", () => {
