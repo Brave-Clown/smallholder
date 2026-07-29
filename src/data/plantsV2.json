@@ -964,6 +964,7 @@
     "category": "berry",
     "family": "rosaceae",
     "lifecycle": "perennial",
+    "productiveYears": 4,
     "habit": "groundcover",
     "climate": {
       "frostTolerance": "hardy",
@@ -1041,6 +1042,7 @@
     "category": "berry",
     "family": "rosaceae",
     "lifecycle": "perennial",
+    "productiveYears": 10,
     "habit": "cane",
     "needsTrellis": true,
     "climate": {
@@ -1113,6 +1115,7 @@
     "category": "berry",
     "family": "ericaceae",
     "lifecycle": "perennial",
+    "productiveYears": 40,
     "habit": "shrub",
     "climate": {
       "frostTolerance": "hardy",
@@ -1411,6 +1414,7 @@
     "category": "herb",
     "family": "amaryllidaceae",
     "lifecycle": "perennial",
+    "productiveYears": 4,
     "habit": "upright",
     "climate": {
       "soilGerminationMinC": 10,
@@ -2720,6 +2724,7 @@
     "category": "herb",
     "family": "lamiaceae",
     "lifecycle": "perennial",
+    "productiveYears": 10,
     "habit": "shrub",
     "climate": {
       "frostTolerance": "half_hardy",
@@ -2797,6 +2802,7 @@
     "category": "herb",
     "family": "lamiaceae",
     "lifecycle": "perennial",
+    "productiveYears": 4,
     "habit": "groundcover",
     "climate": {
       "frostTolerance": "hardy",
@@ -2873,6 +2879,7 @@
     "category": "berry",
     "family": "grossulariaceae",
     "lifecycle": "perennial",
+    "productiveYears": 12,
     "habit": "shrub",
     "climate": {
       "frostTolerance": "very_hardy",
@@ -2945,6 +2952,7 @@
     "category": "berry",
     "family": "grossulariaceae",
     "lifecycle": "perennial",
+    "productiveYears": 12,
     "habit": "shrub",
     "climate": {
       "frostTolerance": "very_hardy",
@@ -3244,6 +3252,7 @@
     "category": "vegetable",
     "family": "asparagaceae",
     "lifecycle": "perennial",
+    "productiveYears": 20,
     "habit": "upright",
     "climate": {
       "frostTolerance": "very_hardy",

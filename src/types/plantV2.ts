@@ -140,6 +140,18 @@ export interface PlantV2 {
   category: "vegetable" | "fruit" | "herb" | "grain" | "berry" | "tree";
   family: BotanicalFamily;          // rotation logic reads THIS now
   lifecycle: Lifecycle;
+  /**
+   * Perennials: years of useful production before the planting is spent and
+   * wants tearing out. Lives HERE and not on `BearingMaturity`, because the
+   * shortest-lived plants in the corpus — strawberry and thyme, both ~4 years
+   * — carry `SeasonalMaturity`; hanging it off the bearing shape would miss
+   * exactly the plants that need it.
+   *
+   * Absent means "no useful limit" (mint outlives the gardener). The point is
+   * the sufficiency calculator: a perennial bed that silently declines makes
+   * every long-horizon projection overstate its yield.
+   */
+  productiveYears?: number;
   habit: GrowthHabit;               // vine beans finally expressible
   needsTrellis?: boolean;
 
