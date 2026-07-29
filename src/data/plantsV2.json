@@ -1,0 +1,3462 @@
+[
+  {
+    "id": "tomato",
+    "scientificName": "Solanum lycopersicum",
+    "names": {
+      "en": "Tomato",
+      "de": "Tomate",
+      "es": "Tomate",
+      "fr": "Tomate"
+    },
+    "descriptions": {
+      "en": "Warm-season crop, needs staking. Very productive in good conditions.",
+      "de": "Wärmeliebendes Gemüse, braucht Stütze. Sehr ertragreich bei guten Bedingungen.",
+      "es": "Cultivo de temporada calida, necesita tutor. Muy productivo en buenas condiciones.",
+      "fr": "Culture de saison chaude, nécessite un tuteurage. Très productive dans de bonnes conditions."
+    },
+    "category": "vegetable",
+    "family": "solanaceae",
+    "lifecycle": "annual",
+    "habit": "vine",
+    "needsTrellis": true,
+    "climate": {
+      "soilGerminationMinC": 15,
+      "frostTolerance": "tender",
+      "growthRangeC": [
+        10,
+        35
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "transplant"
+      ],
+      "indoorLeadWeeks": 10
+    },
+    "spacing": {
+      "inRowCm": 50,
+      "betweenRowCm": 70
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 60,
+      "daysToMaturityMax": 85,
+      "expectedYieldKgPerM2": 8
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "high",
+    "rootDepthCm": 91,
+    "nutritionPer100g": {
+      "calories": 18,
+      "proteinG": 0.9,
+      "vitaminCMg": 14,
+      "fiberG": 1.2
+    },
+    "companions": [
+      "basil",
+      "carrot",
+      "parsley",
+      "chives"
+    ],
+    "antagonists": [
+      "potato",
+      "cucumber",
+      "pea"
+    ],
+    "preservationMethods": [
+      "canning",
+      "freezing",
+      "drying"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 3,
+      "seedViabilityYears": 4
+    },
+    "icon": "🍅",
+    "color": "#ef4444",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:1379"
+  },
+  {
+    "id": "zucchini",
+    "scientificName": "Cucurbita pepo",
+    "names": {
+      "en": "Zucchini",
+      "de": "Zucchini",
+      "es": "Calabacin",
+      "fr": "Courgette"
+    },
+    "descriptions": {
+      "en": "Prolific summer squash. One or two plants are usually enough.",
+      "de": "Ergiebiges Sommergemüse. Ein bis zwei Pflanzen reichen meist aus.",
+      "es": "Calabaza de verano muy prolifera. Una o dos plantas suelen ser suficientes.",
+      "fr": "Courge d'été très prolifique. Un ou deux plants suffisent généralement."
+    },
+    "category": "vegetable",
+    "family": "cucurbitaceae",
+    "lifecycle": "annual",
+    "habit": "bush",
+    "climate": {
+      "soilGerminationMinC": 16,
+      "frostTolerance": "tender",
+      "growthRangeC": [
+        15,
+        35
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 6
+    },
+    "spacing": {
+      "inRowCm": 80,
+      "betweenRowCm": 100
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 45,
+      "daysToMaturityMax": 65,
+      "expectedYieldKgPerM2": 6
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "high",
+    "rootDepthCm": 91,
+    "nutritionPer100g": {
+      "calories": 17,
+      "proteinG": 1.2,
+      "vitaminCMg": 18,
+      "fiberG": 1
+    },
+    "companions": [
+      "bean",
+      "pea",
+      "radish"
+    ],
+    "antagonists": [
+      "potato"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "canning"
+    ],
+    "seedSaving": {
+      "difficulty": "advanced",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 5
+    },
+    "icon": "🥒",
+    "color": "#65a30d",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:821"
+  },
+  {
+    "id": "carrot",
+    "scientificName": "Daucus carota subsp. sativus",
+    "names": {
+      "en": "Carrot",
+      "de": "Karotte",
+      "es": "Zanahoria",
+      "fr": "Carotte"
+    },
+    "descriptions": {
+      "en": "Root vegetable that prefers loose, sandy soil. Direct sow only.",
+      "de": "Wurzelgemüse, bevorzugt lockeren, sandigen Boden. Nur Direktsaat.",
+      "es": "Hortaliza de raiz que prefiere suelos sueltos y arenosos. Solo siembra directa.",
+      "fr": "Légume-racine qui préfère un sol meuble et sablonneux. Semis direct uniquement."
+    },
+    "category": "vegetable",
+    "family": "apiaceae",
+    "lifecycle": "biennial",
+    "habit": "root",
+    "climate": {
+      "soilGerminationMinC": 7,
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        7,
+        29
+      ],
+      "heatCeilingC": 30
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow"
+      ],
+      "successionIntervalWeeks": 3
+    },
+    "spacing": {
+      "inRowCm": 5,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 60,
+      "daysToMaturityMax": 80,
+      "expectedYieldKgPerM2": 4
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 41,
+      "proteinG": 0.9,
+      "vitaminCMg": 6,
+      "fiberG": 2.8
+    },
+    "companions": [
+      "tomato",
+      "lettuce",
+      "onion",
+      "leek",
+      "chives"
+    ],
+    "antagonists": [
+      "dill"
+    ],
+    "preservationMethods": [
+      "root_cellar",
+      "freezing",
+      "canning"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 3
+    },
+    "icon": "🥕",
+    "color": "#f97316",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:871",
+    "climateProxy": {
+      "ecoPortCode": 871,
+      "scientificName": "Daucus carota",
+      "relation": "wild_relative"
+    }
+  },
+  {
+    "id": "lettuce",
+    "scientificName": "Lactuca sativa",
+    "names": {
+      "en": "Lettuce",
+      "de": "Kopfsalat",
+      "es": "Lechuga",
+      "fr": "Laitue"
+    },
+    "descriptions": {
+      "en": "Fast-growing salad green. Prefers cooler temperatures.",
+      "de": "Schnell wachsender Salat. Bevorzugt kühlere Temperaturen.",
+      "es": "Verdura de ensalada de crecimiento rapido. Prefiere temperaturas frescas.",
+      "fr": "Salade à croissance rapide. Préfère les températures fraîches."
+    },
+    "category": "vegetable",
+    "family": "asteraceae",
+    "lifecycle": "annual",
+    "habit": "rosette",
+    "climate": {
+      "soilGerminationMinC": 4,
+      "soilGerminationMaxC": 27,
+      "frostTolerance": "half_hardy",
+      "growthRangeC": [
+        4,
+        24
+      ],
+      "heatCeilingC": 27
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 4,
+      "successionIntervalWeeks": 3
+    },
+    "spacing": {
+      "inRowCm": 25,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 30,
+      "daysToMaturityMax": 60,
+      "expectedYieldKgPerM2": 3
+    },
+    "sun": {
+      "minDirectHours": 4
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 30,
+    "nutritionPer100g": {
+      "calories": 15,
+      "proteinG": 1.4,
+      "vitaminCMg": 9,
+      "fiberG": 1.3
+    },
+    "companions": [
+      "carrot",
+      "radish",
+      "strawberry",
+      "chives"
+    ],
+    "antagonists": [
+      "parsley"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 3,
+      "seedViabilityYears": 3
+    },
+    "icon": "🥬",
+    "color": "#84cc16",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:1313"
+  },
+  {
+    "id": "bean",
+    "scientificName": "Phaseolus vulgaris",
+    "names": {
+      "en": "Bush Bean",
+      "de": "Buschbohne",
+      "es": "Poroto arbustivo",
+      "fr": "Haricot nain"
+    },
+    "descriptions": {
+      "en": "Nitrogen-fixing legume. Easy to grow, productive.",
+      "de": "Stickstofffixierende Hülsenfrucht. Einfach anzubauen, ertragreich.",
+      "es": "Leguminosa fijadora de nitrogeno. Facil de cultivar y productiva.",
+      "fr": "Légumineuse fixatrice d'azote. Facile à cultiver et productive."
+    },
+    "category": "vegetable",
+    "family": "fabaceae",
+    "lifecycle": "annual",
+    "habit": "bush",
+    "climate": {
+      "soilGerminationMinC": 16,
+      "frostTolerance": "tender",
+      "growthRangeC": [
+        16,
+        32
+      ],
+      "heatCeilingC": 35
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow"
+      ],
+      "successionIntervalWeeks": 3
+    },
+    "spacing": {
+      "inRowCm": 10,
+      "betweenRowCm": 40
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 50,
+      "daysToMaturityMax": 65,
+      "expectedYieldKgPerM2": 2
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 31,
+      "proteinG": 1.8,
+      "vitaminCMg": 12,
+      "fiberG": 2.7
+    },
+    "companions": [
+      "cucumber",
+      "potato",
+      "zucchini"
+    ],
+    "antagonists": [
+      "onion",
+      "garlic",
+      "leek",
+      "chives"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "canning",
+      "drying"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 3,
+      "seedViabilityYears": 3
+    },
+    "icon": "🫘",
+    "color": "#16a34a",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:1668"
+  },
+  {
+    "id": "pea",
+    "scientificName": "Pisum sativum",
+    "names": {
+      "en": "Pea",
+      "de": "Erbse",
+      "es": "Arveja",
+      "fr": "Pois"
+    },
+    "descriptions": {
+      "en": "Cool-season crop. Sow early in spring, harvest before heat.",
+      "de": "Kühle Jahreszeit. Früh im Frühling säen, vor der Hitze ernten.",
+      "es": "Cultivo de temporada fria. Sembrar temprano en primavera, cosechar antes del calor.",
+      "fr": "Culture de saison fraîche. Semer tôt au printemps, récolter avant les chaleurs."
+    },
+    "category": "vegetable",
+    "family": "fabaceae",
+    "lifecycle": "annual",
+    "habit": "vine",
+    "needsTrellis": true,
+    "climate": {
+      "soilGerminationMinC": 4,
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        7,
+        24
+      ],
+      "heatCeilingC": 27
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow"
+      ],
+      "successionIntervalWeeks": 2
+    },
+    "spacing": {
+      "inRowCm": 5,
+      "betweenRowCm": 50
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 55,
+      "daysToMaturityMax": 70,
+      "expectedYieldKgPerM2": 1.5
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 81,
+      "proteinG": 5.4,
+      "vitaminCMg": 40,
+      "fiberG": 5.7
+    },
+    "companions": [
+      "carrot",
+      "radish",
+      "cucumber"
+    ],
+    "antagonists": [
+      "onion",
+      "garlic"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "drying"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 3,
+      "seedViabilityYears": 3
+    },
+    "icon": "🫛",
+    "color": "#22c55e",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:1721"
+  },
+  {
+    "id": "radish",
+    "scientificName": "Raphanus sativus",
+    "names": {
+      "en": "Radish",
+      "de": "Radieschen",
+      "es": "Rabano",
+      "fr": "Radis"
+    },
+    "descriptions": {
+      "en": "Very fast-growing root vegetable. Ready in 25-30 days.",
+      "de": "Sehr schnell wachsendes Gemüse. In 25–30 Tagen erntereif.",
+      "es": "Hortaliza de raiz de crecimiento muy rapido. Lista en 25-30 dias.",
+      "fr": "Légume-racine à croissance très rapide. Prêt en 25-30 jours."
+    },
+    "category": "vegetable",
+    "family": "brassicaceae",
+    "lifecycle": "annual",
+    "habit": "root",
+    "climate": {
+      "soilGerminationMinC": 5,
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        5,
+        25
+      ],
+      "heatCeilingC": 26
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow"
+      ],
+      "successionIntervalWeeks": 2
+    },
+    "spacing": {
+      "inRowCm": 5,
+      "betweenRowCm": 15
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 25,
+      "daysToMaturityMax": 35,
+      "expectedYieldKgPerM2": 2.5
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 30,
+    "nutritionPer100g": {
+      "calories": 16,
+      "proteinG": 0.7,
+      "vitaminCMg": 15,
+      "fiberG": 1.6
+    },
+    "companions": [
+      "lettuce",
+      "pea",
+      "bean",
+      "spinach"
+    ],
+    "preservationMethods": [
+      "fermenting"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 100,
+      "seedViabilityYears": 4
+    },
+    "icon": "🔴",
+    "color": "#e11d48",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:11291"
+  },
+  {
+    "id": "cucumber",
+    "scientificName": "Cucumis sativus",
+    "names": {
+      "en": "Cucumber",
+      "de": "Gurke",
+      "es": "Pepino",
+      "fr": "Concombre"
+    },
+    "descriptions": {
+      "en": "Needs warmth and consistent watering. Great for trellising.",
+      "de": "Braucht Wärme und regelmäßiges Gießen. Gut für Rankhilfen.",
+      "es": "Necesita calor y riego constante. Ideal para enturar en espaldera.",
+      "fr": "A besoin de chaleur et d'un arrosage régulier. Idéal pour le palissage."
+    },
+    "category": "vegetable",
+    "family": "cucurbitaceae",
+    "lifecycle": "annual",
+    "habit": "vine",
+    "needsTrellis": true,
+    "climate": {
+      "soilGerminationMinC": 16,
+      "frostTolerance": "tender",
+      "growthRangeC": [
+        16,
+        35
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 6
+    },
+    "spacing": {
+      "inRowCm": 40,
+      "betweenRowCm": 100
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 50,
+      "daysToMaturityMax": 70,
+      "expectedYieldKgPerM2": 5
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "high",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 15,
+      "proteinG": 0.7,
+      "vitaminCMg": 3,
+      "fiberG": 0.5
+    },
+    "companions": [
+      "bean",
+      "pea",
+      "dill",
+      "lettuce"
+    ],
+    "antagonists": [
+      "tomato",
+      "potato"
+    ],
+    "preservationMethods": [
+      "fermenting",
+      "canning"
+    ],
+    "seedSaving": {
+      "difficulty": "advanced",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 5
+    },
+    "icon": "🥒",
+    "color": "#15803d",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:817"
+  },
+  {
+    "id": "pepper",
+    "scientificName": "Capsicum annuum",
+    "names": {
+      "en": "Bell Pepper",
+      "de": "Paprika",
+      "es": "Pimiento",
+      "fr": "Poivron"
+    },
+    "descriptions": {
+      "en": "Heat-loving plant. Start indoors early for best results.",
+      "de": "Wärmeliebendes Gemüse. Früh drinnen vorziehen für beste Ergebnisse.",
+      "es": "Planta que ama el calor. Iniciar en interior temprano para mejores resultados.",
+      "fr": "Plante qui aime la chaleur. Démarrer en intérieur tôt pour de meilleurs résultats."
+    },
+    "category": "vegetable",
+    "family": "solanaceae",
+    "lifecycle": "annual",
+    "habit": "bush",
+    "climate": {
+      "soilGerminationMinC": 18,
+      "frostTolerance": "tender",
+      "growthRangeC": [
+        15,
+        35
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "transplant"
+      ],
+      "indoorLeadWeeks": 12
+    },
+    "spacing": {
+      "inRowCm": 45,
+      "betweenRowCm": 60
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 60,
+      "daysToMaturityMax": 90,
+      "expectedYieldKgPerM2": 4
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 31,
+      "proteinG": 1,
+      "vitaminCMg": 128,
+      "fiberG": 1.7
+    },
+    "companions": [
+      "basil",
+      "carrot",
+      "tomato"
+    ],
+    "antagonists": [
+      "bean"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "drying",
+      "canning"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 100,
+      "seedViabilityYears": 3
+    },
+    "icon": "🫑",
+    "color": "#dc2626",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:618"
+  },
+  {
+    "id": "onion",
+    "scientificName": "Allium cepa",
+    "names": {
+      "en": "Onion",
+      "de": "Zwiebel",
+      "es": "Cebolla",
+      "fr": "Oignon"
+    },
+    "descriptions": {
+      "en": "Long-season crop. Start from sets or transplants for best results.",
+      "de": "Langzeit-Kultur. Am besten aus Steckzwiebeln oder Setzlingen.",
+      "es": "Cultivo de temporada larga. Iniciar con bulbillos o trasplantes para mejores resultados.",
+      "fr": "Culture longue. Partir de bulbilles ou de plants pour de meilleurs résultats."
+    },
+    "category": "vegetable",
+    "family": "amaryllidaceae",
+    "lifecycle": "biennial",
+    "habit": "bulb",
+    "climate": {
+      "soilGerminationMinC": 10,
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        7,
+        29
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "sets",
+        "direct_sow"
+      ],
+      "indoorLeadWeeks": 8
+    },
+    "spacing": {
+      "inRowCm": 10,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 90,
+      "daysToMaturityMax": 120,
+      "expectedYieldKgPerM2": 5
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "low",
+    "rootDepthCm": 30,
+    "nutritionPer100g": {
+      "calories": 40,
+      "proteinG": 1.1,
+      "vitaminCMg": 7,
+      "fiberG": 1.7
+    },
+    "companions": [
+      "carrot",
+      "lettuce",
+      "beetroot",
+      "strawberry"
+    ],
+    "antagonists": [
+      "bean",
+      "pea"
+    ],
+    "preservationMethods": [
+      "root_cellar",
+      "drying"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 2
+    },
+    "icon": "🧅",
+    "color": "#d97706",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:551"
+  },
+  {
+    "id": "garlic",
+    "scientificName": "Allium sativum",
+    "names": {
+      "en": "Garlic",
+      "de": "Knoblauch",
+      "es": "Ajo",
+      "fr": "Ail"
+    },
+    "descriptions": {
+      "en": "Plant in autumn, harvest next summer. Very low maintenance.",
+      "de": "Im Herbst pflanzen, im nächsten Sommer ernten. Sehr pflegeleicht.",
+      "es": "Plantar en otono, cosechar en el verano siguiente. Muy bajo mantenimiento.",
+      "fr": "Planter en automne, récolter l'été suivant. Très peu d'entretien."
+    },
+    "category": "vegetable",
+    "family": "amaryllidaceae",
+    "lifecycle": "biennial",
+    "habit": "bulb",
+    "climate": {
+      "soilGerminationMinC": 4,
+      "frostTolerance": "very_hardy",
+      "growthRangeC": [
+        4,
+        29
+      ],
+      "vernalization": {
+        "weeks": 6,
+        "belowC": 10
+      }
+    },
+    "propagation": {
+      "methods": [
+        "sets"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 15,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 240,
+      "daysToMaturityMax": 270,
+      "expectedYieldKgPerM2": 1
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "low",
+    "rootDepthCm": 30,
+    "nutritionPer100g": {
+      "calories": 149,
+      "proteinG": 6.4,
+      "vitaminCMg": 31,
+      "fiberG": 2.1
+    },
+    "companions": [
+      "tomato",
+      "strawberry",
+      "beetroot"
+    ],
+    "antagonists": [
+      "bean",
+      "pea"
+    ],
+    "preservationMethods": [
+      "root_cellar",
+      "drying"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 3,
+      "seedViabilityYears": 1
+    },
+    "icon": "🧄",
+    "color": "#fef3c7",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:367"
+  },
+  {
+    "id": "potato",
+    "scientificName": "Solanum tuberosum",
+    "names": {
+      "en": "Potato",
+      "de": "Kartoffel",
+      "es": "Papa",
+      "fr": "Pomme de terre"
+    },
+    "descriptions": {
+      "en": "Staple crop. Needs hilling as it grows. Good for beginners.",
+      "de": "Grundnahrungsmittel. Muss angehäufelt werden. Gut für Anfänger.",
+      "es": "Cultivo basico. Necesita aporque a medida que crece. Bueno para principiantes.",
+      "fr": "Culture de base. Nécessite un buttage pendant la croissance. Idéal pour les débutants."
+    },
+    "category": "vegetable",
+    "family": "solanaceae",
+    "lifecycle": "annual",
+    "habit": "upright",
+    "climate": {
+      "soilGerminationMinC": 7,
+      "frostTolerance": "half_hardy",
+      "growthRangeC": [
+        7,
+        30
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "tuber"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 35,
+      "betweenRowCm": 70
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 70,
+      "daysToMaturityMax": 120,
+      "expectedYieldKgPerM2": 4
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 77,
+      "proteinG": 2,
+      "vitaminCMg": 20,
+      "fiberG": 2.2
+    },
+    "companions": [
+      "bean",
+      "spinach",
+      "garlic"
+    ],
+    "antagonists": [
+      "tomato",
+      "cucumber",
+      "pumpkin"
+    ],
+    "preservationMethods": [
+      "root_cellar",
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 3,
+      "seedViabilityYears": 2
+    },
+    "icon": "🥔",
+    "color": "#a16207",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:1971"
+  },
+  {
+    "id": "strawberry",
+    "scientificName": "Fragaria × ananassa",
+    "names": {
+      "en": "Strawberry",
+      "de": "Erdbeere",
+      "es": "Fresa",
+      "fr": "Fraise"
+    },
+    "descriptions": {
+      "en": "Perennial berry. Produces fruit for several years.",
+      "de": "Mehrjährige Beere. Trägt mehrere Jahre Früchte.",
+      "es": "Baya perenne. Produce fruta durante varios anos.",
+      "fr": "Petit fruit vivace. Produit des fruits pendant plusieurs années."
+    },
+    "category": "berry",
+    "family": "rosaceae",
+    "lifecycle": "perennial",
+    "habit": "groundcover",
+    "climate": {
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        7,
+        29
+      ],
+      "minWinterTempC": -23,
+      "chillHoursMin": 250
+    },
+    "propagation": {
+      "methods": [
+        "crown",
+        "transplant"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 30,
+      "betweenRowCm": 50
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 60,
+      "daysToMaturityMax": 90,
+      "expectedYieldKgPerM2": 1.5
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 30,
+    "nutritionPer100g": {
+      "calories": 32,
+      "proteinG": 0.7,
+      "vitaminCMg": 59,
+      "fiberG": 2
+    },
+    "companions": [
+      "lettuce",
+      "onion",
+      "garlic",
+      "spinach"
+    ],
+    "antagonists": [
+      "cabbage",
+      "broccoli",
+      "cauliflower",
+      "kohlrabi"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "canning",
+      "drying"
+    ],
+    "icon": "🍓",
+    "color": "#be123c",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:1112"
+  },
+  {
+    "id": "raspberry",
+    "scientificName": "Rubus idaeus",
+    "names": {
+      "en": "Raspberry",
+      "de": "Himbeere",
+      "es": "Frambuesa",
+      "fr": "Framboise"
+    },
+    "descriptions": {
+      "en": "Perennial berry bush. Needs a trellis or support.",
+      "de": "Mehrjähriger Beerenstrauch. Braucht Rankhilfe oder Stütze.",
+      "es": "Arbusto de bayas perenne. Necesita espaldera o soporte.",
+      "fr": "Arbuste fruitier vivace. Nécessite un palissage ou un support."
+    },
+    "category": "berry",
+    "family": "rosaceae",
+    "lifecycle": "perennial",
+    "habit": "cane",
+    "needsTrellis": true,
+    "climate": {
+      "frostTolerance": "very_hardy",
+      "growthRangeC": [
+        7,
+        29
+      ],
+      "heatCeilingC": 32,
+      "minWinterTempC": -29,
+      "chillHoursMin": 800
+    },
+    "propagation": {
+      "methods": [
+        "bare_root"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 50,
+      "betweenRowCm": 150
+    },
+    "maturity": {
+      "kind": "bearing",
+      "yearsToFirstHarvest": 2,
+      "yearsToFullYield": 3,
+      "harvestMonths": [
+        7,
+        8
+      ],
+      "expectedYieldKgPerPlant": 1.5
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 52,
+      "proteinG": 1.2,
+      "vitaminCMg": 26,
+      "fiberG": 6.5
+    },
+    "companions": [
+      "garlic"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "canning"
+    ],
+    "icon": "🫐",
+    "color": "#be185d",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:1877"
+  },
+  {
+    "id": "blueberry",
+    "scientificName": "Vaccinium corymbosum",
+    "names": {
+      "en": "Blueberry",
+      "de": "Heidelbeere",
+      "es": "Arandano",
+      "fr": "Myrtille"
+    },
+    "descriptions": {
+      "en": "Needs acidic soil. Produces fruit after 2-3 years.",
+      "de": "Braucht sauren Boden. Trägt nach 2–3 Jahren Früchte.",
+      "es": "Necesita suelo acido. Produce fruta despues de 2-3 anos.",
+      "fr": "Nécessite un sol acide. Produit des fruits après 2-3 ans."
+    },
+    "category": "berry",
+    "family": "ericaceae",
+    "lifecycle": "perennial",
+    "habit": "shrub",
+    "climate": {
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        7,
+        29
+      ],
+      "minWinterTempC": -26,
+      "chillHoursMin": 500
+    },
+    "propagation": {
+      "methods": [
+        "bare_root"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 100,
+      "betweenRowCm": 200
+    },
+    "maturity": {
+      "kind": "bearing",
+      "yearsToFirstHarvest": 3,
+      "yearsToFullYield": 6,
+      "harvestMonths": [
+        7,
+        8
+      ],
+      "expectedYieldKgPerPlant": 2.5
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 46,
+    "nutritionPer100g": {
+      "calories": 57,
+      "proteinG": 0.7,
+      "vitaminCMg": 10,
+      "fiberG": 2.4
+    },
+    "companions": [
+      "strawberry",
+      "thyme"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "drying"
+    ],
+    "icon": "💙",
+    "color": "#4338ca",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:10704"
+  },
+  {
+    "id": "basil",
+    "scientificName": "Ocimum basilicum",
+    "names": {
+      "en": "Basil",
+      "de": "Basilikum",
+      "es": "Albahaca",
+      "fr": "Basilic"
+    },
+    "descriptions": {
+      "en": "Annual herb, great companion for tomatoes. Loves warmth.",
+      "de": "Einjähriges Kraut, guter Begleiter für Tomaten. Liebt Wärme.",
+      "es": "Hierba anual, gran companera del tomate. Le encanta el calor.",
+      "fr": "Herbe annuelle, excellent compagnon pour les tomates. Aime la chaleur."
+    },
+    "category": "herb",
+    "family": "lamiaceae",
+    "lifecycle": "annual",
+    "habit": "upright",
+    "climate": {
+      "soilGerminationMinC": 18,
+      "frostTolerance": "tender",
+      "growthRangeC": [
+        15,
+        35
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 8
+    },
+    "spacing": {
+      "inRowCm": 25,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 30,
+      "daysToMaturityMax": 60,
+      "expectedYieldKgPerM2": 0.5
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 46,
+    "nutritionPer100g": {
+      "calories": 23,
+      "proteinG": 3.2,
+      "vitaminCMg": 18,
+      "fiberG": 1.6
+    },
+    "companions": [
+      "tomato",
+      "pepper"
+    ],
+    "antagonists": [
+      "rosemary"
+    ],
+    "preservationMethods": [
+      "drying",
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 50,
+      "seedViabilityYears": 5
+    },
+    "icon": "🌿",
+    "color": "#16a34a",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:1547"
+  },
+  {
+    "id": "parsley",
+    "scientificName": "Petroselinum crispum",
+    "names": {
+      "en": "Parsley",
+      "de": "Petersilie",
+      "es": "Perejil",
+      "fr": "Persil"
+    },
+    "descriptions": {
+      "en": "Biennial herb. Slow to germinate but very versatile.",
+      "de": "Zweijähriges Kraut. Keimt langsam, aber sehr vielseitig.",
+      "es": "Hierba bienal. Lenta para germinar pero muy versatil.",
+      "fr": "Herbe bisannuelle. Germination lente mais très polyvalente."
+    },
+    "category": "herb",
+    "family": "apiaceae",
+    "lifecycle": "biennial",
+    "habit": "rosette",
+    "climate": {
+      "soilGerminationMinC": 10,
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        7,
+        28
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 6
+    },
+    "spacing": {
+      "inRowCm": 20,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 60,
+      "daysToMaturityMax": 90,
+      "expectedYieldKgPerM2": 0.8
+    },
+    "sun": {
+      "minDirectHours": 4
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 46,
+    "nutritionPer100g": {
+      "calories": 36,
+      "proteinG": 3,
+      "vitaminCMg": 133,
+      "fiberG": 3.3
+    },
+    "companions": [
+      "tomato",
+      "carrot"
+    ],
+    "antagonists": [
+      "lettuce"
+    ],
+    "preservationMethods": [
+      "drying",
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 300,
+      "seedViabilityYears": 2
+    },
+    "icon": "☘️",
+    "color": "#15803d",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:1661"
+  },
+  {
+    "id": "dill",
+    "scientificName": "Anethum graveolens",
+    "names": {
+      "en": "Dill",
+      "de": "Dill",
+      "es": "Eneldo",
+      "fr": "Aneth"
+    },
+    "descriptions": {
+      "en": "Annual herb. Attracts beneficial insects. Self-seeds readily.",
+      "de": "Einjähriges Kraut. Lockt Nützlinge an. Sät sich selbst aus.",
+      "es": "Hierba anual. Atrae insectos beneficos. Se resiembra facilmente.",
+      "fr": "Herbe annuelle. Attire les insectes bénéfiques. Se ressème facilement."
+    },
+    "category": "herb",
+    "family": "apiaceae",
+    "lifecycle": "annual",
+    "habit": "upright",
+    "climate": {
+      "soilGerminationMinC": 10,
+      "frostTolerance": "half_hardy",
+      "growthRangeC": [
+        7,
+        26
+      ],
+      "heatCeilingC": 27
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 15,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 40,
+      "daysToMaturityMax": 60,
+      "expectedYieldKgPerM2": 0.3
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "low",
+    "rootDepthCm": 46,
+    "nutritionPer100g": {
+      "calories": 43,
+      "proteinG": 3.5,
+      "vitaminCMg": 85,
+      "fiberG": 2.1
+    },
+    "companions": [
+      "cucumber",
+      "lettuce"
+    ],
+    "antagonists": [
+      "carrot"
+    ],
+    "preservationMethods": [
+      "drying",
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 100,
+      "seedViabilityYears": 3
+    },
+    "icon": "🪻",
+    "color": "#65a30d",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:2192"
+  },
+  {
+    "id": "chives",
+    "scientificName": "Allium schoenoprasum",
+    "names": {
+      "en": "Chives",
+      "de": "Schnittlauch",
+      "es": "Cebollino",
+      "fr": "Ciboulette"
+    },
+    "descriptions": {
+      "en": "Perennial herb with mild onion flavor. Very easy to grow.",
+      "de": "Mehrjähriges Kraut mit mildem Zwiebelgeschmack. Sehr pflegeleicht.",
+      "es": "Hierba perenne con suave sabor a cebolla. Muy facil de cultivar.",
+      "fr": "Herbe vivace au léger goût d'oignon. Très facile à cultiver."
+    },
+    "category": "herb",
+    "family": "amaryllidaceae",
+    "lifecycle": "perennial",
+    "habit": "upright",
+    "climate": {
+      "soilGerminationMinC": 10,
+      "frostTolerance": "very_hardy",
+      "growthRangeC": [
+        5,
+        29
+      ],
+      "minWinterTempC": -34
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow",
+        "crown"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 15,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 60,
+      "daysToMaturityMax": 90,
+      "expectedYieldKgPerM2": 0.5
+    },
+    "sun": {
+      "minDirectHours": 4
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 30,
+    "nutritionPer100g": {
+      "calories": 30,
+      "proteinG": 3.3,
+      "vitaminCMg": 58,
+      "fiberG": 2.5
+    },
+    "companions": [
+      "carrot",
+      "tomato",
+      "lettuce"
+    ],
+    "antagonists": [
+      "bean",
+      "pea"
+    ],
+    "preservationMethods": [
+      "drying",
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 100,
+      "seedViabilityYears": 2
+    },
+    "icon": "💜",
+    "color": "#7c3aed",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:810"
+  },
+  {
+    "id": "kale",
+    "scientificName": "Brassica oleracea var. acephala",
+    "names": {
+      "en": "Kale",
+      "de": "Grünkohl",
+      "es": "Col rizada",
+      "fr": "Chou frisé"
+    },
+    "descriptions": {
+      "en": "Hardy leafy green. Tastes sweeter after frost.",
+      "de": "Robustes Blattgemüse. Schmeckt nach Frost süßer.",
+      "es": "Verdura de hoja resistente. Sabe mas dulce despues de una helada.",
+      "fr": "Légume-feuille rustique. Plus doux après le gel."
+    },
+    "category": "vegetable",
+    "family": "brassicaceae",
+    "lifecycle": "biennial",
+    "habit": "upright",
+    "climate": {
+      "soilGerminationMinC": 7,
+      "frostTolerance": "very_hardy",
+      "growthRangeC": [
+        4,
+        27
+      ],
+      "heatCeilingC": 29
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 4,
+      "successionIntervalWeeks": 4
+    },
+    "spacing": {
+      "inRowCm": 45,
+      "betweenRowCm": 60
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 55,
+      "daysToMaturityMax": 75,
+      "expectedYieldKgPerM2": 3
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 49,
+      "proteinG": 4.3,
+      "vitaminCMg": 120,
+      "fiberG": 3.6
+    },
+    "companions": [
+      "beetroot",
+      "onion",
+      "dill"
+    ],
+    "antagonists": [
+      "strawberry"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "drying"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 4
+    },
+    "icon": "💚",
+    "color": "#166534",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:3867"
+  },
+  {
+    "id": "spinach",
+    "scientificName": "Spinacia oleracea",
+    "names": {
+      "en": "Spinach",
+      "de": "Spinat",
+      "es": "Espinaca",
+      "fr": "Épinard"
+    },
+    "descriptions": {
+      "en": "Cool-season green. Bolts quickly in heat.",
+      "de": "Kühle-Jahreszeit-Gemüse. Schießt schnell bei Hitze.",
+      "es": "Verdura de temporada fria. Se espiga rapidamente con el calor.",
+      "fr": "Légume-feuille de saison fraîche. Monte rapidement en graines par temps chaud."
+    },
+    "category": "vegetable",
+    "family": "amaranthaceae",
+    "lifecycle": "annual",
+    "habit": "rosette",
+    "climate": {
+      "soilGerminationMinC": 2,
+      "soilGerminationMaxC": 24,
+      "frostTolerance": "very_hardy",
+      "growthRangeC": [
+        2,
+        21
+      ],
+      "heatCeilingC": 24,
+      "photoperiod": "long_day"
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow"
+      ],
+      "successionIntervalWeeks": 3
+    },
+    "spacing": {
+      "inRowCm": 10,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 35,
+      "daysToMaturityMax": 50,
+      "expectedYieldKgPerM2": 2.5
+    },
+    "sun": {
+      "minDirectHours": 4
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 46,
+    "nutritionPer100g": {
+      "calories": 23,
+      "proteinG": 2.9,
+      "vitaminCMg": 28,
+      "fiberG": 2.2
+    },
+    "companions": [
+      "strawberry",
+      "radish",
+      "bean"
+    ],
+    "preservationMethods": [
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 3
+    },
+    "icon": "🍃",
+    "color": "#14532d",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:1997"
+  },
+  {
+    "id": "beetroot",
+    "scientificName": "Beta vulgaris var. crassa",
+    "names": {
+      "en": "Beetroot",
+      "de": "Rote Bete",
+      "es": "Remolacha",
+      "fr": "Betterave"
+    },
+    "descriptions": {
+      "en": "Dual-purpose: eat both roots and leaves. Easy to grow.",
+      "de": "Doppelt nutzbar: Knolle und Blätter essbar. Einfach anzubauen.",
+      "es": "Doble proposito: se comen raices y hojas. Facil de cultivar.",
+      "fr": "Double usage : on mange les racines et les feuilles. Facile à cultiver."
+    },
+    "category": "vegetable",
+    "family": "amaranthaceae",
+    "lifecycle": "biennial",
+    "habit": "root",
+    "climate": {
+      "soilGerminationMinC": 7,
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        7,
+        29
+      ],
+      "heatCeilingC": 30
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow"
+      ],
+      "successionIntervalWeeks": 4
+    },
+    "spacing": {
+      "inRowCm": 10,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 50,
+      "daysToMaturityMax": 70,
+      "expectedYieldKgPerM2": 4
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 43,
+      "proteinG": 1.6,
+      "vitaminCMg": 5,
+      "fiberG": 2.8
+    },
+    "companions": [
+      "onion",
+      "garlic",
+      "lettuce",
+      "kale"
+    ],
+    "antagonists": [
+      "bean"
+    ],
+    "preservationMethods": [
+      "root_cellar",
+      "canning",
+      "fermenting"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 4
+    },
+    "icon": "🟣",
+    "color": "#881337",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:3712"
+  },
+  {
+    "id": "leek",
+    "scientificName": "Allium ampeloprasum var. porrum",
+    "names": {
+      "en": "Leek",
+      "de": "Lauch",
+      "es": "Puerro",
+      "fr": "Poireau"
+    },
+    "descriptions": {
+      "en": "Hardy allium. Needs blanching for white stems.",
+      "de": "Robustes Lauchgewächs. Muss für weiße Stangen angehäufelt werden.",
+      "es": "Allium resistente. Necesita blanqueo para tallos blancos.",
+      "fr": "Alliacée rustique. Nécessite un blanchiment pour obtenir des fûts blancs."
+    },
+    "category": "vegetable",
+    "family": "amaryllidaceae",
+    "lifecycle": "biennial",
+    "habit": "upright",
+    "climate": {
+      "soilGerminationMinC": 8,
+      "frostTolerance": "very_hardy",
+      "growthRangeC": [
+        7,
+        26
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "transplant"
+      ],
+      "indoorLeadWeeks": 10
+    },
+    "spacing": {
+      "inRowCm": 15,
+      "betweenRowCm": 40
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 100,
+      "daysToMaturityMax": 150,
+      "expectedYieldKgPerM2": 3
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 30,
+    "nutritionPer100g": {
+      "calories": 61,
+      "proteinG": 1.5,
+      "vitaminCMg": 12,
+      "fiberG": 1.8
+    },
+    "companions": [
+      "carrot",
+      "strawberry"
+    ],
+    "antagonists": [
+      "bean",
+      "pea"
+    ],
+    "preservationMethods": [
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 2
+    },
+    "icon": "🥢",
+    "color": "#4d7c0f",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:363",
+    "climateProxy": {
+      "ecoPortCode": 363,
+      "scientificName": "Allium ampeloprasum",
+      "relation": "wild_relative"
+    }
+  },
+  {
+    "id": "pumpkin",
+    "scientificName": "Cucurbita maxima",
+    "names": {
+      "en": "Pumpkin",
+      "de": "Kürbis",
+      "es": "Calabaza",
+      "fr": "Citrouille"
+    },
+    "descriptions": {
+      "en": "Needs lots of space. Great for storage over winter.",
+      "de": "Braucht viel Platz. Hervorragend für die Winterlagerung.",
+      "es": "Necesita mucho espacio. Excelente para almacenar durante el invierno.",
+      "fr": "Nécessite beaucoup d'espace. Excellente pour la conservation hivernale."
+    },
+    "category": "vegetable",
+    "family": "cucurbitaceae",
+    "lifecycle": "annual",
+    "habit": "vine",
+    "climate": {
+      "soilGerminationMinC": 16,
+      "frostTolerance": "tender",
+      "growthRangeC": [
+        15,
+        35
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 6
+    },
+    "spacing": {
+      "inRowCm": 100,
+      "betweenRowCm": 200
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 90,
+      "daysToMaturityMax": 120,
+      "expectedYieldKgPerM2": 5
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "high",
+    "rootDepthCm": 91,
+    "nutritionPer100g": {
+      "calories": 26,
+      "proteinG": 1,
+      "vitaminCMg": 9,
+      "fiberG": 0.5
+    },
+    "companions": [
+      "bean",
+      "radish"
+    ],
+    "antagonists": [
+      "potato"
+    ],
+    "preservationMethods": [
+      "root_cellar",
+      "canning",
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "advanced",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 5
+    },
+    "icon": "🎃",
+    "color": "#ea580c",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:819"
+  },
+  {
+    "id": "chard",
+    "scientificName": "Beta vulgaris var. cicla",
+    "names": {
+      "en": "Swiss Chard",
+      "de": "Mangold",
+      "es": "Acelga",
+      "fr": "Blette"
+    },
+    "descriptions": {
+      "en": "Colorful, productive green. Harvest outer leaves for continuous yield.",
+      "de": "Farbenfrohes, ergiebiges Blattgemüse. Äußere Blätter ernten für laufende Ernte.",
+      "es": "Verdura colorida y productiva. Cosechar hojas externas para rendimiento continuo.",
+      "fr": "Légume-feuille coloré et productif. Récoltez les feuilles extérieures pour une production continue."
+    },
+    "category": "vegetable",
+    "family": "amaranthaceae",
+    "lifecycle": "biennial",
+    "habit": "upright",
+    "climate": {
+      "soilGerminationMinC": 7,
+      "frostTolerance": "half_hardy",
+      "growthRangeC": [
+        7,
+        32
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 4,
+      "successionIntervalWeeks": 4
+    },
+    "spacing": {
+      "inRowCm": 30,
+      "betweenRowCm": 40
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 50,
+      "daysToMaturityMax": 60,
+      "expectedYieldKgPerM2": 3
+    },
+    "sun": {
+      "minDirectHours": 4
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 19,
+      "proteinG": 1.8,
+      "vitaminCMg": 30,
+      "fiberG": 1.6
+    },
+    "companions": [
+      "carrot",
+      "radish",
+      "bean",
+      "cabbage"
+    ],
+    "antagonists": [
+      "corn",
+      "cucumber"
+    ],
+    "preservationMethods": [
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 4
+    },
+    "icon": "🌈",
+    "color": "#dc2626",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:2474"
+  },
+  {
+    "id": "kohlrabi",
+    "scientificName": "Brassica oleracea var. gongylodes",
+    "names": {
+      "en": "Kohlrabi",
+      "de": "Kohlrabi",
+      "es": "Colinabo",
+      "fr": "Chou-rave"
+    },
+    "descriptions": {
+      "en": "Fast-growing brassica. Eat the swollen stem raw or cooked.",
+      "de": "Schnell wachsendes Kohlgewächs. Knolle roh oder gekocht genießen.",
+      "es": "Brasica de crecimiento rapido. Se come el tallo engrosado crudo o cocido.",
+      "fr": "Brassicacée à croissance rapide. Se mange cru ou cuit."
+    },
+    "category": "vegetable",
+    "family": "brassicaceae",
+    "lifecycle": "biennial",
+    "habit": "bulb",
+    "climate": {
+      "soilGerminationMinC": 7,
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        7,
+        26
+      ],
+      "heatCeilingC": 28
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 4
+    },
+    "spacing": {
+      "inRowCm": 25,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 45,
+      "daysToMaturityMax": 60,
+      "expectedYieldKgPerM2": 3.5
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 46,
+    "nutritionPer100g": {
+      "calories": 27,
+      "proteinG": 1.7,
+      "vitaminCMg": 62,
+      "fiberG": 3.6
+    },
+    "companions": [
+      "lettuce",
+      "onion",
+      "beetroot"
+    ],
+    "antagonists": [
+      "strawberry"
+    ],
+    "preservationMethods": [
+      "root_cellar",
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 4
+    },
+    "icon": "🟢",
+    "color": "#a3e635",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:2220"
+  },
+  {
+    "id": "fennel",
+    "scientificName": "Foeniculum vulgare var. azoricum",
+    "names": {
+      "en": "Fennel",
+      "de": "Fenchel",
+      "es": "Hinojo",
+      "fr": "Fenouil"
+    },
+    "descriptions": {
+      "en": "Anise-flavored bulb vegetable. Does not grow well near most other plants.",
+      "de": "Knollengemüse mit Anisgeschmack. Verträgt sich nicht gut mit vielen anderen Pflanzen.",
+      "es": "Hortaliza de bulbo con sabor a anis. No crece bien junto a la mayoria de las otras plantas.",
+      "fr": "Légume-bulbe au goût anisé. Ne pousse pas bien à côté de la plupart des autres plantes."
+    },
+    "category": "vegetable",
+    "family": "apiaceae",
+    "lifecycle": "annual",
+    "habit": "bulb",
+    "climate": {
+      "soilGerminationMinC": 15,
+      "frostTolerance": "half_hardy",
+      "growthRangeC": [
+        10,
+        26
+      ],
+      "heatCeilingC": 27
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 25,
+      "betweenRowCm": 40
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 65,
+      "daysToMaturityMax": 90,
+      "expectedYieldKgPerM2": 3
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 31,
+      "proteinG": 1.2,
+      "vitaminCMg": 12,
+      "fiberG": 3.1
+    },
+    "companions": [
+      "dill",
+      "lettuce"
+    ],
+    "antagonists": [
+      "tomato",
+      "bean",
+      "carrot"
+    ],
+    "preservationMethods": [
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "advanced",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 3
+    },
+    "icon": "🌾",
+    "color": "#fbbf24",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:1107"
+  },
+  {
+    "id": "corn",
+    "scientificName": "Zea mays",
+    "names": {
+      "en": "Corn",
+      "de": "Mais",
+      "es": "Maiz",
+      "fr": "Maïs"
+    },
+    "descriptions": {
+      "en": "Tall-growing cereal. Plant in blocks for good pollination.",
+      "de": "Hochwachsendes Getreide. In Blöcken pflanzen für gute Bestäubung.",
+      "es": "Cereal de crecimiento alto. Plantar en bloques para buena polinizacion.",
+      "fr": "Céréale de grande taille. Planter en blocs pour une bonne pollinisation."
+    },
+    "category": "vegetable",
+    "family": "poaceae",
+    "lifecycle": "annual",
+    "habit": "upright",
+    "climate": {
+      "soilGerminationMinC": 13,
+      "frostTolerance": "tender",
+      "growthRangeC": [
+        13,
+        35
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 30,
+      "betweenRowCm": 75
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 70,
+      "daysToMaturityMax": 100,
+      "expectedYieldKgPerM2": 1
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "high",
+    "rootDepthCm": 91,
+    "nutritionPer100g": {
+      "calories": 86,
+      "proteinG": 3.3,
+      "vitaminCMg": 7,
+      "fiberG": 2.7
+    },
+    "companions": [
+      "bean",
+      "pumpkin",
+      "cucumber"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "drying",
+      "canning"
+    ],
+    "seedSaving": {
+      "difficulty": "advanced",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 2
+    },
+    "icon": "🌽",
+    "color": "#eab308",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:10981"
+  },
+  {
+    "id": "sunflower",
+    "scientificName": "Helianthus annuus",
+    "names": {
+      "en": "Sunflower",
+      "de": "Sonnenblume",
+      "es": "Girasol",
+      "fr": "Tournesol"
+    },
+    "descriptions": {
+      "en": "Attracts pollinators. Edible seeds and great for companion planting.",
+      "de": "Lockt Bestäuber an. Essbare Kerne und guter Begleitpflanzer.",
+      "es": "Atrae polinizadores. Semillas comestibles y excelente para siembra asociada.",
+      "fr": "Attire les pollinisateurs. Graines comestibles et excellent pour le compagnonnage."
+    },
+    "category": "vegetable",
+    "family": "asteraceae",
+    "lifecycle": "annual",
+    "habit": "upright",
+    "climate": {
+      "soilGerminationMinC": 10,
+      "frostTolerance": "tender",
+      "growthRangeC": [
+        10,
+        35
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 45,
+      "betweenRowCm": 75
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 70,
+      "daysToMaturityMax": 100,
+      "expectedYieldKgPerM2": 0.3
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 91,
+    "nutritionPer100g": {
+      "calories": 584,
+      "proteinG": 21,
+      "vitaminCMg": 1.4,
+      "fiberG": 8.6
+    },
+    "companions": [
+      "cucumber",
+      "corn"
+    ],
+    "antagonists": [
+      "potato"
+    ],
+    "preservationMethods": [
+      "drying"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 3
+    },
+    "icon": "🌻",
+    "color": "#facc15",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:1191"
+  },
+  {
+    "id": "cabbage",
+    "scientificName": "Brassica oleracea var. capitata",
+    "names": {
+      "en": "Cabbage",
+      "de": "Weißkohl",
+      "es": "Repollo",
+      "fr": "Chou"
+    },
+    "descriptions": {
+      "en": "Cool-season brassica. Good for sauerkraut and storage.",
+      "de": "Kühle-Jahreszeit-Kohlgewächs. Gut für Sauerkraut und Lagerung.",
+      "es": "Brasica de temporada fria. Bueno para chucrut y almacenamiento.",
+      "fr": "Brassicacée de saison fraîche. Idéal pour la choucroute et la conservation."
+    },
+    "category": "vegetable",
+    "family": "brassicaceae",
+    "lifecycle": "biennial",
+    "habit": "rosette",
+    "climate": {
+      "soilGerminationMinC": 7,
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        7,
+        26
+      ],
+      "heatCeilingC": 28
+    },
+    "propagation": {
+      "methods": [
+        "transplant"
+      ],
+      "indoorLeadWeeks": 4
+    },
+    "spacing": {
+      "inRowCm": 50,
+      "betweenRowCm": 60
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 70,
+      "daysToMaturityMax": 100,
+      "expectedYieldKgPerM2": 5
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "high",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 25,
+      "proteinG": 1.3,
+      "vitaminCMg": 37,
+      "fiberG": 2.5
+    },
+    "companions": [
+      "onion",
+      "dill",
+      "beetroot"
+    ],
+    "antagonists": [
+      "strawberry"
+    ],
+    "preservationMethods": [
+      "fermenting",
+      "root_cellar",
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 4
+    },
+    "icon": "🥬",
+    "color": "#86efac",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:554"
+  },
+  {
+    "id": "broccoli",
+    "scientificName": "Brassica oleracea var. italica",
+    "names": {
+      "en": "Broccoli",
+      "de": "Brokkoli",
+      "es": "Brocoli",
+      "fr": "Brocoli"
+    },
+    "descriptions": {
+      "en": "Harvest the main head, then side shoots keep producing.",
+      "de": "Hauptkopf ernten, dann produzieren Seitentriebe weiter.",
+      "es": "Cosechar la cabeza principal, luego los brotes laterales siguen produciendo.",
+      "fr": "Récoltez la tête principale, puis les pousses latérales continuent de produire."
+    },
+    "category": "vegetable",
+    "family": "brassicaceae",
+    "lifecycle": "biennial",
+    "habit": "upright",
+    "climate": {
+      "soilGerminationMinC": 7,
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        7,
+        26
+      ],
+      "heatCeilingC": 27
+    },
+    "propagation": {
+      "methods": [
+        "transplant"
+      ],
+      "indoorLeadWeeks": 4
+    },
+    "spacing": {
+      "inRowCm": 45,
+      "betweenRowCm": 60
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 60,
+      "daysToMaturityMax": 90,
+      "expectedYieldKgPerM2": 2
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "high",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 34,
+      "proteinG": 2.8,
+      "vitaminCMg": 89,
+      "fiberG": 2.6
+    },
+    "companions": [
+      "onion",
+      "dill",
+      "basil"
+    ],
+    "antagonists": [
+      "strawberry",
+      "tomato"
+    ],
+    "preservationMethods": [
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 4
+    },
+    "icon": "🥦",
+    "color": "#059669",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:556"
+  },
+  {
+    "id": "cauliflower",
+    "scientificName": "Brassica oleracea var. botrytis",
+    "names": {
+      "en": "Cauliflower",
+      "de": "Blumenkohl",
+      "es": "Coliflor",
+      "fr": "Chou-fleur"
+    },
+    "descriptions": {
+      "en": "Needs consistent conditions. Blanch heads by tying leaves.",
+      "de": "Braucht gleichmäßige Bedingungen. Köpfe durch Blätter schützen.",
+      "es": "Necesita condiciones constantes. Blanquear las cabezas atando las hojas.",
+      "fr": "Nécessite des conditions stables. Blanchir les têtes en attachant les feuilles."
+    },
+    "category": "vegetable",
+    "family": "brassicaceae",
+    "lifecycle": "biennial",
+    "habit": "upright",
+    "climate": {
+      "soilGerminationMinC": 8,
+      "frostTolerance": "half_hardy",
+      "growthRangeC": [
+        8,
+        26
+      ],
+      "heatCeilingC": 27
+    },
+    "propagation": {
+      "methods": [
+        "transplant"
+      ],
+      "indoorLeadWeeks": 4
+    },
+    "spacing": {
+      "inRowCm": 50,
+      "betweenRowCm": 60
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 55,
+      "daysToMaturityMax": 80,
+      "expectedYieldKgPerM2": 2.5
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "high",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 25,
+      "proteinG": 1.9,
+      "vitaminCMg": 48,
+      "fiberG": 2
+    },
+    "companions": [
+      "onion",
+      "beetroot"
+    ],
+    "antagonists": [
+      "strawberry",
+      "tomato"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "canning"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 4
+    },
+    "icon": "🤍",
+    "color": "#f5f5f4",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:553"
+  },
+  {
+    "id": "celery",
+    "scientificName": "Apium graveolens var. dulce",
+    "names": {
+      "en": "Celery",
+      "de": "Sellerie",
+      "es": "Apio",
+      "fr": "Céleri"
+    },
+    "descriptions": {
+      "en": "Long-season crop that needs rich soil and consistent moisture.",
+      "de": "Langzeit-Kultur, braucht nährstoffreichen Boden und gleichmäßige Feuchtigkeit.",
+      "es": "Cultivo de temporada larga que necesita suelo rico y humedad constante.",
+      "fr": "Culture longue qui nécessite un sol riche et une humidité constante."
+    },
+    "category": "vegetable",
+    "family": "apiaceae",
+    "lifecycle": "biennial",
+    "habit": "upright",
+    "climate": {
+      "soilGerminationMinC": 15,
+      "soilGerminationMaxC": 24,
+      "frostTolerance": "half_hardy",
+      "growthRangeC": [
+        10,
+        24
+      ],
+      "heatCeilingC": 27
+    },
+    "propagation": {
+      "methods": [
+        "transplant"
+      ],
+      "indoorLeadWeeks": 10
+    },
+    "spacing": {
+      "inRowCm": 25,
+      "betweenRowCm": 40
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 80,
+      "daysToMaturityMax": 120,
+      "expectedYieldKgPerM2": 4
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "high",
+    "rootDepthCm": 30,
+    "nutritionPer100g": {
+      "calories": 16,
+      "proteinG": 0.7,
+      "vitaminCMg": 3,
+      "fiberG": 1.6
+    },
+    "companions": [
+      "tomato",
+      "leek",
+      "cabbage"
+    ],
+    "antagonists": [
+      "carrot",
+      "potato"
+    ],
+    "preservationMethods": [
+      "root_cellar",
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "advanced",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 3
+    },
+    "icon": "🟩",
+    "color": "#a3e635",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:432"
+  },
+  {
+    "id": "turnip",
+    "scientificName": "Brassica rapa var. rapifera",
+    "names": {
+      "en": "Turnip",
+      "de": "Steckrübe",
+      "es": "Nabo",
+      "fr": "Navet"
+    },
+    "descriptions": {
+      "en": "Quick-growing root vegetable. Both roots and greens are edible.",
+      "de": "Schnell wachsendes Wurzelgemüse. Knolle und Blätter sind essbar.",
+      "es": "Hortaliza de raiz de crecimiento rapido. Tanto las raices como las hojas son comestibles.",
+      "fr": "Légume-racine à croissance rapide. Les racines et les fanes sont comestibles."
+    },
+    "category": "vegetable",
+    "family": "brassicaceae",
+    "lifecycle": "biennial",
+    "habit": "root",
+    "climate": {
+      "soilGerminationMinC": 5,
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        5,
+        26
+      ],
+      "heatCeilingC": 27
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow"
+      ],
+      "successionIntervalWeeks": 3
+    },
+    "spacing": {
+      "inRowCm": 15,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 40,
+      "daysToMaturityMax": 60,
+      "expectedYieldKgPerM2": 4
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 28,
+      "proteinG": 0.9,
+      "vitaminCMg": 21,
+      "fiberG": 1.8
+    },
+    "companions": [
+      "pea",
+      "onion"
+    ],
+    "preservationMethods": [
+      "root_cellar",
+      "fermenting"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 100,
+      "seedViabilityYears": 4
+    },
+    "icon": "🤎",
+    "color": "#e9d5ff",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:3881"
+  },
+  {
+    "id": "mint",
+    "scientificName": "Mentha spicata",
+    "names": {
+      "en": "Mint",
+      "de": "Minze",
+      "es": "Menta",
+      "fr": "Menthe"
+    },
+    "descriptions": {
+      "en": "Vigorous perennial herb. Best grown in containers to prevent spreading.",
+      "de": "Wuchsfreudiges mehrjähriges Kraut. Am besten im Topf halten.",
+      "es": "Hierba perenne vigorosa. Mejor cultivar en macetas para evitar que se expanda.",
+      "fr": "Herbe vivace vigoureuse. À cultiver de préférence en pot pour éviter l'envahissement."
+    },
+    "category": "herb",
+    "family": "lamiaceae",
+    "lifecycle": "perennial",
+    "habit": "groundcover",
+    "climate": {
+      "soilGerminationMinC": 13,
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        7,
+        30
+      ],
+      "minWinterTempC": -29
+    },
+    "propagation": {
+      "methods": [
+        "cutting",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 6
+    },
+    "spacing": {
+      "inRowCm": 30,
+      "betweenRowCm": 40
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 30,
+      "daysToMaturityMax": 60,
+      "expectedYieldKgPerM2": 0.5
+    },
+    "sun": {
+      "minDirectHours": 4
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 46,
+    "nutritionPer100g": {
+      "calories": 44,
+      "proteinG": 3.3,
+      "vitaminCMg": 13,
+      "fiberG": 6.8
+    },
+    "companions": [
+      "tomato",
+      "cabbage",
+      "pea"
+    ],
+    "antagonists": [
+      "parsley"
+    ],
+    "preservationMethods": [
+      "drying",
+      "freezing"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 50,
+      "seedViabilityYears": 3
+    },
+    "icon": "🍀",
+    "color": "#34d399",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:7710"
+  },
+  {
+    "id": "rosemary",
+    "scientificName": "Salvia rosmarinus",
+    "names": {
+      "en": "Rosemary",
+      "de": "Rosmarin",
+      "es": "Romero",
+      "fr": "Romarin"
+    },
+    "descriptions": {
+      "en": "Woody perennial herb. Drought-tolerant once established.",
+      "de": "Verholzendes mehrjähriges Kraut. Trockenheitstolerant wenn etabliert.",
+      "es": "Hierba perenne lenosa. Tolerante a la sequia una vez establecida.",
+      "fr": "Herbe vivace ligneuse. Résistante à la sécheresse une fois établie."
+    },
+    "category": "herb",
+    "family": "lamiaceae",
+    "lifecycle": "perennial",
+    "habit": "shrub",
+    "climate": {
+      "frostTolerance": "half_hardy",
+      "growthRangeC": [
+        7,
+        32
+      ],
+      "minWinterTempC": -9
+    },
+    "propagation": {
+      "methods": [
+        "cutting",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 12
+    },
+    "spacing": {
+      "inRowCm": 60,
+      "betweenRowCm": 60
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 90,
+      "daysToMaturityMax": 180,
+      "expectedYieldKgPerM2": 0.3
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "low",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 131,
+      "proteinG": 3.3,
+      "vitaminCMg": 22,
+      "fiberG": 14.1
+    },
+    "companions": [
+      "bean",
+      "cabbage",
+      "carrot"
+    ],
+    "antagonists": [
+      "basil",
+      "mint"
+    ],
+    "preservationMethods": [
+      "drying"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 50,
+      "seedViabilityYears": 2
+    },
+    "icon": "💐",
+    "color": "#6366f1",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:9326"
+  },
+  {
+    "id": "thyme",
+    "scientificName": "Thymus vulgaris",
+    "names": {
+      "en": "Thyme",
+      "de": "Thymian",
+      "es": "Tomillo",
+      "fr": "Thym"
+    },
+    "descriptions": {
+      "en": "Low-growing perennial herb. Excellent ground cover.",
+      "de": "Niedrig wachsendes mehrjähriges Kraut. Hervorragender Bodendecker.",
+      "es": "Hierba perenne de bajo crecimiento. Excelente cobertura del suelo.",
+      "fr": "Herbe vivace basse. Excellent couvre-sol."
+    },
+    "category": "herb",
+    "family": "lamiaceae",
+    "lifecycle": "perennial",
+    "habit": "groundcover",
+    "climate": {
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        7,
+        32
+      ],
+      "minWinterTempC": -23
+    },
+    "propagation": {
+      "methods": [
+        "cutting",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 8
+    },
+    "spacing": {
+      "inRowCm": 20,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 60,
+      "daysToMaturityMax": 90,
+      "expectedYieldKgPerM2": 0.3
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "low",
+    "rootDepthCm": 46,
+    "nutritionPer100g": {
+      "calories": 101,
+      "proteinG": 5.6,
+      "vitaminCMg": 160,
+      "fiberG": 14
+    },
+    "companions": [
+      "tomato",
+      "cabbage",
+      "strawberry"
+    ],
+    "antagonists": [
+      "basil"
+    ],
+    "preservationMethods": [
+      "drying"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 50,
+      "seedViabilityYears": 3
+    },
+    "icon": "🌸",
+    "color": "#a78bfa",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:2441"
+  },
+  {
+    "id": "currant",
+    "scientificName": "Ribes nigrum",
+    "names": {
+      "en": "Currant",
+      "de": "Johannisbeere",
+      "es": "Grosella",
+      "fr": "Groseille"
+    },
+    "descriptions": {
+      "en": "Hardy berry bush. Red and black varieties available.",
+      "de": "Robuster Beerenstrauch. Rote und schwarze Sorten verfügbar.",
+      "es": "Arbusto de bayas resistente. Variedades rojas y negras disponibles.",
+      "fr": "Arbuste fruitier rustique. Variétés rouges et noires disponibles."
+    },
+    "category": "berry",
+    "family": "grossulariaceae",
+    "lifecycle": "perennial",
+    "habit": "shrub",
+    "climate": {
+      "frostTolerance": "very_hardy",
+      "growthRangeC": [
+        4,
+        27
+      ],
+      "heatCeilingC": 30,
+      "minWinterTempC": -34,
+      "chillHoursMin": 900
+    },
+    "propagation": {
+      "methods": [
+        "bare_root",
+        "cutting"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 100,
+      "betweenRowCm": 150
+    },
+    "maturity": {
+      "kind": "bearing",
+      "yearsToFirstHarvest": 2,
+      "yearsToFullYield": 4,
+      "harvestMonths": [
+        7
+      ],
+      "expectedYieldKgPerPlant": 3
+    },
+    "sun": {
+      "minDirectHours": 4
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 56,
+      "proteinG": 1.4,
+      "vitaminCMg": 41,
+      "fiberG": 4.3
+    },
+    "companions": [
+      "garlic",
+      "chives"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "canning"
+    ],
+    "icon": "🍒",
+    "color": "#dc2626",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:9282"
+  },
+  {
+    "id": "gooseberry",
+    "scientificName": "Ribes uva-crispa",
+    "names": {
+      "en": "Gooseberry",
+      "de": "Stachelbeere",
+      "es": "Grosella espinosa",
+      "fr": "Groseille à maquereau"
+    },
+    "descriptions": {
+      "en": "Thorny berry bush. Excellent for jams and desserts.",
+      "de": "Dorniger Beerenstrauch. Hervorragend für Marmelade und Desserts.",
+      "es": "Arbusto de bayas espinoso. Excelente para mermeladas y postres.",
+      "fr": "Arbuste fruitier épineux. Excellent pour les confitures et les desserts."
+    },
+    "category": "berry",
+    "family": "grossulariaceae",
+    "lifecycle": "perennial",
+    "habit": "shrub",
+    "climate": {
+      "frostTolerance": "very_hardy",
+      "growthRangeC": [
+        4,
+        27
+      ],
+      "heatCeilingC": 30,
+      "minWinterTempC": -34,
+      "chillHoursMin": 900
+    },
+    "propagation": {
+      "methods": [
+        "bare_root",
+        "cutting"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 100,
+      "betweenRowCm": 150
+    },
+    "maturity": {
+      "kind": "bearing",
+      "yearsToFirstHarvest": 2,
+      "yearsToFullYield": 4,
+      "harvestMonths": [
+        7
+      ],
+      "expectedYieldKgPerPlant": 3.5
+    },
+    "sun": {
+      "minDirectHours": 4
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 44,
+      "proteinG": 0.9,
+      "vitaminCMg": 28,
+      "fiberG": 4.3
+    },
+    "companions": [
+      "garlic"
+    ],
+    "preservationMethods": [
+      "canning",
+      "freezing"
+    ],
+    "icon": "🫒",
+    "color": "#84cc16",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:9290"
+  },
+  {
+    "id": "eggplant",
+    "scientificName": "Solanum melongena",
+    "names": {
+      "en": "Eggplant",
+      "de": "Aubergine",
+      "es": "Berenjena",
+      "fr": "Aubergine"
+    },
+    "descriptions": {
+      "en": "Heat-loving solanaceous fruit. Needs warm conditions and rich soil.",
+      "de": "Wärmeliebendes Nachtschattengewächs. Braucht warme Bedingungen und nährstoffreichen Boden.",
+      "es": "Fruto solanacea que ama el calor. Necesita condiciones calidas y suelo rico.",
+      "fr": "Solanacée qui aime la chaleur. Nécessite des conditions chaudes et un sol riche."
+    },
+    "category": "vegetable",
+    "family": "solanaceae",
+    "lifecycle": "annual",
+    "habit": "bush",
+    "climate": {
+      "soilGerminationMinC": 18,
+      "frostTolerance": "tender",
+      "growthRangeC": [
+        18,
+        35
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "transplant"
+      ],
+      "indoorLeadWeeks": 12
+    },
+    "spacing": {
+      "inRowCm": 50,
+      "betweenRowCm": 70
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 65,
+      "daysToMaturityMax": 90,
+      "expectedYieldKgPerM2": 4
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "high",
+    "rootDepthCm": 61,
+    "nutritionPer100g": {
+      "calories": 25,
+      "proteinG": 1,
+      "vitaminCMg": 2.2,
+      "fiberG": 3
+    },
+    "companions": [
+      "basil",
+      "bean",
+      "pepper"
+    ],
+    "antagonists": [
+      "fennel"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "canning",
+      "drying"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 50,
+      "seedViabilityYears": 5
+    },
+    "icon": "🍆",
+    "color": "#7c3aed",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:1965"
+  },
+  {
+    "id": "arugula",
+    "scientificName": "Eruca vesicaria subsp. sativa",
+    "names": {
+      "en": "Arugula",
+      "de": "Rucola",
+      "es": "Rucula",
+      "fr": "Roquette"
+    },
+    "descriptions": {
+      "en": "Peppery salad green. Fast-growing cool-season crop, ready in weeks.",
+      "de": "Würziges Salatgrün. Schnellwachsend, innerhalb weniger Wochen erntereif.",
+      "es": "Verdura de ensalada picante. Cultivo de temporada fria de crecimiento rapido, lista en semanas.",
+      "fr": "Salade poivrée. Culture de saison fraîche à croissance rapide, prête en quelques semaines."
+    },
+    "category": "vegetable",
+    "family": "brassicaceae",
+    "lifecycle": "annual",
+    "habit": "rosette",
+    "climate": {
+      "soilGerminationMinC": 4,
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        4,
+        24
+      ],
+      "heatCeilingC": 26
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 10,
+      "betweenRowCm": 20
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 21,
+      "daysToMaturityMax": 40,
+      "expectedYieldKgPerM2": 2
+    },
+    "sun": {
+      "minDirectHours": 4
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 30,
+    "nutritionPer100g": {
+      "calories": 25,
+      "proteinG": 2.6,
+      "vitaminCMg": 15,
+      "fiberG": 1.6
+    },
+    "companions": [
+      "carrot",
+      "lettuce",
+      "bean",
+      "onion"
+    ],
+    "antagonists": [
+      "strawberry"
+    ],
+    "seedSaving": {
+      "difficulty": "easy",
+      "isolationDistanceM": 100,
+      "seedViabilityYears": 4
+    },
+    "icon": "🥗",
+    "color": "#4d7c0f",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:5794"
+  },
+  {
+    "id": "squash",
+    "scientificName": "Cucurbita moschata",
+    "names": {
+      "en": "Butternut Squash",
+      "de": "Butternut-Kürbis",
+      "es": "Calabaza butternut",
+      "fr": "Courge butternut"
+    },
+    "descriptions": {
+      "en": "Winter squash with sweet, nutty flesh. Stores well for months.",
+      "de": "Winterkürbis mit süßem, nussigem Fruchtfleisch. Monatelang lagerfähig.",
+      "es": "Calabaza de invierno con pulpa dulce y avellanada. Se almacena bien durante meses.",
+      "fr": "Courge d'hiver à chair douce et noisettée. Se conserve bien pendant des mois."
+    },
+    "category": "vegetable",
+    "family": "cucurbitaceae",
+    "lifecycle": "annual",
+    "habit": "vine",
+    "climate": {
+      "soilGerminationMinC": 16,
+      "frostTolerance": "tender",
+      "growthRangeC": [
+        15,
+        35
+      ]
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 6
+    },
+    "spacing": {
+      "inRowCm": 90,
+      "betweenRowCm": 180
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 85,
+      "daysToMaturityMax": 110,
+      "expectedYieldKgPerM2": 4
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "high",
+    "rootDepthCm": 91,
+    "nutritionPer100g": {
+      "calories": 45,
+      "proteinG": 1,
+      "vitaminCMg": 21,
+      "fiberG": 2
+    },
+    "companions": [
+      "bean",
+      "corn",
+      "radish"
+    ],
+    "antagonists": [
+      "potato"
+    ],
+    "preservationMethods": [
+      "root_cellar",
+      "freezing",
+      "canning"
+    ],
+    "seedSaving": {
+      "difficulty": "advanced",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 5
+    },
+    "icon": "🍂",
+    "color": "#d2b48c",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:820"
+  },
+  {
+    "id": "asparagus",
+    "scientificName": "Asparagus officinalis",
+    "names": {
+      "en": "Asparagus",
+      "de": "Spargel",
+      "es": "Esparrago",
+      "fr": "Asperge"
+    },
+    "descriptions": {
+      "en": "Perennial vegetable. Takes 2-3 years to establish but produces for 15+ years.",
+      "de": "Mehrjähriges Gemüse. Braucht 2-3 Jahre zum Etablieren, trägt dann über 15 Jahre.",
+      "es": "Hortaliza perenne. Tarda 2-3 anos en establecerse pero produce por mas de 15 anos.",
+      "fr": "Légume vivace. Met 2-3 ans à s'établir mais produit pendant plus de 15 ans."
+    },
+    "category": "vegetable",
+    "family": "asparagaceae",
+    "lifecycle": "perennial",
+    "habit": "upright",
+    "climate": {
+      "frostTolerance": "very_hardy",
+      "growthRangeC": [
+        7,
+        30
+      ],
+      "minWinterTempC": -34
+    },
+    "propagation": {
+      "methods": [
+        "crown"
+      ]
+    },
+    "spacing": {
+      "inRowCm": 40,
+      "betweenRowCm": 120
+    },
+    "maturity": {
+      "kind": "bearing",
+      "yearsToFirstHarvest": 3,
+      "yearsToFullYield": 5,
+      "harvestMonths": [
+        4,
+        5
+      ],
+      "expectedYieldKgPerPlant": 0.5
+    },
+    "sun": {
+      "minDirectHours": 6
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 152,
+    "nutritionPer100g": {
+      "calories": 20,
+      "proteinG": 2.2,
+      "vitaminCMg": 5.6,
+      "fiberG": 2.1
+    },
+    "companions": [
+      "tomato",
+      "parsley",
+      "basil"
+    ],
+    "antagonists": [
+      "garlic",
+      "onion"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "canning"
+    ],
+    "seedSaving": {
+      "difficulty": "advanced",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 3
+    },
+    "icon": "🌿",
+    "color": "#22c55e",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:468"
+  },
+  {
+    "id": "pak_choi",
+    "scientificName": "Brassica rapa subsp. chinensis",
+    "names": {
+      "en": "Pak Choi",
+      "de": "Pak Choi",
+      "es": "Pak choi",
+      "fr": "Pak choï"
+    },
+    "descriptions": {
+      "en": "Fast-growing Asian green with crisp white stems and tender leaves.",
+      "de": "Schnellwachsendes asiatisches Blattgemüse mit knackigen weißen Stielen und zarten Blättern.",
+      "es": "Verdura asiatica de crecimiento rapido con tallos blancos crujientes y hojas tiernas.",
+      "fr": "Chou asiatique à croissance rapide avec des tiges blanches croquantes et des feuilles tendres."
+    },
+    "category": "vegetable",
+    "family": "brassicaceae",
+    "lifecycle": "annual",
+    "habit": "rosette",
+    "climate": {
+      "soilGerminationMinC": 7,
+      "frostTolerance": "hardy",
+      "growthRangeC": [
+        7,
+        24
+      ],
+      "heatCeilingC": 27
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 4
+    },
+    "spacing": {
+      "inRowCm": 20,
+      "betweenRowCm": 30
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 30,
+      "daysToMaturityMax": 50,
+      "expectedYieldKgPerM2": 3
+    },
+    "sun": {
+      "minDirectHours": 4
+    },
+    "waterNeed": "high",
+    "rootDepthCm": 30,
+    "nutritionPer100g": {
+      "calories": 13,
+      "proteinG": 1.5,
+      "vitaminCMg": 45,
+      "fiberG": 1
+    },
+    "companions": [
+      "onion",
+      "garlic",
+      "dill",
+      "lettuce"
+    ],
+    "antagonists": [
+      "strawberry"
+    ],
+    "preservationMethods": [
+      "freezing",
+      "fermenting"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 500,
+      "seedViabilityYears": 4
+    },
+    "icon": "🥬",
+    "color": "#86efac",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:3878"
+  },
+  {
+    "id": "endive",
+    "scientificName": "Cichorium endivia",
+    "names": {
+      "en": "Endive",
+      "de": "Endivie",
+      "es": "Endivia",
+      "fr": "Endive"
+    },
+    "descriptions": {
+      "en": "Slightly bitter salad green. Blanch hearts for milder flavor.",
+      "de": "Leicht bitterer Salat. Herzen bleichen für milderes Aroma.",
+      "es": "Verdura de ensalada ligeramente amarga. Blanquear los corazones para un sabor mas suave.",
+      "fr": "Salade légèrement amère. Blanchir les cœurs pour une saveur plus douce."
+    },
+    "category": "vegetable",
+    "family": "asteraceae",
+    "lifecycle": "annual",
+    "habit": "rosette",
+    "climate": {
+      "soilGerminationMinC": 7,
+      "frostTolerance": "half_hardy",
+      "growthRangeC": [
+        7,
+        24
+      ],
+      "heatCeilingC": 27
+    },
+    "propagation": {
+      "methods": [
+        "direct_sow",
+        "transplant"
+      ],
+      "indoorLeadWeeks": 6
+    },
+    "spacing": {
+      "inRowCm": 30,
+      "betweenRowCm": 35
+    },
+    "maturity": {
+      "kind": "seasonal",
+      "daysToMaturityMin": 45,
+      "daysToMaturityMax": 65,
+      "expectedYieldKgPerM2": 3
+    },
+    "sun": {
+      "minDirectHours": 4
+    },
+    "waterNeed": "medium",
+    "rootDepthCm": 46,
+    "nutritionPer100g": {
+      "calories": 17,
+      "proteinG": 1.3,
+      "vitaminCMg": 6.5,
+      "fiberG": 3.1
+    },
+    "companions": [
+      "carrot",
+      "radish",
+      "chives"
+    ],
+    "antagonists": [
+      "lettuce"
+    ],
+    "seedSaving": {
+      "difficulty": "moderate",
+      "isolationDistanceM": 100,
+      "seedViabilityYears": 5
+    },
+    "icon": "🥬",
+    "color": "#bef264",
+    "dataQuality": "draft",
+    "source": "builtin; climate ECOCROP:693"
+  }
+]

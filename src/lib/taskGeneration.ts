@@ -160,7 +160,7 @@ function prePlantingTasks(group: PlantingGroup, lastFrostDate: string): RuleResu
  * Perennials are skipped either way: harvestDaysMax >= 365 is the placeholder
  * the lifecycle split exists to kill, and "harvest your blueberry 730 days
  * after planting" is worse than saying nothing. They get real harvest months
- * once PerennialMaturity lands with the schema v2 migration.
+ * once BearingMaturity lands with the schema v2 migration.
  */
 function harvestTasks(group: PlantingGroup, lastFrostDate: string): RuleResult[] {
   if (group.plant.harvestDaysMax >= 365) return [];

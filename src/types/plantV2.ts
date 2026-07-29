@@ -93,9 +93,18 @@ export type BotanicalFamily =
 export type PropagationMethod =
   | "direct_sow" | "transplant" | "cutting" | "bare_root" | "sets" | "tuber" | "crown";
 
-/** Annuals & biennials: the engine walks these days through the climate. */
-export interface AnnualMaturity {
-  kind: "annual";
+/**
+ * The two shapes are named for the CLOCK they run on, not for the plant's
+ * lifecycle, and that distinction is load-bearing: perennial herbs like mint
+ * and thyme crop in their first season and take `SeasonalMaturity`. Naming
+ * this one "annual" invited the reading that `lifecycle === "perennial"`
+ * implies the other shape. It does not — 10 of the 45 shipped plants are
+ * perennial and only 5 take `BearingMaturity`.
+ */
+
+/** Measured in DAYS from planting, within one season. */
+export interface SeasonalMaturity {
+  kind: "seasonal";
   daysToMaturityMin: number;
   daysToMaturityMax: number;
   /** How long the plant keeps producing once mature (pick window). */
@@ -104,9 +113,9 @@ export interface AnnualMaturity {
   expectedYieldKgPerM2?: number;
 }
 
-/** Perennials: establishment ramp + month-anchored harvest. */
-export interface PerennialMaturity {
-  kind: "perennial";
+/** Measured in YEARS to come into bearing: establishment ramp + month-anchored harvest. */
+export interface BearingMaturity {
+  kind: "bearing";
   yearsToFirstHarvest: number;
   yearsToFullYield: number;
   /** 1–12; hemisphere-flipped by the engine for southern latitudes. */
@@ -114,6 +123,8 @@ export interface PerennialMaturity {
   /** kg per PLANT per year at full maturity (not per m²). */
   expectedYieldKgPerPlant?: number;
 }
+
+export type Maturity = SeasonalMaturity | BearingMaturity;
 
 export interface PlantV2 {
   id: string;                       // slug, unique across builtin + custom + packs
@@ -149,7 +160,7 @@ export interface PlantV2 {
     matureCanopyM?: number;
   };
 
-  maturity: AnnualMaturity | PerennialMaturity;
+  maturity: Maturity;
 
   sun: { minDirectHours: number };  // pairs with the per-bed sunHours field
   waterNeed: "low" | "medium" | "high";
