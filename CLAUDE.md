@@ -223,10 +223,15 @@ What survives the correction is the harder half: **germination floor *and*
 ceiling, vernalization, and chill hours are carried by no open dataset**,
 because sowing-side thresholds are what a *planner* needs and ECOCROP was built
 to answer "will this crop grow here", not "when do I sow it". That gap is the
-fork's actual contribution. `docs/design/climate-needs-45.json` covers batch 1;
-later batches are rate-limited by those four fields plus the human choice of
-which ECOCROP row a plant is — which is what makes the draft → verified pipeline
-the central mechanism rather than bookkeeping.
+fork's actual contribution. Batch 1 is authored and lives on the plant record in
+`src/data/plantsV2.json` — `climate` per plant, and that is the only copy;
+`docs/design/climate-needs-45.json` was its staging file and was deleted once
+consumed. `soilGerminationMaxC` is filled on the 34 seed-started plants and
+deliberately blank on the 11 grown from sets, tubers, crowns, bare root or
+cuttings, which never germinate. Later batches are rate-limited by those four
+fields plus the human choice of which ECOCROP row a plant is — which is what
+makes the draft → verified pipeline the central mechanism rather than
+bookkeeping.
 
 ## Don'ts
 
