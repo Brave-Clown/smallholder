@@ -25,7 +25,8 @@
       "growthRangeC": [
         10,
         35
-      ]
+      ],
+      "soilGerminationMaxC": 35
     },
     "propagation": {
       "methods": [
@@ -105,7 +106,8 @@
       "growthRangeC": [
         15,
         35
-      ]
+      ],
+      "soilGerminationMaxC": 38
     },
     "propagation": {
       "methods": [
@@ -183,7 +185,8 @@
         7,
         29
       ],
-      "heatCeilingC": 30
+      "heatCeilingC": 30,
+      "soilGerminationMaxC": 30
     },
     "propagation": {
       "methods": [
@@ -345,7 +348,8 @@
         16,
         32
       ],
-      "heatCeilingC": 35
+      "heatCeilingC": 35,
+      "soilGerminationMaxC": 35
     },
     "propagation": {
       "methods": [
@@ -427,7 +431,8 @@
         7,
         24
       ],
-      "heatCeilingC": 27
+      "heatCeilingC": 27,
+      "soilGerminationMaxC": 27
     },
     "propagation": {
       "methods": [
@@ -505,7 +510,8 @@
         5,
         25
       ],
-      "heatCeilingC": 26
+      "heatCeilingC": 26,
+      "soilGerminationMaxC": 32
     },
     "propagation": {
       "methods": [
@@ -579,7 +585,8 @@
       "growthRangeC": [
         16,
         35
-      ]
+      ],
+      "soilGerminationMaxC": 38
     },
     "propagation": {
       "methods": [
@@ -658,7 +665,8 @@
       "growthRangeC": [
         15,
         35
-      ]
+      ],
+      "soilGerminationMaxC": 35
     },
     "propagation": {
       "methods": [
@@ -735,7 +743,8 @@
       "growthRangeC": [
         7,
         29
-      ]
+      ],
+      "soilGerminationMaxC": 30
     },
     "propagation": {
       "methods": [
@@ -1194,7 +1203,8 @@
       "growthRangeC": [
         15,
         35
-      ]
+      ],
+      "soilGerminationMaxC": 35
     },
     "propagation": {
       "methods": [
@@ -1270,7 +1280,8 @@
       "growthRangeC": [
         7,
         28
-      ]
+      ],
+      "soilGerminationMaxC": 30
     },
     "propagation": {
       "methods": [
@@ -1347,7 +1358,8 @@
         7,
         26
       ],
-      "heatCeilingC": 27
+      "heatCeilingC": 27,
+      "soilGerminationMaxC": 30
     },
     "propagation": {
       "methods": [
@@ -1423,7 +1435,8 @@
         5,
         29
       ],
-      "minWinterTempC": -34
+      "minWinterTempC": -34,
+      "soilGerminationMaxC": 30
     },
     "propagation": {
       "methods": [
@@ -1501,7 +1514,8 @@
         4,
         27
       ],
-      "heatCeilingC": 29
+      "heatCeilingC": 29,
+      "soilGerminationMaxC": 32
     },
     "propagation": {
       "methods": [
@@ -1655,7 +1669,8 @@
         7,
         29
       ],
-      "heatCeilingC": 30
+      "heatCeilingC": 30,
+      "soilGerminationMaxC": 30
     },
     "propagation": {
       "methods": [
@@ -1733,7 +1748,8 @@
       "growthRangeC": [
         7,
         26
-      ]
+      ],
+      "soilGerminationMaxC": 30
     },
     "propagation": {
       "methods": [
@@ -1813,7 +1829,8 @@
       "growthRangeC": [
         15,
         35
-      ]
+      ],
+      "soilGerminationMaxC": 38
     },
     "propagation": {
       "methods": [
@@ -1890,7 +1907,8 @@
       "growthRangeC": [
         7,
         32
-      ]
+      ],
+      "soilGerminationMaxC": 30
     },
     "propagation": {
       "methods": [
@@ -1970,7 +1988,8 @@
         7,
         26
       ],
-      "heatCeilingC": 28
+      "heatCeilingC": 28,
+      "soilGerminationMaxC": 32
     },
     "propagation": {
       "methods": [
@@ -2048,7 +2067,8 @@
         10,
         26
       ],
-      "heatCeilingC": 27
+      "heatCeilingC": 27,
+      "soilGerminationMaxC": 30
     },
     "propagation": {
       "methods": [
@@ -2123,7 +2143,8 @@
       "growthRangeC": [
         13,
         35
-      ]
+      ],
+      "soilGerminationMaxC": 35
     },
     "propagation": {
       "methods": [
@@ -2196,7 +2217,8 @@
       "growthRangeC": [
         10,
         35
-      ]
+      ],
+      "soilGerminationMaxC": 35
     },
     "propagation": {
       "methods": [
@@ -2270,7 +2292,8 @@
         7,
         26
       ],
-      "heatCeilingC": 28
+      "heatCeilingC": 28,
+      "soilGerminationMaxC": 32
     },
     "propagation": {
       "methods": [
@@ -2348,7 +2371,8 @@
         7,
         26
       ],
-      "heatCeilingC": 27
+      "heatCeilingC": 27,
+      "soilGerminationMaxC": 32
     },
     "propagation": {
       "methods": [
@@ -2425,7 +2449,8 @@
         8,
         26
       ],
-      "heatCeilingC": 27
+      "heatCeilingC": 27,
+      "soilGerminationMaxC": 32
     },
     "propagation": {
       "methods": [
@@ -2581,7 +2606,8 @@
         5,
         26
       ],
-      "heatCeilingC": 27
+      "heatCeilingC": 27,
+      "soilGerminationMaxC": 32
     },
     "propagation": {
       "methods": [
@@ -3031,7 +3057,8 @@
       "growthRangeC": [
         18,
         35
-      ]
+      ],
+      "soilGerminationMaxC": 35
     },
     "propagation": {
       "methods": [
@@ -3109,7 +3136,8 @@
         4,
         24
       ],
-      "heatCeilingC": 26
+      "heatCeilingC": 26,
+      "soilGerminationMaxC": 27
     },
     "propagation": {
       "methods": [
@@ -3181,7 +3209,8 @@
       "growthRangeC": [
         15,
         35
-      ]
+      ],
+      "soilGerminationMaxC": 38
     },
     "propagation": {
       "methods": [
@@ -3341,7 +3370,8 @@
         7,
         24
       ],
-      "heatCeilingC": 27
+      "heatCeilingC": 27,
+      "soilGerminationMaxC": 30
     },
     "propagation": {
       "methods": [
@@ -3420,7 +3450,8 @@
         7,
         24
       ],
-      "heatCeilingC": 27
+      "heatCeilingC": 27,
+      "soilGerminationMaxC": 27
     },
     "propagation": {
       "methods": [
