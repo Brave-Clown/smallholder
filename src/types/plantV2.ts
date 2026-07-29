@@ -177,6 +177,19 @@ export interface PlantV2 {
   // Provenance — non-negotiable once community packs and hundreds of entries exist
   dataQuality: "verified" | "draft" | "community";
   source?: string;                  // pack name, "builtin", contributor, etc.
+  /**
+   * Set when `climate` was taken from a RELATED taxon rather than this crop.
+   * ECOCROP has no row for cultivated carrot or leek, only their wild
+   * relatives, and standing in the wild plant's numbers is defensible but is
+   * not the same claim as a direct match. Making that a field instead of a
+   * comment means "which plants are worth improving" is a query, which is
+   * what an outside contributor needs in order to help.
+   */
+  climateProxy?: {
+    ecoPortCode: number;
+    scientificName: string;
+    relation: "wild_relative" | "same_species_group" | "genus_only";
+  };
 }
 
 // ---------------------------------------------------------------------------
