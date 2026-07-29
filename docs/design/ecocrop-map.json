@@ -1,0 +1,1366 @@
+{
+  "_source": "FAO ECOCROP, CC BY 4.0 (https://data.apps.fao.org/catalog/dataset/ecocrop)",
+  "_note": "Chosen by hand, one row per plant. frostDamageC is ECOCROP KTMP (damage during active growth); winterKillC is KTMPR (killing temperature during rest). They are different things and must not be collapsed — Picea abies reads KTMP -1, KTMPR -30.",
+  "_cycleDaysWarning": "cycleDays is ECOCROP GMIN/GMAX, the whole crop cycle. It is NOT days to first harvest and must not overwrite maturity. Checked against our 45: it agrees for annuals harvested once (33 of 45) and disagrees systematically for perennials (it reports an annual cycle, not years to bearing) and for cut-and-come-again herbs (basil 80-270d here vs 30-60d to first picking). Use it to corroborate a pick, never as a source.",
+  "_confidence": {
+    "high": "ECOCROP common name matches the crop outright",
+    "medium": "right botanical variety, verified by something other than the common name",
+    "modelled": "a kitchen word split across botanical species by our own judgement (the Cucurbitas)",
+    "proxy": "no row exists for the cultivated crop; a wild relative stands in — see climateProxy"
+  },
+  "_generated": "2026-07-28",
+  "plants": {
+    "tomato": {
+      "ecoPortCode": 1379,
+      "scientificName": "Lycopersicon esculentum",
+      "commonNames": [
+        "tomato",
+        "tomate",
+        "pomodoro",
+        "tomata"
+      ],
+      "confidence": "high",
+      "note": "filed under the pre-1990s name Lycopersicon esculentum",
+      "values": {
+        "growthRangeC": [
+          20,
+          27
+        ],
+        "absoluteRangeC": [
+          7,
+          35
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          70,
+          150
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "annual",
+        "family": "Solanaceae"
+      }
+    },
+    "zucchini": {
+      "ecoPortCode": 821,
+      "scientificName": "Cucurbita pepo",
+      "commonNames": [
+        "marrow",
+        "pumpkin",
+        "squash",
+        "bitter nut squash"
+      ],
+      "confidence": "modelled",
+      "note": "C. pepo, the one certain member of the three-way Cucurbita split",
+      "values": {
+        "growthRangeC": [
+          17,
+          30
+        ],
+        "absoluteRangeC": [
+          6,
+          40
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          40,
+          100
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "annual",
+        "family": "Cucurbitaceae"
+      }
+    },
+    "carrot": {
+      "ecoPortCode": 871,
+      "scientificName": "Daucus carota",
+      "commonNames": [
+        "wild carrot",
+        "devil's plague",
+        "Queen Anne's-lace",
+        "cenoura brava"
+      ],
+      "confidence": "proxy",
+      "note": "ECOCROP has no cultivated carrot; this is wild carrot (Queen Anne's-lace). Accepted 2026-07-28: better than nothing, and maturity overlaps ours (60-80 vs 40-150d)",
+      "climateProxy": {
+        "ecoPortCode": 871,
+        "scientificName": "Daucus carota",
+        "relation": "wild_relative"
+      },
+      "values": {
+        "growthRangeC": [
+          15,
+          24
+        ],
+        "absoluteRangeC": [
+          3,
+          30
+        ],
+        "frostDamageC": 0,
+        "winterKillC": -1,
+        "cycleDays": [
+          40,
+          150
+        ],
+        "photoperiod": "long day (>14 hours)",
+        "lifeSpan": "biennial",
+        "family": "Umbelliferae"
+      }
+    },
+    "lettuce": {
+      "ecoPortCode": 1313,
+      "scientificName": "Lactuca sativa var. capitata",
+      "commonNames": [
+        "lettuce",
+        "garden lettuce",
+        "letisi",
+        "head lettuce"
+      ],
+      "confidence": "medium",
+      "note": "only Lactuca sativa row is var. capitata (head lettuce); we ship generic lettuce",
+      "values": {
+        "growthRangeC": [
+          12,
+          21
+        ],
+        "absoluteRangeC": [
+          5,
+          30
+        ],
+        "frostDamageC": 0,
+        "winterKillC": -1,
+        "cycleDays": [
+          35,
+          85
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours)",
+        "lifeSpan": "annual, biennial",
+        "family": "Compositae"
+      }
+    },
+    "bean": {
+      "ecoPortCode": 1668,
+      "scientificName": "Phaseolus vulgaris",
+      "commonNames": [
+        "common bean",
+        "french bean",
+        "frijol",
+        "garden bean"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          16,
+          25
+        ],
+        "absoluteRangeC": [
+          7,
+          32
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          50,
+          270
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours)",
+        "lifeSpan": "annual",
+        "family": "Leguminosae"
+      }
+    },
+    "pea": {
+      "ecoPortCode": 1721,
+      "scientificName": "Pisum sativum",
+      "commonNames": [
+        "pea",
+        "garden pea",
+        "English pea",
+        "green pea"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          10,
+          24
+        ],
+        "absoluteRangeC": [
+          4,
+          30
+        ],
+        "frostDamageC": 0,
+        "winterKillC": -2,
+        "cycleDays": [
+          60,
+          140
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours)",
+        "lifeSpan": "annual",
+        "family": "Leguminosae"
+      }
+    },
+    "radish": {
+      "ecoPortCode": 11291,
+      "scientificName": "Raphanus sativus var. radicula",
+      "commonNames": [
+        "radish"
+      ],
+      "confidence": "medium",
+      "note": "var. radicula (salad radish). The generic row 1839 is daikon-weighted and gives an absolute min of 10C, wrong for a crop that germinates at 5C; this row says 3C",
+      "values": {
+        "growthRangeC": [
+          12,
+          25
+        ],
+        "absoluteRangeC": [
+          3,
+          30
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          21,
+          135
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "annual, biennial",
+        "family": "Cruciferae"
+      }
+    },
+    "cucumber": {
+      "ecoPortCode": 817,
+      "scientificName": "Cucumis sativus",
+      "commonNames": [
+        "cucumber",
+        "gherkin",
+        "concombre",
+        "huanggua"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          18,
+          32
+        ],
+        "absoluteRangeC": [
+          6,
+          38
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          40,
+          180
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "annual",
+        "family": "Cucurbitaceae"
+      }
+    },
+    "pepper": {
+      "ecoPortCode": 618,
+      "scientificName": "Capsicum annuum",
+      "commonNames": [
+        "sweet pepper",
+        "chili pepper",
+        "green pepper",
+        "lajiao"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          17,
+          30
+        ],
+        "absoluteRangeC": [
+          8,
+          35
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          60,
+          180
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours)",
+        "lifeSpan": "annual",
+        "family": "Solanaceae"
+      }
+    },
+    "onion": {
+      "ecoPortCode": 551,
+      "scientificName": "Allium cepa var. cepa",
+      "commonNames": [
+        "Onions (bulb)"
+      ],
+      "confidence": "medium",
+      "note": "var. cepa = \"Onions (bulb)\"; identical values to generic 364, which also covers shallot",
+      "values": {
+        "growthRangeC": [
+          12,
+          25
+        ],
+        "absoluteRangeC": [
+          4,
+          30
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          85,
+          175
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "annual, biennial",
+        "family": "Alliaceae"
+      }
+    },
+    "garlic": {
+      "ecoPortCode": 367,
+      "scientificName": "Allium sativum",
+      "commonNames": [
+        "garlic",
+        "cultivated garlic",
+        "ail",
+        "aglio"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          18,
+          30
+        ],
+        "absoluteRangeC": [
+          7,
+          35
+        ],
+        "frostDamageC": -5,
+        "winterKillC": -5,
+        "cycleDays": [
+          90,
+          120
+        ],
+        "photoperiod": "long day (>14 hours)",
+        "lifeSpan": "biennial",
+        "family": "Alliaceae"
+      }
+    },
+    "potato": {
+      "ecoPortCode": 1971,
+      "scientificName": "Solanum tuberosum",
+      "commonNames": [
+        "potato",
+        "tuber",
+        "spud",
+        "Irish potato"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          15,
+          25
+        ],
+        "absoluteRangeC": [
+          7,
+          30
+        ],
+        "frostDamageC": 0,
+        "winterKillC": -1,
+        "cycleDays": [
+          90,
+          160
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "annual",
+        "family": "Solanaceae"
+      }
+    },
+    "strawberry": {
+      "ecoPortCode": 1112,
+      "scientificName": "Fragaria x ananassa",
+      "commonNames": [
+        "strawberry",
+        "dessert strawberry",
+        "garden strawberry",
+        "fraise"
+      ],
+      "confidence": "high",
+      "note": "garden strawberry, the cultivated hybrid",
+      "values": {
+        "growthRangeC": [
+          11,
+          24
+        ],
+        "absoluteRangeC": [
+          6,
+          28
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          180,
+          270
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "perennial",
+        "family": "Rosaceae"
+      }
+    },
+    "raspberry": {
+      "ecoPortCode": 1877,
+      "scientificName": "Rubus idaeus ssp. idaeus",
+      "commonNames": [
+        "European raspberry",
+        "red garden raspberry",
+        "red raspberry",
+        "hindberry"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          17,
+          23
+        ],
+        "absoluteRangeC": [
+          5,
+          28
+        ],
+        "frostDamageC": -1,
+        "winterKillC": -35,
+        "cycleDays": [
+          120,
+          180
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "perennial",
+        "family": "Rosaceae"
+      }
+    },
+    "blueberry": {
+      "ecoPortCode": 10704,
+      "scientificName": "Vaccinium corymbosum",
+      "commonNames": [
+        "high-bush blueberry",
+        "swamp blueberry",
+        "American blueberry",
+        "blueberry"
+      ],
+      "confidence": "high",
+      "note": "high-bush, what garden centres actually sell",
+      "splitCandidate": "low-bush (Vaccinium angustifolium, 10700) is a separate crop — add in batch 1",
+      "values": {
+        "growthRangeC": [
+          18,
+          30
+        ],
+        "absoluteRangeC": [
+          7,
+          42
+        ],
+        "frostDamageC": -1,
+        "winterKillC": -29,
+        "cycleDays": [
+          160,
+          200
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "perennial",
+        "family": "Ericaceae"
+      }
+    },
+    "basil": {
+      "ecoPortCode": 1547,
+      "scientificName": "Ocimum basilicum",
+      "commonNames": [
+        "basil",
+        "sweet basil",
+        "common basil",
+        "basilic"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          18,
+          27
+        ],
+        "absoluteRangeC": [
+          7,
+          36
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          80,
+          270
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "annual",
+        "family": "Labiatae"
+      }
+    },
+    "parsley": {
+      "ecoPortCode": 1661,
+      "scientificName": "Petroselinum crispum",
+      "commonNames": [
+        "parsley",
+        "persil",
+        "Petersilie",
+        "prezzemolo"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          11,
+          20
+        ],
+        "absoluteRangeC": [
+          7,
+          28
+        ],
+        "frostDamageC": 0,
+        "winterKillC": -5,
+        "cycleDays": [
+          70,
+          365
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "perennial",
+        "family": "Umbelliferae"
+      }
+    },
+    "dill": {
+      "ecoPortCode": 2192,
+      "scientificName": "Anethum graveolens",
+      "commonNames": [
+        "dill",
+        "garden dill",
+        "East Indian dill",
+        "aneth"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          15,
+          18
+        ],
+        "absoluteRangeC": [
+          6,
+          26
+        ],
+        "frostDamageC": 0,
+        "winterKillC": -2,
+        "cycleDays": [
+          100,
+          180
+        ],
+        "photoperiod": "long day (>14 hours)",
+        "lifeSpan": "annual, biennial",
+        "family": "Umbelliferae"
+      }
+    },
+    "chives": {
+      "ecoPortCode": 810,
+      "scientificName": "Allium schoenoprasum",
+      "commonNames": [
+        "chives",
+        "chive garlic",
+        "ezo-negi",
+        "cebolleta"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          10,
+          20
+        ],
+        "absoluteRangeC": [
+          2,
+          35
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          70,
+          100
+        ],
+        "photoperiod": "long day (>14 hours)",
+        "lifeSpan": "annual, perennial",
+        "family": "Alliaceae"
+      }
+    },
+    "kale": {
+      "ecoPortCode": 3867,
+      "scientificName": "Brassica oleracea var. acephala",
+      "commonNames": [
+        "thousand head kale",
+        "thousand-head kale",
+        "marrowstem kale",
+        "marrow-stem kale"
+      ],
+      "confidence": "medium",
+      "note": "var. acephala is right, but its common names are all fodder kales",
+      "values": {
+        "growthRangeC": [
+          15,
+          22
+        ],
+        "absoluteRangeC": [
+          7,
+          30
+        ],
+        "frostDamageC": 0,
+        "winterKillC": -5,
+        "cycleDays": [
+          60,
+          85
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "biennial, perennial",
+        "family": "Cruciferae"
+      }
+    },
+    "spinach": {
+      "ecoPortCode": 1997,
+      "scientificName": "Spinacia oleracea",
+      "commonNames": [
+        "spinach",
+        "epinard",
+        "espinaca",
+        "spinacio"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          13,
+          20
+        ],
+        "absoluteRangeC": [
+          2,
+          27
+        ],
+        "frostDamageC": 0,
+        "winterKillC": -7,
+        "cycleDays": [
+          40,
+          120
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "annual",
+        "family": "Chenopodiaceae"
+      }
+    },
+    "beetroot": {
+      "ecoPortCode": 3712,
+      "scientificName": "Beta vulgaris var. crassa",
+      "commonNames": [],
+      "confidence": "medium",
+      "note": "var. crassa = garden beet. No common name on the row, so verified instead by maturity: ours 50-70d vs 55-90d here, while the generic Beta vulgaris row is 160-240d (sugar beet) and would not have matched",
+      "values": {
+        "growthRangeC": [
+          15,
+          25
+        ],
+        "absoluteRangeC": [
+          5,
+          30
+        ],
+        "frostDamageC": -3,
+        "winterKillC": -6,
+        "cycleDays": [
+          55,
+          90
+        ],
+        "photoperiod": "long day (>14 hours)",
+        "lifeSpan": "biennial",
+        "family": "Chenopodiaceae"
+      }
+    },
+    "leek": {
+      "ecoPortCode": 363,
+      "scientificName": "Allium ampeloprasum",
+      "commonNames": [
+        "wild leek",
+        "vine leek",
+        "Levant garlic",
+        "alho porro bravo"
+      ],
+      "confidence": "proxy",
+      "note": "ECOCROP has no cultivated leek (var. porrum); this is the wild species. Accepted 2026-07-28, and maturity overlaps ours (100-150 vs 120-150d)",
+      "climateProxy": {
+        "ecoPortCode": 363,
+        "scientificName": "Allium ampeloprasum",
+        "relation": "wild_relative"
+      },
+      "values": {
+        "growthRangeC": [
+          18,
+          24
+        ],
+        "absoluteRangeC": [
+          6,
+          27
+        ],
+        "frostDamageC": -5,
+        "winterKillC": -5,
+        "cycleDays": [
+          120,
+          150
+        ],
+        "photoperiod": "long day (>14 hours)",
+        "lifeSpan": "annual, biennial",
+        "family": "Alliaceae"
+      }
+    },
+    "pumpkin": {
+      "ecoPortCode": 819,
+      "scientificName": "Cucurbita maxima",
+      "commonNames": [
+        "pumpkin",
+        "squash",
+        "giant squash",
+        "citrouille"
+      ],
+      "confidence": "modelled",
+      "note": "C. maxima, assigned by size — our pumpkin is spaced 100/200cm. \"Pumpkin\" is a kitchen word, not a botanical one",
+      "values": {
+        "growthRangeC": [
+          20,
+          30
+        ],
+        "absoluteRangeC": [
+          9,
+          38
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          80,
+          140
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "annual",
+        "family": "Cucurbitaceae"
+      }
+    },
+    "chard": {
+      "ecoPortCode": 2474,
+      "scientificName": "Beta vulgaris var. cicla",
+      "commonNames": [
+        "Silver beet"
+      ],
+      "confidence": "high",
+      "note": "var. cicla = silver beet = chard",
+      "values": {
+        "growthRangeC": [
+          15,
+          25
+        ],
+        "absoluteRangeC": [
+          5,
+          35
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          50,
+          150
+        ],
+        "photoperiod": "long day (>14 hours)",
+        "lifeSpan": "biennial",
+        "family": "Chenopodiaceae"
+      }
+    },
+    "kohlrabi": {
+      "ecoPortCode": 2220,
+      "scientificName": "Brassica oleracea var. gongyloides",
+      "commonNames": [
+        "Kohlrabi"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          12,
+          18
+        ],
+        "absoluteRangeC": [
+          5,
+          25
+        ],
+        "frostDamageC": -1,
+        "winterKillC": -2,
+        "cycleDays": [
+          50,
+          70
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "annual, biennial",
+        "family": "Cruciferae"
+      }
+    },
+    "fennel": {
+      "ecoPortCode": 1107,
+      "scientificName": "Foeniculum vulgare",
+      "commonNames": [
+        "fennel",
+        "sweet fennel",
+        "fennel seed",
+        "fenouil sucre"
+      ],
+      "confidence": "medium",
+      "note": "generic F. vulgare; bulb fennel is var. azoricum, absent",
+      "values": {
+        "growthRangeC": [
+          15,
+          25
+        ],
+        "absoluteRangeC": [
+          6,
+          32
+        ],
+        "frostDamageC": -2,
+        "winterKillC": -5,
+        "cycleDays": [
+          30,
+          110
+        ],
+        "photoperiod": "long day (>14 hours)",
+        "lifeSpan": "biennial, perennial",
+        "family": "Umbelliferae"
+      }
+    },
+    "corn": {
+      "ecoPortCode": 10981,
+      "scientificName": "Zea mays ssp. saccharata",
+      "commonNames": [
+        "sweet corn",
+        "sweet maize",
+        "milho doce"
+      ],
+      "confidence": "high",
+      "note": "ssp. saccharata = sweet corn, not field maize",
+      "values": {
+        "growthRangeC": [
+          16,
+          24
+        ],
+        "absoluteRangeC": [
+          12,
+          38
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          65,
+          100
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours)",
+        "lifeSpan": "annual",
+        "family": "Gramineae"
+      }
+    },
+    "sunflower": {
+      "ecoPortCode": 1191,
+      "scientificName": "Helianthus annuus",
+      "commonNames": [
+        "sunflower",
+        "Italian girasole",
+        "cut-and-come-again",
+        "sonneblom"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          17,
+          34
+        ],
+        "absoluteRangeC": [
+          5,
+          45
+        ],
+        "frostDamageC": 0,
+        "winterKillC": -10,
+        "cycleDays": [
+          70,
+          200
+        ],
+        "photoperiod": "short day (<12 hours)",
+        "lifeSpan": "annual",
+        "family": "Compositae"
+      }
+    },
+    "cabbage": {
+      "ecoPortCode": 554,
+      "scientificName": "Brassica oleracea var. capitata",
+      "commonNames": [
+        "cabbage",
+        "Shetland cabbage",
+        "Savoy cabbage",
+        "white cabbage"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          15,
+          24
+        ],
+        "absoluteRangeC": [
+          7,
+          32
+        ],
+        "frostDamageC": -1,
+        "winterKillC": -10,
+        "cycleDays": [
+          60,
+          200
+        ],
+        "photoperiod": "neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "biennial",
+        "family": "Cruciferae"
+      }
+    },
+    "broccoli": {
+      "ecoPortCode": 556,
+      "scientificName": "Brassica oleracea var. italica",
+      "commonNames": [
+        "broccoli",
+        "sprouting broccoli",
+        "spear cauliflower",
+        "calabrese"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          15,
+          24
+        ],
+        "absoluteRangeC": [
+          3,
+          35
+        ],
+        "frostDamageC": -1,
+        "winterKillC": -5,
+        "cycleDays": [
+          80,
+          120
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "biennial",
+        "family": "Cruciferae"
+      }
+    },
+    "cauliflower": {
+      "ecoPortCode": 553,
+      "scientificName": "Brassica oleracea var. botrytis",
+      "commonNames": [
+        "cauliflower",
+        "chou fleur (French)",
+        "coliflor (Spanish)",
+        "cavolfiore (Italian)"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          10,
+          25
+        ],
+        "absoluteRangeC": [
+          5,
+          30
+        ],
+        "frostDamageC": -5,
+        "winterKillC": -5,
+        "cycleDays": [
+          60,
+          120
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "biennial",
+        "family": "Cruciferae"
+      }
+    },
+    "celery": {
+      "ecoPortCode": 432,
+      "scientificName": "Apium graveolens var. dulce",
+      "commonNames": [
+        "celery"
+      ],
+      "confidence": "high",
+      "note": "var. dulce = stalk celery, not celeriac",
+      "values": {
+        "growthRangeC": [
+          18,
+          25
+        ],
+        "absoluteRangeC": [
+          4,
+          28
+        ],
+        "frostDamageC": -1,
+        "winterKillC": -5,
+        "cycleDays": [
+          80,
+          160
+        ],
+        "photoperiod": "long day (>14 hours)",
+        "lifeSpan": "annual, biennial",
+        "family": "Umbelliferae"
+      }
+    },
+    "turnip": {
+      "ecoPortCode": 3881,
+      "scientificName": "Brassica rapa var. rapifera",
+      "commonNames": [],
+      "confidence": "medium",
+      "note": "var. rapifera = turnip. No common name on the row; verified by maturity instead, ours 40-60d vs 40-80d here",
+      "values": {
+        "growthRangeC": [
+          10,
+          17
+        ],
+        "absoluteRangeC": [
+          7,
+          30
+        ],
+        "frostDamageC": -4,
+        "winterKillC": -10,
+        "cycleDays": [
+          40,
+          80
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "biennial",
+        "family": "Cruciferae"
+      }
+    },
+    "mint": {
+      "ecoPortCode": 7710,
+      "scientificName": "Mentha spicata var. crispa",
+      "commonNames": [
+        "spearmint",
+        "menthe crepue",
+        "krauseminze"
+      ],
+      "confidence": "medium",
+      "note": "spearmint, chosen 2026-07-28 as the default culinary mint over peppermint (2099)",
+      "values": {
+        "growthRangeC": [
+          15,
+          25
+        ],
+        "absoluteRangeC": [
+          4,
+          36
+        ],
+        "frostDamageC": -1,
+        "winterKillC": -8,
+        "cycleDays": [
+          40,
+          270
+        ],
+        "photoperiod": "long day (>14 hours)",
+        "lifeSpan": "perennial",
+        "family": "Labiatae"
+      }
+    },
+    "rosemary": {
+      "ecoPortCode": 9326,
+      "scientificName": "Rosmarinus officinalis",
+      "commonNames": [
+        "rosemary",
+        "rosmarin",
+        "rosmarino",
+        "romero"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          18,
+          30
+        ],
+        "absoluteRangeC": [
+          8,
+          38
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          120,
+          270
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "perennial",
+        "family": "Labiatae"
+      }
+    },
+    "thyme": {
+      "ecoPortCode": 2441,
+      "scientificName": "Thymus vulgaris",
+      "commonNames": [
+        "garden thyme",
+        "common thyme",
+        "thyme",
+        "thym"
+      ],
+      "confidence": "high",
+      "note": "T. vulgaris = garden thyme (NOT serpyllum, the creeping one)",
+      "values": {
+        "growthRangeC": [
+          16,
+          25
+        ],
+        "absoluteRangeC": [
+          4,
+          30
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          100,
+          200
+        ],
+        "photoperiod": "long day (>14 hours)",
+        "lifeSpan": "perennial",
+        "family": "Labiatae"
+      }
+    },
+    "currant": {
+      "ecoPortCode": 9282,
+      "scientificName": "Ribes nigrum",
+      "commonNames": [
+        "black currant",
+        "schwarze Johannisbeere",
+        "Ribis nigri folium",
+        "Ribis nigri fructus"
+      ],
+      "confidence": "high",
+      "note": "blackcurrant, chosen because we ship one generic currant and ECOCROP splits black from red",
+      "splitCandidate": "redcurrant (Ribes rubrum, 9285) is a separate crop — add in batch 1",
+      "values": {
+        "growthRangeC": [
+          17,
+          25
+        ],
+        "absoluteRangeC": [
+          5,
+          30
+        ],
+        "frostDamageC": -1,
+        "winterKillC": -28,
+        "cycleDays": [
+          150,
+          180
+        ],
+        "photoperiod": "long day (>14 hours)",
+        "lifeSpan": "perennial",
+        "family": "Grossulariaceae"
+      }
+    },
+    "gooseberry": {
+      "ecoPortCode": 9290,
+      "scientificName": "Ribes uva-crispa",
+      "commonNames": [
+        "gooseberry",
+        "stikkelsbær",
+        "stachelbeere"
+      ],
+      "confidence": "high",
+      "note": "R. uva-crispa, common name literally \"gooseberry\"",
+      "values": {
+        "growthRangeC": [
+          15,
+          25
+        ],
+        "absoluteRangeC": [
+          3,
+          40
+        ],
+        "frostDamageC": 0,
+        "winterKillC": -28,
+        "cycleDays": [
+          150,
+          180
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "perennial",
+        "family": "Grossulariaceae"
+      }
+    },
+    "eggplant": {
+      "ecoPortCode": 1965,
+      "scientificName": "Solanum melongena",
+      "commonNames": [
+        "eggplant",
+        "aubergine",
+        "brinjal",
+        "badinjan"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          20,
+          35
+        ],
+        "absoluteRangeC": [
+          9,
+          40
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          70,
+          120
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "annual",
+        "family": "Solanaceae"
+      }
+    },
+    "arugula": {
+      "ecoPortCode": 5794,
+      "scientificName": "Eruca sativa",
+      "commonNames": [
+        "rocket",
+        "salad rocket",
+        "garden rocket",
+        "arugula"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          15,
+          25
+        ],
+        "absoluteRangeC": [
+          8,
+          29
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          70,
+          150
+        ],
+        "photoperiod": null,
+        "lifeSpan": "annual",
+        "family": "Cruciferae"
+      }
+    },
+    "squash": {
+      "ecoPortCode": 820,
+      "scientificName": "Cucurbita moschata",
+      "commonNames": [
+        "pumpkin",
+        "squash",
+        "small horned melon",
+        "nangua"
+      ],
+      "confidence": "modelled",
+      "note": "C. moschata, the butternut group, assigned by size against pumpkin (100/200cm) and zucchini",
+      "values": {
+        "growthRangeC": [
+          20,
+          30
+        ],
+        "absoluteRangeC": [
+          10,
+          40
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          80,
+          140
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours)",
+        "lifeSpan": "annual",
+        "family": "Cucurbitaceae"
+      }
+    },
+    "asparagus": {
+      "ecoPortCode": 468,
+      "scientificName": "Asparagus officinalis",
+      "commonNames": [
+        "asparagus",
+        "espárrago",
+        "aspargo",
+        "Spargel"
+      ],
+      "confidence": "high",
+      "values": {
+        "growthRangeC": [
+          15,
+          30
+        ],
+        "absoluteRangeC": [
+          6,
+          38
+        ],
+        "frostDamageC": -1,
+        "winterKillC": -5,
+        "cycleDays": [
+          210,
+          270
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "perennial",
+        "family": "Asparagaceae"
+      }
+    },
+    "pak_choi": {
+      "ecoPortCode": 3878,
+      "scientificName": "Brassica rapa Pak Choi",
+      "commonNames": [
+        "Pak Choi"
+      ],
+      "confidence": "high",
+      "note": "row is literally named \"Brassica rapa Pak Choi\"",
+      "values": {
+        "growthRangeC": [
+          20,
+          25
+        ],
+        "absoluteRangeC": [
+          10,
+          32
+        ],
+        "frostDamageC": null,
+        "winterKillC": null,
+        "cycleDays": [
+          21,
+          45
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "biennial",
+        "family": "Cruciferae"
+      }
+    },
+    "endive": {
+      "ecoPortCode": 693,
+      "scientificName": "Cichorium endivia",
+      "commonNames": [
+        "endive"
+      ],
+      "confidence": "high",
+      "note": "C. endivia; 694 intybus is chicory/Belgian endive, a different crop",
+      "values": {
+        "growthRangeC": [
+          15,
+          23
+        ],
+        "absoluteRangeC": [
+          5,
+          30
+        ],
+        "frostDamageC": -1,
+        "winterKillC": -5,
+        "cycleDays": [
+          70,
+          85
+        ],
+        "photoperiod": "short day (<12 hours), neutral day (12-14 hours), long day (>14 hours)",
+        "lifeSpan": "annual, biennial",
+        "family": "Compositae"
+      }
+    }
+  }
+}

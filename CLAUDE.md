@@ -158,8 +158,7 @@ carries its `EcoPortCode` in `source`.*
 
 *Measured, 2568 rows × 55 columns: `TOPMN`/`TOPMX` (optimal growth band, 81%
 filled) → `growthRangeC`. `TMIN`/`TMAX` (absolute survivable range, 81%) →
-`heatCeilingC`. `KTMP` (killing temperature, 45%) → `frostTolerance` and
-perennial `minWinterTempC`. `PHOTO` (67%) is a three-bucket string that maps
+`heatCeilingC`. `PHOTO` (67%) is a three-bucket string that maps
 1:1 onto our `Photoperiod` union. `LISPA` (89%) is literally
 annual/biennial/perennial. `FAMNAME` 93%, `GMIN`/`GMAX` (crop cycle days) 100%.*
 
@@ -169,6 +168,35 @@ ECOCROP's temperatures are **growth** temperatures — reading `TOPMN` as a
 germination floor is the silent-wrong-value failure this file warns about
 elsewhere. So the paragraph below still stands, narrowed: the authored core is
 those four fields, not all nine.*
+
+***`KTMP` is NOT winter hardiness — corrected 2026-07-28, hours after the
+row above was first written wrong.*** *The claim was `KTMP` → `frostTolerance`
+**and** perennial `minWinterTempC`. Only the first half is right. ECOCROP
+carries **two** killing temperatures, both filled on the same 1157 rows:*
+
+- *`KTMP` — damage during active growth. Clusters between −5 and 0 °C (1012 of
+  1157 rows), never below −20. → `frostTolerance`.*
+- *`KTMPR` — killing temperature during **rest**. → `minWinterTempC`.*
+
+***Two more ECOCROP columns bite the same way.*** *`GMIN`/`GMAX` is the whole
+crop cycle, not days to harvest — it reports an annual figure for perennials and
+a to-seed figure for cut-and-come-again herbs, so it corroborates a pick and
+must never overwrite `maturity`. And `FAMNAME` is pre-APG: `Cruciferae`,
+`Umbelliferae`, `Labiatae`, `Compositae`, `Leguminosae`, `Gramineae`,
+`Alliaceae`, `Chenopodiaceae` cover 31 of our 45 plants and match nothing in the
+`BotanicalFamily` union, so a lowercase map would drop every brassica to
+`"other"` and silently disable rotation warnings. Use `plantFamilyMap`, which
+already covers all 45; ECOCROP's families only matter for new plants in later
+batches.*
+
+*The tell is a plant whose hardiness you already know: `Picea abies` reads
+`KTMP −1, KTMPR −30`, and `Pinus sylvestris` reads `KTMP −1, KTMPR −40`. Norway
+spruce does not die at −1 °C. Our own perennials land where they should on
+`KTMPR` — raspberry −35, blueberry −29, blackcurrant −28 — and would have been
+recorded as dying at −1 °C had the original mapping shipped. **That is the
+silent-wrong-value failure this file keeps warning about, caught only by
+sanity-checking against a plant whose real hardiness was known.** Neither
+column is named in a way that reveals this; the data had to be looked at.*
 
 ***The work is the mapping table, not the values.*** *A naive
 scientific-name match got 4 of 45 wrong in the first pass: every brassica
